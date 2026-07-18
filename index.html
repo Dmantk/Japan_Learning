@@ -98,7 +98,7 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--
 .kana-status-dot{position:absolute;top:4px;right:5px;font-size:9px;}
 .kana-card.kanji .kana-char{font-size:44px;}.kana-card.kanji .kana-meaning{font-size:9px;color:var(--text3);margin-top:1px;}
 /* ===== TAB GROUP ===== */
-.tab-group{display:flex;background:var(--bg3);border-radius:var(--r);padding:3px;gap:2px;border:1px solid var(--border);}
+.tab-group{display:flex;background:var(--bg3);border-radius:var(--r);padding:3px;gap:2px;border:1px solid var(--border);overflow-x:auto;-webkit-overflow-scrolling:touch;flex-shrink:0;}
 .tab-btn{padding:5px 12px;border-radius:7px;border:none;cursor:pointer;font-size:12px;font-weight:600;transition:all .18s;background:transparent;color:var(--text2);}
 .tab-btn.active{background:var(--card);color:var(--primary);box-shadow:var(--shadow);}
 .tab-btn:hover:not(.active){color:var(--text);}
@@ -117,7 +117,7 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--
 .fc-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center;}
 .fc-rating{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;}
 /* ===== VOCAB TABLE ===== */
-.vocab-toolbar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+.vocab-toolbar{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
 .search-box{flex:1;min-width:160px;position:relative;}
 .search-box input{width:100%;background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:7px 12px 7px 32px;color:var(--text);font-size:13px;outline:none;transition:border .18s;}
 .search-box input:focus{border-color:var(--primary);}
@@ -130,6 +130,7 @@ td{padding:9px 12px;font-size:13px;border-bottom:1px solid var(--border);transit
 tr:last-child td{border-bottom:none;}tr:hover td{background:var(--bg3);}
 .type-badge{display:inline-block;padding:2px 6px;border-radius:5px;font-size:10.5px;font-weight:700;}
 .type-名詞{background:var(--info-l);color:var(--info);}.type-動詞{background:var(--success-l);color:var(--success);}.type-形容詞{background:var(--warning-l);color:var(--warning);}.type-副詞{background:var(--primary-l);color:var(--primary);}.type-表現{background:var(--accent-l);color:var(--accent);}.type-接続詞{background:var(--danger-l);color:var(--danger);}.type-形容動詞{background:var(--info-l);color:var(--info);}
+.type-label-vn{font-size:9px;opacity:.8;display:block;margin-top:1px;}
 .word-jp{font-size:15px;font-weight:700;}.word-reading{font-size:10px;color:var(--text3);}
 .star-btn{background:none;border:none;cursor:pointer;font-size:15px;transition:transform .18s;padding:2px;}.star-btn:hover{transform:scale(1.3);}
 /* ===== GRAMMAR ===== */
@@ -310,8 +311,7 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:inherit;}
   .stats-grid{grid-template-columns:1fr 1fr;}
   .grammar-grid{grid-template-columns:1fr;}
   .game-grid{grid-template-columns:1fr 1fr;}
-  .vocab-toolbar{gap:6px;}
-  .vocab-toolbar .tab-group{display:none;}
+  .vocab-toolbar{gap:6px;flex-wrap:wrap;}
   table th:nth-child(5),table td:nth-child(5){display:none;}
 }
 @media(max-width:400px){
@@ -331,6 +331,60 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:inherit;}
 </style>
 </head>
 <body>
+<!-- AUTH OVERLAY -->
+<div id="authOverlay" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:9000;padding:20px;">
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r2);padding:32px;width:100%;max-width:420px;box-shadow:var(--shadow2);">
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="font-size:52px;margin-bottom:8px;">🌸</div>
+      <div style="font-size:22px;font-weight:700;color:var(--text);" id="authAppName">Nihongo Master</div>
+      <div style="font-size:12px;color:var(--text3);margin-top:4px;">Học Tiếng Nhật Hiệu Quả</div>
+    </div>
+    <!-- Login form -->
+    <div id="loginForm">
+      <div class="form-group">
+        <label class="form-label">Tên đăng nhập</label>
+        <input type="text" class="form-input" id="loginUsername" placeholder="Nhập username..." style="font-size:15px;" onkeydown="if(event.key==='Enter')document.getElementById('loginPw').focus()">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Mật khẩu</label>
+        <input type="password" class="form-input" id="loginPw" placeholder="••••••••" style="font-size:15px;" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <div id="loginError" style="color:var(--danger);font-size:12px;min-height:18px;margin-bottom:8px;text-align:center;"></div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center;padding:12px;font-size:15px;" onclick="doLogin()">🔓 Đăng nhập</button>
+      <div style="text-align:center;margin-top:16px;font-size:13px;color:var(--text3);">
+        Chưa có tài khoản? <span style="color:var(--primary);cursor:pointer;font-weight:700;" onclick="showRegister()">Đăng ký ngay</span>
+      </div>
+      <div style="text-align:center;margin-top:8px;">
+        <span style="color:var(--text3);font-size:11px;cursor:pointer;text-decoration:underline;" onclick="skipAuth()">Dùng không cần đăng nhập →</span>
+      </div>
+    </div>
+    <!-- Register form -->
+    <div id="registerForm" style="display:none;">
+      <div class="form-group">
+        <label class="form-label">Tên hiển thị *</label>
+        <input type="text" class="form-input" id="regDisplayName" placeholder="VD: Nguyễn Văn A" style="font-size:15px;">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Tên đăng nhập *</label>
+        <input type="text" class="form-input" id="regUsername" placeholder="VD: nguyenvana (không dấu, không khoảng trắng)" style="font-size:14px;">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Mật khẩu * (tối thiểu 4 ký tự)</label>
+        <input type="password" class="form-input" id="regPw" placeholder="••••••••" style="font-size:15px;">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Xác nhận mật khẩu *</label>
+        <input type="password" class="form-input" id="regPw2" placeholder="Nhập lại mật khẩu" style="font-size:15px;" onkeydown="if(event.key==='Enter')doRegister()">
+      </div>
+      <div id="regError" style="color:var(--danger);font-size:12px;min-height:18px;margin-bottom:8px;text-align:center;"></div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center;padding:12px;font-size:15px;" onclick="doRegister()">✅ Tạo tài khoản</button>
+      <div style="text-align:center;margin-top:16px;font-size:13px;color:var(--text3);">
+        Đã có tài khoản? <span style="color:var(--primary);cursor:pointer;font-weight:700;" onclick="showLogin()">Đăng nhập</span>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="app-layout">
 <!-- SIDEBAR OVERLAY (mobile) -->
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
@@ -377,6 +431,7 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:inherit;}
       <div class="topbar-title" id="topbarTitle">🏠 Trang chủ</div>
     </div>
     <div class="topbar-actions">
+      <div id="userBadge" style="display:none;background:var(--primary-l);border:1px solid var(--primary);border-radius:var(--r);padding:4px 10px;font-size:12px;font-weight:700;color:var(--primary);cursor:pointer;" onclick="openModal('settingsModal')"></div>
       <button class="btn btn-secondary btn-sm" onclick="toggleTheme()" id="themeBtn">🌙</button>
       <button class="btn btn-secondary btn-sm" onclick="openModal('settingsModal')">⚙️</button>
       <button class="btn btn-primary btn-sm" onclick="navigate('minigame')">🎮 Chơi</button>
@@ -511,7 +566,7 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:inherit;}
           <div class="chip active" onclick="filterKanjiGrid('all',this)">Tất cả</div>
 
         </div>
-        <div class="kana-grid" id="kanji-grid" style="grid-template-columns:repeat(auto-fill,minmax(110px,1fr))"></div>
+        <div class="kana-grid" id="kanji-grid"></div>
 
       </div>
     </div>
@@ -566,23 +621,44 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:inherit;}
       </div>
       <!-- VOCAB -->
       <div id="level-vocab-section">
-        <div class="vocab-toolbar">
-          <div class="search-box"><span class="search-icon">🔍</span><input type="text" id="vocabSearch" placeholder="Tìm từ vựng..." oninput="filterVocab()"></div>
-          <div class="tab-group">
-            <button class="tab-btn active" onclick="filterVocabType('all',this)">Tất cả</button>
-            <button class="tab-btn" onclick="filterVocabType('名詞',this)">名詞</button>
-            <button class="tab-btn" onclick="filterVocabType('動詞',this)">動詞</button>
-            <button class="tab-btn" onclick="filterVocabType('形容詞',this)">形容詞</button>
-            <button class="tab-btn" onclick="filterVocabType('starred',this)">⭐</button>
+        <!-- Lesson list view -->
+        <div id="vocab-lesson-list">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+            <div style="font-size:13px;color:var(--text3);">Chọn bài để xem từ vựng</div>
+            <div id="vocab-lesson-edit-btns" style="display:none;gap:6px;">
+              <label class="btn btn-secondary btn-sm" style="cursor:pointer;">📥 Import Excel<input type="file" accept=".xlsx,.xls" style="display:none" onchange="importVocabExcel(event)"></label>
+              <button class="btn btn-secondary btn-sm" onclick="exportVocabTemplate()">📤 Template</button>
+              <button class="btn btn-primary btn-sm" onclick="openAddLessonModal('vocab')">➕ Thêm bài</button>
+            </div>
           </div>
-          <label class="btn btn-secondary btn-sm" style="cursor:pointer;">📥 Import<input type="file" accept=".xlsx,.xls" style="display:none" onchange="importVocabExcel(event)"></label>
-          <button class="btn btn-secondary btn-sm" onclick="exportVocabTemplate()">📤 Template</button>
-          <button class="btn btn-primary btn-sm" onclick="openAddVocabModal()">➕ Thêm</button>
+          <div class="lesson-grid" id="vocab-lesson-grid"></div>
         </div>
-        <div class="vocab-table-wrap">
-          <table><thead><tr><th>#</th><th>Từ vựng</th><th>Từ loại</th><th>Nghĩa</th><th>Kanji</th><th>⭐</th><th>Thao tác</th></tr></thead><tbody id="vocabTableBody"></tbody></table>
+        <!-- Vocab table view (inside a lesson) -->
+        <div id="vocab-table-view" style="display:none;">
+          <div class="lesson-back-btn" onclick="backToLessons('vocab')">← Quay lại danh sách bài</div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
+            <div style="font-size:16px;font-weight:700;" id="vocab-current-lesson-title"></div>
+            <div id="vocab-table-edit-btns" style="display:none;gap:6px;flex-wrap:wrap;">
+              <label class="btn btn-secondary btn-sm" style="cursor:pointer;">📥 Import<input type="file" accept=".xlsx,.xls" style="display:none" onchange="importVocabExcel(event)"></label>
+              <button class="btn btn-secondary btn-sm" onclick="exportVocabTemplate()">📤 Template</button>
+              <button class="btn btn-primary btn-sm" onclick="openAddVocabModal()">➕ Thêm từ</button>
+            </div>
+          </div>
+          <div class="vocab-toolbar">
+            <div class="search-box"><span class="search-icon">🔍</span><input type="text" id="vocabSearch" placeholder="Tìm từ vựng..." oninput="filterVocab()"></div>
+            <div class="tab-group">
+              <button class="tab-btn active" onclick="filterVocabType('all',this)">Tất cả</button>
+              <button class="tab-btn" onclick="filterVocabType('名詞',this)">名詞</button>
+              <button class="tab-btn" onclick="filterVocabType('動詞',this)">動詞</button>
+              <button class="tab-btn" onclick="filterVocabType('形容詞',this)">形容詞</button>
+              <button class="tab-btn" onclick="filterVocabType('starred',this)">⭐</button>
+            </div>
+          </div>
+          <div class="vocab-table-wrap">
+            <table><thead><tr><th>#</th><th>Từ vựng</th><th>Từ loại</th><th>Nghĩa</th><th>Kanji</th><th>⭐</th><th id="vocab-action-col">Thao tác</th></tr></thead><tbody id="vocabTableBody"></tbody></table>
+          </div>
+          <div style="margin-top:8px;font-size:11px;color:var(--text3)" id="vocabCount"></div>
         </div>
-        <div style="margin-top:8px;font-size:11px;color:var(--text3)" id="vocabCount"></div>
       </div>
       <!-- GRAMMAR -->
       <div id="level-grammar-section" style="display:none;">
@@ -815,29 +891,53 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:inherit;}
         <button class="tab-btn" onclick="switchSentTab('practice',this)">✍️ Luyện tập</button>
       </div>
 
-      <!-- LIST tab -->
+      <!-- LIST tab - Topic cards -->
       <div id="sent-list-section">
-        <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center;justify-content:flex-end;">
-          <label class="btn btn-secondary btn-sm" style="cursor:pointer;">📥 Import Excel<input type="file" accept=".xlsx,.xls" style="display:none" onchange="importSentExcel(event)"></label>
-          <button class="btn btn-secondary btn-sm" onclick="exportSentTemplate()">📤 Template</button>
-          <button class="btn btn-primary btn-sm" onclick="openAddSentModal()">➕ Thêm câu</button>
+        <!-- Topic list view -->
+        <div id="sent-topic-list">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+            <div style="font-size:13px;color:var(--text3);">Chọn chủ đề để xem câu</div>
+            <div id="sent-topic-edit-btns" style="display:none;gap:6px;flex-wrap:wrap;">
+              <label class="btn btn-secondary btn-sm" style="cursor:pointer;">📥 Import Excel<input type="file" accept=".xlsx,.xls" style="display:none" onchange="importSentExcel(event)"></label>
+              <button class="btn btn-secondary btn-sm" onclick="exportSentTemplate()">📤 Template</button>
+              <button class="btn btn-primary btn-sm" onclick="openAddSentTopicModal()">➕ Thêm chủ đề</button>
+            </div>
+          </div>
+          <div class="lesson-grid" id="sent-topic-grid"></div>
         </div>
-        <div id="sent-list-grid" style="display:flex;flex-direction:column;gap:10px;"></div>
-        <div style="margin-top:8px;font-size:11px;color:var(--text3)" id="sentCount"></div>
+        <!-- Sentence list inside topic -->
+        <div id="sent-detail-view" style="display:none;">
+          <div class="lesson-back-btn" onclick="backToSentTopics()">← Quay lại danh sách chủ đề</div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
+            <div style="font-size:16px;font-weight:700;" id="sent-current-topic-title"></div>
+            <div id="sent-detail-edit-btns" style="display:none;gap:6px;flex-wrap:wrap;">
+              <button class="btn btn-primary btn-sm" onclick="openAddSentModal()">➕ Thêm câu</button>
+            </div>
+          </div>
+          <div id="sent-list-grid" style="display:flex;flex-direction:column;gap:10px;"></div>
+          <div style="margin-top:8px;font-size:11px;color:var(--text3)" id="sentCount"></div>
+        </div>
       </div>
 
       <!-- FLASHCARD tab -->
       <div id="sent-flashcard-section" style="display:none;">
+        <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center;">
+          <div class="tab-group">
+            <button class="tab-btn active" onclick="setSentFCSource('all',this)">Tất cả</button>
+            <button class="tab-btn" onclick="setSentFCSource('topic',this)">Chủ đề hiện tại</button>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="shuffleSentFC()">🔀 Xáo trộn</button>
+        </div>
         <div class="fc-wrap">
-          <div class="fc-container" style="width:100%;max-width:500px;height:auto;min-height:160px;" onclick="flipSentCard()">
-            <div class="fc-inner" id="sent-flashcard">
-              <div class="fc-face fc-front" style="padding:24px;">
-                <div id="sent-fc-jp" style="font-size:22px;font-weight:700;color:var(--text);text-align:center;line-height:1.6;"></div>
+          <div style="width:100%;max-width:520px;cursor:pointer;margin:0 auto;" onclick="flipSentCard()">
+            <div id="sent-flashcard">
+              <div id="sent-fc-front" style="background:var(--card);border:1.5px solid var(--border);border-radius:var(--r2);padding:24px;min-height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;">
+                <div id="sent-fc-jp" style="font-size:clamp(14px,3vw,22px);font-weight:700;color:var(--text);line-height:1.6;word-break:break-all;overflow-wrap:break-word;width:100%;"></div>
                 <div style="font-size:11px;color:var(--text3);margin-top:10px;">Nhấn để xem nghĩa</div>
               </div>
-              <div class="fc-face fc-back" style="padding:24px;">
-                <div id="sent-fc-vn" style="font-size:18px;font-weight:600;color:var(--primary);text-align:center;line-height:1.6;"></div>
-                <div id="sent-fc-note" style="font-size:12px;color:var(--text2);margin-top:8px;text-align:center;font-style:italic;display:none;"></div>
+              <div id="sent-fc-back" style="background:var(--primary-l);border:1.5px solid var(--primary);border-radius:var(--r2);padding:24px;min-height:130px;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;">
+                <div id="sent-fc-vn" style="font-size:clamp(13px,2.5vw,18px);font-weight:600;color:var(--primary);line-height:1.6;word-break:break-word;width:100%;"></div>
+                <div id="sent-fc-note" style="font-size:12px;color:var(--text2);margin-top:8px;font-style:italic;"></div>
               </div>
             </div>
           </div>
@@ -867,7 +967,7 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:inherit;}
           <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:12px;">
             <button class="btn btn-primary" onclick="checkSentPractice()">✅ Kiểm tra</button>
             <button class="btn btn-secondary" onclick="toggleSentHint()">💡 Gợi ý</button>
-          <button class="btn btn-secondary" onclick="revealSentPractice()">👁 Đáp án</button>
+            <button class="btn btn-secondary" onclick="revealSentPractice()">👁 Đáp án</button>
             <button class="btn btn-secondary" onclick="speakSentPractice()">🔊 Nghe mẫu</button>
             <button class="btn btn-secondary" onclick="nextSentPractice()">⏭ Tiếp</button>
           </div>
@@ -956,6 +1056,16 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:inherit;}
   </div>
 </div>
 
+<!-- Add Sentence Topic Modal -->
+<div class="modal-overlay" id="addSentTopicModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('addSentTopicModal')">✕</button>
+    <div class="modal-title">💬 <span id="addSentTopicTitle">Thêm chủ đề</span></div>
+    <div class="form-group"><label class="form-label">Tên chủ đề *</label><input type="text" class="form-input" id="sent-topic-title-input" placeholder="VD: Chào hỏi, Gia đình, Du lịch..."></div>
+    <div class="form-group"><label class="form-label">Ghi chú</label><input type="text" class="form-input" id="sent-topic-note-input" placeholder="VD: Câu giao tiếp hàng ngày"></div>
+    <div class="form-actions"><button class="btn btn-secondary" onclick="closeModal('addSentTopicModal')">Hủy</button><button class="btn btn-primary" onclick="saveSentTopic()">💾 Lưu</button></div>
+  </div>
+</div>
 <!-- Add Sentence Modal -->
 <div class="modal-overlay" id="addSentModal">
   <div class="modal">
@@ -1063,6 +1173,7 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:inherit;}
   <div class="modal">
     <button class="modal-close" onclick="closeModal('settingsModal')">✕</button>
     <div class="modal-title">⚙️ Cài đặt</div>
+    <div id="userInfoSettings" style="display:none;background:var(--primary-l);border:1px solid var(--primary);border-radius:var(--r);padding:12px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;"><div><div style="font-size:13px;font-weight:700;" id="settingsUserName"></div><div style="font-size:11px;color:var(--text3);" id="settingsUserId"></div></div><button class="btn btn-danger btn-sm" onclick="doLogout()">🚪 Đăng xuất</button></div>
     <div style="display:flex;flex-direction:column;gap:12px;">
       <div class="card" style="padding:14px;border-color:var(--primary);">
         <div class="card-title">✏️ Chế độ chỉnh sửa</div>
@@ -1095,6 +1206,11 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:inherit;}
         <div class="card-title">📝 Nội dung tùy chỉnh</div>
         <div style="font-size:12px;color:var(--text3);margin-bottom:10px;">Reset sẽ xóa từ vựng, ngữ pháp, câu đã thêm và khôi phục dữ liệu mặc định</div>
         <button class="btn btn-danger btn-sm" onclick="resetContent()">🗑 Reset nội dung về mặc định</button>
+      </div>
+      <div class="card" style="padding:14px;" id="githubSyncCard" style="display:none;">
+        <div class="card-title">☁️ GitHub Sync</div>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:10px;">Lưu dữ liệu lên GitHub để đồng bộ giữa các thiết bị</div>
+        <button class="btn btn-primary btn-sm" onclick="syncToGitHub()">☁️ Sync lên GitHub</button>
       </div>
       <div class="card" style="padding:14px;border-color:var(--danger);">
         <div class="card-title" style="color:var(--danger);">⚠️ Reset tất cả</div>
@@ -1197,7 +1313,15 @@ function navigate(page,param){
   if(page==='writing')initWriting();
   if(page==='listening')initListening();
   if(page==='speaking')initSpeaking();
-  if(page==='sentences'){renderSentList();renderSentFC();renderSentPractice();}
+  if(page==='sentences'){
+    migrateSentData();
+    currentSentTopic=null;
+    const stl=document.getElementById('sent-topic-list');
+    const sdv=document.getElementById('sent-detail-view');
+    if(stl)stl.style.display='block';if(sdv)sdv.style.display='none';
+    renderSentTopics();
+    applyEditMode();
+  }
 }
 function toggleTheme(){S.theme=S.theme==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',S.theme);document.getElementById('themeBtn').textContent=S.theme==='dark'?'☀️':'🌙';save();}
 function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebarOverlay').classList.toggle('open');}
@@ -1229,6 +1353,7 @@ function updateDashboard(){
 // ============================================================
 // KANA GRID
 // ============================================================
+const TYPE_VN={'名詞':'Danh từ','動詞':'Động từ','形容詞':'Tính từ -i','形容動詞':'Tính từ -na','副詞':'Phó từ','接続詞':'Liên từ','表現':'Biểu hiện'};
 const HIRA_KATA={'あ':'ア','い':'イ','う':'ウ','え':'エ','お':'オ','か':'カ','き':'キ','く':'ク','け':'ケ','こ':'コ','さ':'サ','し':'シ','す':'ス','せ':'セ','そ':'ソ','た':'タ','ち':'チ','つ':'ツ','て':'テ','と':'ト','な':'ナ','に':'ニ','ぬ':'ヌ','ね':'ネ','の':'ノ','は':'ハ','ひ':'ヒ','ふ':'フ','へ':'ヘ','ほ':'ホ','ま':'マ','み':'ミ','む':'ム','め':'メ','も':'モ','や':'ヤ','ゆ':'ユ','よ':'ヨ','ら':'ラ','り':'リ','る':'ル','れ':'レ','ろ':'ロ','わ':'ワ','を':'ヲ','ん':'ン','が':'ガ','ぎ':'ギ','ぐ':'グ','げ':'ゲ','ご':'ゴ','ざ':'ザ','じ':'ジ','ず':'ズ','ぜ':'ゼ','ぞ':'ゾ','だ':'ダ','ぢ':'ヂ','づ':'ヅ','で':'デ','ど':'ド','ば':'バ','び':'ビ','ぶ':'ブ','べ':'ベ','ぼ':'ボ','ぱ':'パ','ぴ':'ピ','ぷ':'プ','ぺ':'ペ','ぽ':'ポ','きゃ':'キャ','きゅ':'キュ','きょ':'キョ','しゃ':'シャ','しゅ':'シュ','しょ':'ショ','ちゃ':'チャ','ちゅ':'チュ','ちょ':'チョ','にゃ':'ニャ','にゅ':'ニュ','にょ':'ニョ','ひゃ':'ヒャ','ひゅ':'ヒュ','ひょ':'ヒョ','みゃ':'ミャ','みゅ':'ミュ','みょ':'ミョ','りゃ':'リャ','りゅ':'リュ','りょ':'リョ','ぎゃ':'ギャ','ぎゅ':'ギュ','ぎょ':'ギョ','じゃ':'ジャ','じゅ':'ジュ','じょ':'ジョ','びゃ':'ビャ','びゅ':'ビュ','びょ':'ビョ','ぴゃ':'ピャ','ぴゅ':'ピュ','ぴょ':'ピョ'};
 const KATA_HIRA={'ア':'あ','イ':'い','ウ':'う','エ':'え','オ':'お','カ':'か','キ':'き','ク':'く','ケ':'け','コ':'こ','サ':'さ','シ':'し','ス':'す','セ':'せ','ソ':'そ','タ':'た','チ':'ち','ツ':'つ','テ':'て','ト':'と','ナ':'な','ニ':'に','ヌ':'ぬ','ネ':'ね','ノ':'の','ハ':'は','ヒ':'ひ','フ':'ふ','ヘ':'へ','ホ':'ほ','マ':'ま','ミ':'み','ム':'む','メ':'め','モ':'も','ヤ':'や','ユ':'ゆ','ヨ':'よ','ラ':'ら','リ':'り','ル':'る','レ':'れ','ロ':'ろ','ワ':'わ','ヲ':'を','ン':'ん','ガ':'が','ギ':'ぎ','グ':'ぐ','ゲ':'げ','ゴ':'ご','ザ':'ざ','ジ':'じ','ズ':'ず','ゼ':'ぜ','ゾ':'ぞ','ダ':'だ','ヂ':'ぢ','ヅ':'づ','デ':'で','ド':'ど','バ':'ば','ビ':'び','ブ':'ぶ','ベ':'べ','ボ':'ぼ','パ':'ぱ','ピ':'ぴ','プ':'ぷ','ペ':'ぺ','ポ':'ぽ','キャ':'きゃ','キュ':'きゅ','キョ':'きょ','シャ':'しゃ','シュ':'しゅ','ショ':'しょ','チャ':'ちゃ','チュ':'ちゅ','チョ':'ちょ','ニャ':'にゃ','ニュ':'にゅ','ニョ':'にょ','ヒャ':'ひゃ','ヒュ':'ひゅ','ヒョ':'ひょ','ミャ':'みゃ','ミュ':'みゅ','ミョ':'みょ','リャ':'りゃ','リュ':'りゅ','リョ':'りょ','ギャ':'ぎゃ','ギュ':'ぎゅ','ギョ':'ぎょ','ジャ':'じゃ','ジュ':'じゅ','ジョ':'じょ','ビャ':'びゃ','ビュ':'びゅ','ビョ':'びょ','ピャ':'ぴゃ','ピュ':'ぴゅ','ピョ':'ぴょ'};
 function renderKanaGrid(type){
@@ -1393,16 +1518,22 @@ function renderSentList(){
   var grid=document.getElementById('sent-list-grid');if(!grid)return;
   if(!data.length){grid.innerHTML='<div class="empty-state"><div class="empty-icon">💬</div><div class="empty-text">Chưa có câu nào!</div></div>';document.getElementById('sentCount').textContent='';return;}
   var rows=data.map(function(s){
+    var editBtns=editMode
+      ?'<div style="display:flex;gap:5px;margin-top:10px;">'
+        +'<button class="btn btn-xs" style="background:var(--info);color:#fff" onclick="speakSentById('+s.id+')">🔊</button>'
+        +'<button class="btn btn-secondary btn-xs" onclick="editSentence(sentLevel,'+s.id+')">✏️</button>'
+        +'<button class="btn btn-danger btn-xs" onclick="deleteSentence(sentLevel,'+s.id+')">🗑</button>'
+        +'</div>'
+      :'<div style="margin-top:8px;">'
+        +'<button class="btn btn-xs" style="background:var(--info);color:#fff" onclick="speakSentById('+s.id+')">🔊</button>'
+        +'</div>';
     return '<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r2);padding:16px;margin-bottom:8px;">'
       +'<div style="font-size:18px;font-weight:700;color:var(--text);line-height:1.5;margin-bottom:4px;">'+s.jp+'</div>'
       +(s.reading?'<div style="font-size:12px;color:var(--text3);font-style:italic;margin-bottom:4px;">'+s.reading+'</div>':'')
       +'<div style="font-size:14px;color:var(--text2);margin-bottom:6px;">'+s.vn+'</div>'
       +(s.note?'<span style="font-size:11px;color:var(--primary);background:var(--primary-l);padding:2px 8px;border-radius:5px;">📌 '+s.note+'</span>':'')
-      +'<div style="display:flex;gap:5px;margin-top:10px;">'
-      +'<button class="btn btn-xs" style="background:var(--info);color:#fff" onclick="speakSentById('+s.id+')">🔊</button>'
-      +'<button class="btn btn-secondary btn-xs" onclick="editSentence(sentLevel,'+s.id+')">✏️</button>'
-      +'<button class="btn btn-danger btn-xs" onclick="deleteSentence(sentLevel,'+s.id+')">🗑</button>'
-      +'</div></div>';
+      +editBtns
+      +'</div>';
   });
   grid.innerHTML=rows.join('');
   document.getElementById('sentCount').textContent=data.length+' câu';
@@ -1426,7 +1557,19 @@ function renderSentFC(){
   sentFCIndex=Math.min(sentFCIndex,data.length-1);const s=data[sentFCIndex];
   document.getElementById('sent-fc-jp').textContent=s.jp;document.getElementById('sent-fc-vn').textContent=s.vn;document.getElementById('sent-fc-note').textContent=s.note||'';document.getElementById('sent-fc-progress').textContent=`${sentFCIndex+1} / ${data.length}`;document.getElementById('sent-flashcard').classList.remove('flipped');
 }
-function flipSentCard(){document.getElementById('sent-flashcard').classList.toggle('flipped');const s=(S.sentData[sentLevel]||[])[sentFCIndex];if(s)speak(s.jp);}
+function flipSentCard(){
+  const fc=document.getElementById('sent-flashcard');
+  const front=fc.children[0];
+  const back=fc.children[1];
+  if(!front||!back)return;
+  const isFlipped=back.style.display!=='none';
+  if(isFlipped){
+    front.style.display='flex';back.style.display='none';
+  } else {
+    front.style.display='none';back.style.display='flex';
+    const s=(S.sentData[sentLevel]||[])[sentFCIndex];if(s)speak(s.jp);
+  }
+}
 function nextSentFC(){const d=S.sentData[sentLevel]||[];sentFCIndex=(sentFCIndex+1)%Math.max(1,d.length);renderSentFC();}
 function prevSentFC(){const d=S.sentData[sentLevel]||[];sentFCIndex=(sentFCIndex-1+d.length)%Math.max(1,d.length);renderSentFC();}
 function speakSentCurrent(){const s=(S.sentData[sentLevel]||[])[sentFCIndex];if(s)speak(s.jp);}
@@ -2016,13 +2159,20 @@ function checkWritingText(){
 let editMode = JSON.parse(localStorage.getItem('editMode')||'false');
 
 function applyEditMode(){
-  const els = document.querySelectorAll(
-    '#vocab-lesson-edit-btns,#vocab-table-edit-btns,#grammar-lesson-edit-btns,#grammar-detail-edit-btns,#kanji-edit-btns,#hira-edit-btns,#kata-edit-btns'
-  );
-  els.forEach(el=>{
-    el.style.display = editMode ? 'flex' : 'none';
+  // All edit-mode-only elements
+  const editIds=[
+    'vocab-lesson-edit-btns','vocab-table-edit-btns',
+    'grammar-lesson-edit-btns','grammar-detail-edit-btns',
+    'kanji-edit-btns','hira-edit-btns','kata-edit-btns',
+    'sent-topic-edit-btns','sent-detail-edit-btns'
+  ];
+  editIds.forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.style.display=editMode?'flex':'none';
   });
   // Action column in vocab table
+  // Hide/show action column
+  document.querySelectorAll('.vocab-action-cell').forEach(el=>el.style.display=editMode?'':'none');
   const actionCol = document.getElementById('vocab-action-col');
   if(actionCol) actionCol.style.display = editMode ? '' : 'none';
   // Update button
@@ -2175,7 +2325,7 @@ function renderVocabTable(){
     return '<tr>'
       +'<td style="color:var(--text3);font-size:11px">'+v.id+'</td>'
       +'<td><div class="word-jp">'+v.word+'</div>'+(v.reading!==v.word?'<div class="word-reading">'+v.reading+'</div>':'')+'</td>'
-      +'<td><span class="type-badge type-'+v.type+'">'+v.type+'</span></td>'
+      +'<td><span class="type-badge type-'+v.type+'">'+v.type+'<span class="type-label-vn">'+(TYPE_VN[v.type]||'')+'</span></span></td>'
       +'<td>'+v.meaning+'</td>'
       +'<td style="color:var(--warning);font-weight:700">'+(v.kanji||'-')+'</td>'
       +'<td><button class="star-btn voc-star" data-lv="'+lv+'" data-id="'+v.id+'">'+(st?'⭐':'☆')+'</button></td>'
@@ -2238,25 +2388,98 @@ function importVocabExcel(event){
   const reader=new FileReader();
   reader.onload=function(e){try{
     const wb=XLSX.read(e.target.result,{type:'binary'}),ws=wb.Sheets[wb.SheetNames[0]],rows=XLSX.utils.sheet_to_json(ws,{header:1});
-    const lv=S.level;
-    const key = currentVocabLesson ? lv+'_lesson_'+currentVocabLesson : lv;
-    if(!S.vocabData[key])S.vocabData[key]=[];
-    let added=0;const startId=Math.max(0,...S.vocabData[key].map(v=>v.id))+1;
-    rows.slice(1).forEach((row,i)=>{if(!row[1])return;S.vocabData[key].push({id:startId+i,word:String(row[1]||''),type:String(row[2]||'名詞'),meaning:String(row[3]||''),reading:String(row[1]||''),kanji:String(row[4]||'')});added++;});
-    save();renderVocabTable();showToast('✅ Import '+added+' từ!','success');
-  }catch(err){showToast('❌ Lỗi đọc file!','error');}};
+    if(!rows.length){showToast('File trống!','error');return;}
+    const header=rows[0].map(h=>String(h||'').toLowerCase());
+    // Detect format: new format has 'level' and 'bài' columns
+    const hasLevel=header.some(h=>h.includes('level'));
+    const hasLesson=header.some(h=>h.includes('bài')||h.includes('bai'));
+    let added=0,skipped=0;
+    if(hasLevel&&hasLesson){
+      // New format: STT, Level, Bài, Tên bài, Từ vựng, Từ loại, Nghĩa, Kanji
+      const levelIdx=header.findIndex(h=>h.includes('level'));
+      const lessonIdIdx=header.findIndex(h=>h.includes('bài')||h.includes('bai'));
+      const lessonNameIdx=header.findIndex(h=>h.includes('tên bài')||h.includes('ten bai')||h===String(lessonIdIdx+1));
+      const wordIdx=header.findIndex(h=>h.includes('từ vựng')||h.includes('tu vung')||h.includes('kana'));
+      const typeIdx=header.findIndex(h=>h.includes('từ loại')||h.includes('tu loai'));
+      const meaningIdx=header.findIndex(h=>h.includes('nghĩa')||h.includes('nghia'));
+      const kanjiIdx=header.findIndex(h=>h.includes('kanji'));
+      // Group by level+lesson
+      const groups={};
+      rows.slice(1).forEach(row=>{
+        if(!row[wordIdx||4])return;
+        const lv=String(row[levelIdx]||'N5').toUpperCase();
+        const lessonId=parseInt(row[lessonIdIdx]||1)||1;
+        const lessonName=String(row[lessonNameIdx>=0?lessonNameIdx:3]||'Bài '+lessonId);
+        const key=lv+'_lesson_'+lessonId;
+        if(!groups[key])groups[key]={lv,lessonId,lessonName,words:[]};
+        groups[key].words.push({
+          word:String(row[wordIdx>=0?wordIdx:4]||''),
+          type:String(row[typeIdx>=0?typeIdx:5]||'名詞'),
+          meaning:String(row[meaningIdx>=0?meaningIdx:6]||''),
+          kanji:String(row[kanjiIdx>=0?kanjiIdx:7]||''),
+        });
+      });
+      // Insert into vocabData and vocabLessons
+      Object.entries(groups).forEach(([key,g])=>{
+        const {lv,lessonId,lessonName,words}=g;
+        // Ensure lesson exists
+        if(!S.vocabLessons[lv])S.vocabLessons[lv]=[];
+        if(!S.vocabLessons[lv].find(l=>l.id===lessonId)){
+          S.vocabLessons[lv].push({id:lessonId,title:lessonName,note:''});
+          S.vocabLessons[lv].sort((a,b)=>a.id-b.id);
+        }
+        if(!S.vocabData[key])S.vocabData[key]=[];
+        const startId=Math.max(0,...S.vocabData[key].map(v=>v.id))+1;
+        words.forEach((w,i)=>{
+          if(!w.word)return;
+          S.vocabData[key].push({id:startId+i,word:w.word,type:w.type,meaning:w.meaning,reading:w.word,kanji:w.kanji});
+          added++;
+        });
+      });
+      saveLessons();
+    } else {
+      // Old format: STT, Từ vựng, Từ loại, Nghĩa, Kanji
+      const lv=S.level;
+      const key=currentVocabLesson?lv+'_lesson_'+currentVocabLesson:lv;
+      if(!S.vocabData[key])S.vocabData[key]=[];
+      const startId=Math.max(0,...S.vocabData[key].map(v=>v.id))+1;
+      rows.slice(1).forEach((row,i)=>{
+        if(!row[1])return;
+        S.vocabData[key].push({id:startId+i,word:String(row[1]||''),type:String(row[2]||'名詞'),meaning:String(row[3]||''),reading:String(row[1]||''),kanji:String(row[4]||'')});
+        added++;
+      });
+    }
+    save();
+    if(S.page==='level'){renderVocabLessons();if(currentVocabLesson)renderVocabTable();}
+    var skipMsg=skipped?' (bỏ qua '+skipped+')':'';showToast('✅ Import '+added+' từ'+skipMsg+'!','success');
+    // Sync to GitHub if configured
+    if(typeof syncToGitHub==='function') syncToGitHub();
+  }catch(err){console.error(err);showToast('❌ Lỗi: '+err.message,'error');}};
   reader.readAsBinaryString(file);event.target.value='';
 }
 function exportVocabTemplate(){
   const lv=S.level;
-  const key = currentVocabLesson ? lv+'_lesson_'+currentVocabLesson : lv;
-  const data=S.vocabData[key]||[];
-  const ws_data=[['STT','Từ vựng (Kana)','Từ loại','Nghĩa tiếng Việt','Kanji'],...data.map(v=>[v.id,v.word,v.type,v.meaning,v.kanji||''])];
-  if(ws_data.length===1)ws_data.push([1,'あいさつ','名詞','lời chào hỏi','挨拶']);
-  const wb=XLSX.utils.book_new(),ws=XLSX.utils.aoa_to_sheet(ws_data);
-  ws['!cols']=[{wch:6},{wch:25},{wch:12},{wch:25},{wch:15}];
-  XLSX.utils.book_append_sheet(wb,ws,'Vocabulary');XLSX.writeFile(wb,'vocab_'+lv+'.xlsx');
-  showToast('📤 Đã tải file Excel!','success');
+  // Export ALL vocab across all lessons for this level
+  const lessons=S.vocabLessons[lv]||[];
+  const allRows=[['STT','Level','Bài (số)','Tên bài','Từ vựng (Kana)','Từ loại','Nghĩa tiếng Việt','Kanji']];
+  let stt=1;
+  lessons.forEach(lesson=>{
+    const key=lv+'_lesson_'+lesson.id;
+    const data=S.vocabData[key]||[];
+    data.forEach(v=>{
+      allRows.push([stt++,lv,lesson.id,lesson.title,v.word,v.type,v.meaning,v.kanji||'']);
+    });
+  });
+  if(allRows.length===1){
+    allRows.push([1,'N5',1,'Bài 1 - Chào hỏi','あいさつ','名詞','lời chào hỏi','挨拶']);
+    allRows.push([2,'N5',1,'Bài 1 - Chào hỏi','こんにちは','表現','Xin chào','']);
+    allRows.push([3,'N4',2,'Bài 2 - Gia đình','かぞく','名詞','gia đình','家族']);
+  }
+  const wb=XLSX.utils.book_new(),ws=XLSX.utils.aoa_to_sheet(allRows);
+  ws['!cols']=[{wch:5},{wch:6},{wch:8},{wch:25},{wch:22},{wch:12},{wch:22},{wch:12}];
+  XLSX.utils.book_append_sheet(wb,ws,'Vocabulary');
+  XLSX.writeFile(wb,'vocab_all_levels.xlsx');
+  showToast('📤 Đã tải file Excel (có cột Level & Bài)!','success');
 }
 
 // ============================================================
@@ -2898,6 +3121,651 @@ function initVocabSampleData(){
   }
 }
 
+
+// ============================================================
+// GITHUB SYNC & AUTH SYSTEM
+// ============================================================
+let currentUser = null; // {id, name, passwordHash}
+const GH = typeof APP_CONFIG !== 'undefined' ? APP_CONFIG.github : {};
+const AUTH_CFG = (typeof APP_CONFIG !== 'undefined' && APP_CONFIG.auth) ? APP_CONFIG.auth : {enabled:false};
+
+// Simple hash function
+function simpleHash(str){
+  let h=0;for(let i=0;i<str.length;i++){h=((h<<5)-h)+str.charCodeAt(i);h|=0;}
+  return Math.abs(h).toString(36);
+}
+
+// ============================================================
+// GITHUB API HELPERS
+// ============================================================
+async function ghRequest(method, path, body){
+  if(!GH.enabled||!GH.token||!GH.owner||!GH.repo) return null;
+  const url=`https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/${GH.data_path}/${path}`;
+  const headers={'Authorization':'token '+GH.token,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'};
+  try{
+    const res=await fetch(url,{method,headers,body:body?JSON.stringify(body):undefined});
+    if(!res.ok){const e=await res.json();console.warn('GH API error:',e.message);return null;}
+    return await res.json();
+  }catch(e){console.warn('GH fetch error:',e);return null;}
+}
+
+async function ghReadFile(path){
+  const data=await ghRequest('GET',path);
+  if(!data||!data.content) return null;
+  try{return JSON.parse(atob(data.content.replace(/\n/g,'')));}
+  catch(e){return null;}
+}
+
+async function ghWriteFile(path, jsonData, message){
+  // Get current SHA if file exists
+  const existing=await ghRequest('GET',path);
+  const sha=existing?existing.sha:undefined;
+  const body={
+    message:message||'Update '+path,
+    content:btoa(unescape(encodeURIComponent(JSON.stringify(jsonData,null,2)))),
+    branch:GH.branch||'main',
+  };
+  if(sha) body.sha=sha;
+  return await ghRequest('PUT',path,body);
+}
+
+// ============================================================
+// AUTH FUNCTIONS
+// ============================================================
+function initAuth(){
+  // Apply app name from config
+  const appNameEl=document.getElementById('authAppName');
+  if(appNameEl&&typeof APP_CONFIG!=='undefined') appNameEl.textContent=APP_CONFIG.app_name||'Nihongo Master';
+  if(!AUTH_CFG||!AUTH_CFG.enabled){
+    document.getElementById('authOverlay').style.display='none';
+    loadUserData(null);
+    return;
+  }
+  // Check if already logged in (session persists)
+  const saved=localStorage.getItem('nihongo_currentUser');
+  if(saved){
+    try{
+      currentUser=JSON.parse(saved);
+      document.getElementById('authOverlay').style.display='none';
+      loadUserData(currentUser);
+      updateUserUI();
+      return;
+    }catch(e){}
+  }
+  // Show auth overlay
+  const ao=document.getElementById('authOverlay');
+  ao.style.display='flex';
+  ao.style.alignItems='center';
+  ao.style.justifyContent='center';
+}
+
+function showLogin(){
+  document.getElementById('loginForm').style.display='block';
+  document.getElementById('registerForm').style.display='none';
+  document.getElementById('loginError').textContent='';
+  setTimeout(()=>{const el=document.getElementById('loginUsername');if(el)el.focus();},100);
+}
+function showRegister(){
+  document.getElementById('loginForm').style.display='none';
+  document.getElementById('registerForm').style.display='block';
+  document.getElementById('regError').textContent='';
+  setTimeout(()=>{const el=document.getElementById('regDisplayName');if(el)el.focus();},100);
+}
+function skipAuth(){
+  document.getElementById('authOverlay').style.display='none';
+  loadUserData(null);
+}
+
+async function doLogin(){
+  const username=(document.getElementById('loginUsername').value||'').trim().toLowerCase();
+  const pw=document.getElementById('loginPw').value;
+  const errEl=document.getElementById('loginError');
+  if(!username||!pw){errEl.textContent='Vui lòng điền đầy đủ!';return;}
+  errEl.textContent='⏳ Đang kiểm tra...';
+  const users=await loadUsersList();
+  const user=users.find(u=>u.username===username);
+  if(!user){errEl.textContent='❌ Tên đăng nhập không tồn tại!';return;}
+  if(user.passwordHash!==simpleHash(pw)){errEl.textContent='❌ Mật khẩu không đúng!';return;}
+  currentUser=user;
+  // Save session - persists until logout
+  localStorage.setItem('nihongo_currentUser',JSON.stringify(user));
+  document.getElementById('authOverlay').style.display='none';
+  await loadUserData(user);
+  updateUserUI();
+  showToast('👋 Xin chào, '+user.displayName+'!','success');
+}
+
+async function doRegister(){
+  const displayName=(document.getElementById('regDisplayName').value||'').trim();
+  const username=(document.getElementById('regUsername').value||'').trim().toLowerCase().replace(/[^a-z0-9_]/g,'');
+  const pw=document.getElementById('regPw').value;
+  const pw2=document.getElementById('regPw2').value;
+  const errEl=document.getElementById('regError');
+  if(!displayName){errEl.textContent='Vui lòng nhập tên hiển thị!';return;}
+  if(!username||username.length<3){errEl.textContent='Tên đăng nhập tối thiểu 3 ký tự (a-z, 0-9, _)!';return;}
+  if(pw.length<4){errEl.textContent='Mật khẩu tối thiểu 4 ký tự!';return;}
+  if(pw!==pw2){errEl.textContent='Mật khẩu không khớp!';return;}
+  errEl.textContent='⏳ Đang tạo tài khoản...';
+  const users=await loadUsersList();
+  // Check username unique
+  if(users.find(u=>u.username===username)){errEl.textContent='❌ Tên đăng nhập đã tồn tại!';return;}
+  // Generate new ID
+  const maxId=users.reduce((m,u)=>Math.max(m,parseInt(u.id)||0),0);
+  const newId=String(maxId+1).padStart(3,'0');
+  const newUser={id:newId,username,displayName,passwordHash:simpleHash(pw),createdAt:new Date().toISOString()};
+  users.push(newUser);
+  await saveUsersList(users);
+  // Create user data file on GitHub
+  if(GH&&GH.enabled&&GH.token){
+    await ghWriteFile('users/'+newId+'.json',getDefaultUserData(),'Create user '+newId+' ('+username+')');
+  }
+  currentUser=newUser;
+  localStorage.setItem('nihongo_currentUser',JSON.stringify(newUser));
+  document.getElementById('authOverlay').style.display='none';
+  await loadUserData(newUser);
+  updateUserUI();
+  showToast('✅ Tạo tài khoản thành công! Chào '+displayName+'!','success');
+}
+
+function doLogout(){
+  if(!confirm('Đăng xuất?'))return;
+  currentUser=null;
+  localStorage.removeItem('nihongo_currentUser');
+  closeModal('settingsModal');
+  updateUserUI();
+  // Always show auth overlay on logout if auth enabled
+  const authEnabled = (typeof APP_CONFIG!=='undefined' && APP_CONFIG.auth && APP_CONFIG.auth.enabled) || (AUTH_CFG && AUTH_CFG.enabled);
+  if(authEnabled){
+    const ao=document.getElementById('authOverlay');
+    ao.style.display='flex';
+    ao.style.alignItems='center';
+    ao.style.justifyContent='center';
+    showLogin();
+    // Clear login fields
+    const lu=document.getElementById('loginUsername');
+    const lp=document.getElementById('loginPw');
+    if(lu)lu.value='';if(lp)lp.value='';
+  }
+  showToast('👋 Đã đăng xuất!','info');
+}
+
+function updateUserUI(){
+  const badge=document.getElementById('userBadge');
+  const nameEl=document.getElementById('settingsUserName');
+  const idEl=document.getElementById('settingsUserId');
+  const infoEl=document.getElementById('userInfoSettings');
+  if(currentUser){
+    const dname=currentUser.displayName||currentUser.name||currentUser.username||'User';
+    const uname=currentUser.username||'';
+    if(badge){badge.style.display='block';badge.textContent='👤 '+dname;}
+    if(nameEl)nameEl.textContent=dname+(uname?' (@'+uname+')':'');
+    if(idEl)idEl.textContent='ID: '+currentUser.id;
+    if(infoEl)infoEl.style.display='flex';
+  } else {
+    if(badge)badge.style.display='none';
+    if(infoEl)infoEl.style.display='none';
+  }
+}
+
+// ============================================================
+// USER DATA LOAD/SAVE
+// ============================================================
+async function loadUsersList(){
+  if(GH.enabled&&GH.token){
+    const data=await ghReadFile('users.json');
+    if(data&&Array.isArray(data))return data;
+  }
+  // Fallback to localStorage
+  return JSON.parse(localStorage.getItem('nihongo_users')||'[]');
+}
+
+async function saveUsersList(users){
+  localStorage.setItem('nihongo_users',JSON.stringify(users));
+  if(GH.enabled&&GH.token){
+    await ghWriteFile('users.json',users,'Update users list');
+  }
+}
+
+function getDefaultUserData(){
+  return {
+    kanaStatus:{},
+    starred:{},
+    vocabData:{},
+    grammarData:JSON.parse(JSON.stringify(GRAMMAR)),
+    sentData:JSON.parse(JSON.stringify(SENTENCES_DEFAULT)),
+    vocabLessons:JSON.parse(JSON.stringify(DEFAULT_VOCAB_LESSONS)),
+    grammarLessons:JSON.parse(JSON.stringify(DEFAULT_GRAMMAR_LESSONS)),
+    score:0,
+    theme:'light',
+    editMode:false,
+  };
+}
+
+async function loadUserData(user){
+  if(!user){
+    // No auth - use localStorage (already loaded in S)
+    return;
+  }
+  // Try GitHub first
+  if(GH.enabled&&GH.token){
+    showToast('⏳ Đang tải dữ liệu...','info');
+    const data=await ghReadFile('users/'+user.id+'.json');
+    if(data){
+      applyUserData(data);
+      showToast('☁️ Đã đồng bộ từ GitHub!','success');
+      return;
+    }
+  }
+  // Fallback: load from localStorage with user prefix
+  const prefix='nihongo_user_'+user.id+'_';
+  const keys=['kanaStatus','starred','vocabData','grammarData','sentData','vocabLessons','grammarLessons','score','theme'];
+  keys.forEach(k=>{
+    const val=localStorage.getItem(prefix+k);
+    if(val){
+      try{
+        if(k==='score') S.score=parseInt(val)||0;
+        else if(k==='theme') S.theme=val;
+        else S[k]=JSON.parse(val);
+      }catch(e){}
+    }
+  });
+  updateDashboard();
+}
+
+function applyUserData(data){
+  if(data.kanaStatus) S.kanaStatus=data.kanaStatus;
+  if(data.starred) S.starred=data.starred;
+  if(data.vocabData) S.vocabData=data.vocabData;
+  if(data.grammarData) S.grammarData=data.grammarData;
+  if(data.sentData) S.sentData=data.sentData;
+  if(data.vocabLessons) S.vocabLessons=data.vocabLessons;
+  if(data.grammarLessons) S.grammarLessons=data.grammarLessons;
+  if(data.score) S.score=data.score;
+  if(data.theme){S.theme=data.theme;document.documentElement.setAttribute('data-theme',S.theme);}
+  updateDashboard();
+}
+
+async function syncToGitHub(){
+  if(!GH.enabled||!GH.token||!currentUser) return;
+  const data={
+    kanaStatus:S.kanaStatus,starred:S.starred,vocabData:S.vocabData,
+    grammarData:S.grammarData,sentData:S.sentData,vocabLessons:S.vocabLessons,
+    grammarLessons:S.grammarLessons,score:S.score,theme:S.theme,
+    lastSync:new Date().toISOString(),
+  };
+  const ok=await ghWriteFile('users/'+currentUser.id+'.json',data,'Sync user '+currentUser.id);
+  if(ok) showToast('☁️ Đã lưu lên GitHub!','success');
+  else showToast('⚠️ Không thể sync GitHub','error');
+}
+
+// Override save() to also sync user data
+const _origSave = save;
+function save(){
+  _origSave();
+  // Save with user prefix if logged in
+  if(currentUser){
+    const prefix='nihongo_user_'+currentUser.id+'_';
+    localStorage.setItem(prefix+'kanaStatus',JSON.stringify(S.kanaStatus));
+    localStorage.setItem(prefix+'starred',JSON.stringify(S.starred));
+    localStorage.setItem(prefix+'vocabData',JSON.stringify(S.vocabData));
+    localStorage.setItem(prefix+'score',S.score);
+    localStorage.setItem(prefix+'theme',S.theme);
+  }
+}
+
+// Add sync button to settings
+
+// ============================================================
+// SENTENCE TOPICS - chia câu theo chủ đề
+// ============================================================
+const DEFAULT_SENT_TOPICS = {
+  N5:[
+    {id:1,title:'Chào hỏi',note:'あいさつ',sentences:[]},
+    {id:2,title:'Gia đình',note:'家族',sentences:[]},
+    {id:3,title:'Trường học',note:'学校',sentences:[]},
+  ],
+  N4:[{id:1,title:'Hành động hàng ngày',note:'日常動作',sentences:[]}],
+  N3:[{id:1,title:'Cảm xúc & Tính cách',note:'感情・性格',sentences:[]}],
+  N2:[{id:1,title:'Kinh tế & Xã hội',note:'経済・社会',sentences:[]}],
+  N1:[{id:1,title:'Văn học & Triết học',note:'文学・哲学',sentences:[]}],
+};
+
+// Migrate old sentData to topic-based structure
+function migrateSentData(){
+  if(!S.sentTopics){
+    S.sentTopics = JSON.parse(localStorage.getItem('sentTopics')||'null') || JSON.parse(JSON.stringify(DEFAULT_SENT_TOPICS));
+    // Migrate old S.sentData into topic 1 of each level
+    ['N5','N4','N3','N2','N1'].forEach(lv=>{
+      const old = S.sentData[lv]||[];
+      if(old.length>0 && S.sentTopics[lv] && S.sentTopics[lv][0]){
+        S.sentTopics[lv][0].sentences = old;
+      }
+    });
+    saveSentTopics();
+  }
+}
+function saveSentTopics(){localStorage.setItem('sentTopics',JSON.stringify(S.sentTopics));}
+
+let currentSentTopic = null; // current topic id
+let editingSentTopicId = null;
+let sentFCDeck = [];
+let sentFCIdx = 0;
+
+// ============================================================
+// TOPIC LIST
+// ============================================================
+function renderSentTopics(){
+  const lv = sentLevel;
+  const topics = (S.sentTopics&&S.sentTopics[lv])||[];
+  const grid = document.getElementById('sent-topic-grid');if(!grid)return;
+  if(!topics.length){
+    grid.innerHTML='<div class="empty-state"><div class="empty-icon">💬</div><div class="empty-text">Chưa có chủ đề nào. Bật Edit Mode để thêm!</div></div>';
+    return;
+  }
+  grid.innerHTML=topics.map(t=>{
+    const cnt=(t.sentences||[]).length;
+    const editBtns=editMode
+      ?'<div class="lesson-card-actions">'
+        +'<button class="btn btn-secondary btn-xs" onclick="event.stopPropagation();editSentTopic('+t.id+')">✏️</button>'
+        +'<button class="btn btn-danger btn-xs" onclick="event.stopPropagation();deleteSentTopic('+t.id+')">🗑</button>'
+        +'</div>'
+      :'';
+    return '<div class="lesson-card" onclick="openSentTopic('+t.id+')">'
+      +'<div class="lesson-card-count">'+cnt+' câu</div>'
+      +'<div class="lesson-card-title">'+t.title+'</div>'
+      +'<div class="lesson-card-note">'+(t.note||'')+'</div>'
+      +editBtns+'</div>';
+  }).join('');
+}
+
+function openSentTopic(topicId){
+  currentSentTopic=topicId;
+  const lv=sentLevel;
+  const topic=((S.sentTopics&&S.sentTopics[lv])||[]).find(t=>t.id===topicId);if(!topic)return;
+  document.getElementById('sent-topic-list').style.display='none';
+  document.getElementById('sent-detail-view').style.display='block';
+  document.getElementById('sent-current-topic-title').textContent=topic.title;
+  renderSentList();
+  applyEditMode();
+}
+
+function backToSentTopics(){
+  currentSentTopic=null;
+  document.getElementById('sent-topic-list').style.display='block';
+  document.getElementById('sent-detail-view').style.display='none';
+  renderSentTopics();
+}
+
+// ============================================================
+// TOPIC CRUD
+// ============================================================
+function openAddSentTopicModal(){
+  editingSentTopicId=null;
+  document.getElementById('addSentTopicTitle').textContent='Thêm chủ đề';
+  document.getElementById('sent-topic-title-input').value='';
+  document.getElementById('sent-topic-note-input').value='';
+  openModal('addSentTopicModal');
+}
+function editSentTopic(id){
+  editingSentTopicId=id;
+  const lv=sentLevel;
+  const t=((S.sentTopics&&S.sentTopics[lv])||[]).find(t=>t.id===id);if(!t)return;
+  document.getElementById('addSentTopicTitle').textContent='Chỉnh sửa chủ đề';
+  document.getElementById('sent-topic-title-input').value=t.title;
+  document.getElementById('sent-topic-note-input').value=t.note||'';
+  openModal('addSentTopicModal');
+}
+function saveSentTopic(){
+  const title=document.getElementById('sent-topic-title-input').value.trim();
+  const note=document.getElementById('sent-topic-note-input').value.trim();
+  if(!title){showToast('Vui lòng nhập tên chủ đề!','error');return;}
+  const lv=sentLevel;
+  if(!S.sentTopics)S.sentTopics={};
+  if(!S.sentTopics[lv])S.sentTopics[lv]=[];
+  if(editingSentTopicId){
+    const idx=S.sentTopics[lv].findIndex(t=>t.id===editingSentTopicId);
+    if(idx>=0)S.sentTopics[lv][idx]={...S.sentTopics[lv][idx],title,note};
+    showToast('✅ Đã cập nhật!','success');
+  } else {
+    const newId=Math.max(0,...S.sentTopics[lv].map(t=>t.id))+1;
+    S.sentTopics[lv].push({id:newId,title,note,sentences:[]});
+    showToast('✅ Đã thêm chủ đề!','success');
+  }
+  saveSentTopics();closeModal('addSentTopicModal');renderSentTopics();
+}
+function deleteSentTopic(id){
+  if(!confirm('Xóa chủ đề này? Tất cả câu trong chủ đề cũng bị xóa!'))return;
+  const lv=sentLevel;
+  S.sentTopics[lv]=(S.sentTopics[lv]||[]).filter(t=>t.id!==id);
+  saveSentTopics();renderSentTopics();showToast('🗑 Đã xóa!','info');
+}
+
+// ============================================================
+// SENTENCE LIST (inside topic)
+// ============================================================
+function renderSentList(){
+  const lv=sentLevel;
+  const topic=currentSentTopic?((S.sentTopics&&S.sentTopics[lv])||[]).find(t=>t.id===currentSentTopic):null;
+  const data=topic?(topic.sentences||[]):(S.sentData[lv]||[]);
+  const grid=document.getElementById('sent-list-grid');if(!grid)return;
+  if(!data.length){
+    grid.innerHTML='<div class="empty-state"><div class="empty-icon">💬</div><div class="empty-text">Chưa có câu nào. Bật Edit Mode để thêm!</div></div>';
+    document.getElementById('sentCount').textContent='';return;
+  }
+  var rows=data.map(function(s){
+    var editBtns=editMode
+      ?'<div style="display:flex;gap:5px;margin-top:10px;">'
+        +'<button class="btn btn-xs" style="background:var(--info);color:#fff" onclick="speakSentById('+s.id+')">🔊</button>'
+        +'<button class="btn btn-secondary btn-xs" onclick="editSentenceInTopic('+s.id+')">✏️</button>'
+        +'<button class="btn btn-danger btn-xs" onclick="deleteSentenceFromTopic('+s.id+')">🗑</button>'
+        +'</div>'
+      :'<div style="margin-top:8px;">'
+        +'<button class="btn btn-xs" style="background:var(--info);color:#fff" onclick="speakSentById('+s.id+')">🔊</button>'
+        +'</div>';
+    return '<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r2);padding:16px;margin-bottom:8px;">'
+      +'<div style="font-size:18px;font-weight:700;color:var(--text);line-height:1.5;margin-bottom:4px;">'+s.jp+'</div>'
+      +(s.reading?'<div style="font-size:12px;color:var(--text3);font-style:italic;margin-bottom:4px;">'+s.reading+'</div>':'')
+      +'<div style="font-size:14px;color:var(--text2);margin-bottom:6px;">'+s.vn+'</div>'
+      +(s.note?'<span style="font-size:11px;color:var(--primary);background:var(--primary-l);padding:2px 8px;border-radius:5px;">📌 '+s.note+'</span>':'')
+      +editBtns+'</div>';
+  });
+  grid.innerHTML=rows.join('');
+  document.getElementById('sentCount').textContent=data.length+' câu';
+}
+
+function openAddSentModal(){
+  S.editSentId=null;
+  document.getElementById('addSentTitle').textContent='Thêm câu';
+  ['sent-jp-input','sent-reading-input','sent-vn-input','sent-note-input'].forEach(id=>document.getElementById(id).value='');
+  openModal('addSentModal');
+}
+function editSentenceInTopic(id){
+  const lv=sentLevel;
+  const topic=((S.sentTopics&&S.sentTopics[lv])||[]).find(t=>t.id===currentSentTopic);
+  const item=(topic?topic.sentences:S.sentData[lv]||[]).find(s=>s.id===id);if(!item)return;
+  S.editSentId=id;
+  document.getElementById('addSentTitle').textContent='Chỉnh sửa câu';
+  document.getElementById('sent-jp-input').value=item.jp;
+  document.getElementById('sent-reading-input').value=item.reading||'';
+  document.getElementById('sent-vn-input').value=item.vn;
+  document.getElementById('sent-note-input').value=item.note||'';
+  openModal('addSentModal');
+}
+function deleteSentenceFromTopic(id){
+  if(!confirm('Xóa câu này?'))return;
+  const lv=sentLevel;
+  const topic=((S.sentTopics&&S.sentTopics[lv])||[]).find(t=>t.id===currentSentTopic);
+  if(topic){topic.sentences=(topic.sentences||[]).filter(s=>s.id!==id);saveSentTopics();}
+  else{S.sentData[lv]=(S.sentData[lv]||[]).filter(s=>s.id!==id);saveSentData();}
+  renderSentList();showToast('🗑 Đã xóa!','info');
+}
+
+// Override saveSentence to save into topic
+function saveSentence(){
+  const jp=document.getElementById('sent-jp-input').value.trim();
+  const reading=document.getElementById('sent-reading-input').value.trim();
+  const vn=document.getElementById('sent-vn-input').value.trim();
+  const note=document.getElementById('sent-note-input').value.trim();
+  if(!jp||!vn){showToast('Vui lòng điền câu JP và nghĩa!','error');return;}
+  const lv=sentLevel;
+  const topic=currentSentTopic?((S.sentTopics&&S.sentTopics[lv])||[]).find(t=>t.id===currentSentTopic):null;
+  const arr=topic?(topic.sentences||(topic.sentences=[])):(S.sentData[lv]||(S.sentData[lv]=[]));
+  if(S.editSentId){
+    const idx=arr.findIndex(s=>s.id===S.editSentId);
+    if(idx>=0)arr[idx]={...arr[idx],jp,reading,vn,note};
+    showToast('✅ Đã cập nhật!','success');
+  } else {
+    const newId=Math.max(0,...arr.map(s=>s.id))+1;
+    arr.push({id:newId,jp,reading,vn,note});
+    showToast('✅ Đã thêm câu!','success');
+  }
+  if(topic)saveSentTopics();else saveSentData();
+  closeModal('addSentModal');renderSentList();
+  if(currentSentTopic)renderSentTopics();
+}
+
+function speakSentById(id){
+  const lv=sentLevel;
+  const topic=currentSentTopic?((S.sentTopics&&S.sentTopics[lv])||[]).find(t=>t.id===currentSentTopic):null;
+  const arr=topic?(topic.sentences||[]):(S.sentData[lv]||[]);
+  const s=arr.find(x=>x.id===id);if(s)speak(s.jp);
+}
+
+// ============================================================
+// SENTENCE FLASHCARD with topic support
+// ============================================================
+function buildSentFCDeck(source){
+  const lv=sentLevel;
+  if(source==='topic'&&currentSentTopic){
+    const topic=((S.sentTopics&&S.sentTopics[lv])||[]).find(t=>t.id===currentSentTopic);
+    return topic?(topic.sentences||[]):[];
+  }
+  // All sentences across all topics
+  const topics=(S.sentTopics&&S.sentTopics[lv])||[];
+  let all=[];
+  topics.forEach(t=>all=all.concat(t.sentences||[]));
+  if(!all.length) all=S.sentData[lv]||[];
+  return all;
+}
+
+let sentFCSource='all';
+function setSentFCSource(src,el){
+  sentFCSource=src;
+  document.querySelectorAll('#sent-flashcard-section .tab-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  sentFCDeck=buildSentFCDeck(src);
+  sentFCIdx=0;renderSentFC();
+}
+function shuffleSentFC(){
+  sentFCDeck=sentFCDeck.sort(()=>Math.random()-.5);
+  sentFCIdx=0;renderSentFC();showToast('🔀 Đã xáo trộn!','info');
+}
+
+function renderSentFC(){
+  const data=sentFCDeck.length?sentFCDeck:buildSentFCDeck(sentFCSource);
+  sentFCDeck=data;
+  const front=document.getElementById('sent-fc-front');
+  const back=document.getElementById('sent-fc-back');
+  if(!data.length){
+    const jp=document.getElementById('sent-fc-jp');
+    if(jp)jp.textContent='Chưa có câu nào';
+    return;
+  }
+  sentFCIdx=Math.min(sentFCIdx,data.length-1);
+  const s=data[sentFCIdx];
+  document.getElementById('sent-fc-jp').textContent=s.jp;
+  document.getElementById('sent-fc-vn').textContent=s.vn;
+  document.getElementById('sent-fc-note').textContent=s.note||'';
+  document.getElementById('sent-fc-progress').textContent=(sentFCIdx+1)+' / '+data.length;
+  if(front)front.style.display='flex';
+  if(back)back.style.display='none';
+}
+
+function flipSentCard(){
+  const front=document.getElementById('sent-fc-front');
+  const back=document.getElementById('sent-fc-back');
+  if(!front||!back)return;
+  const isFlipped=back.style.display!=='none';
+  if(isFlipped){front.style.display='flex';back.style.display='none';}
+  else{front.style.display='none';back.style.display='flex';const s=sentFCDeck[sentFCIdx];if(s)speak(s.jp);}
+}
+function nextSentFC(){sentFCIdx=(sentFCIdx+1)%Math.max(1,sentFCDeck.length);renderSentFC();}
+function prevSentFC(){sentFCIdx=(sentFCIdx-1+sentFCDeck.length)%Math.max(1,sentFCDeck.length);renderSentFC();}
+function speakSentCurrent(){const s=sentFCDeck[sentFCIdx];if(s)speak(s.jp);}
+function rateSentFC(r){if(r==='easy'){S.score+=5;save();showToast('+5 điểm!','success');}nextSentFC();}
+
+// ============================================================
+// SENTENCE PRACTICE with topic support
+// ============================================================
+let sentPracticeIdx=0;
+let sentPracticeDeck=[];
+
+function renderSentPractice(){
+  sentPracticeDeck=buildSentFCDeck('all');
+  if(!sentPracticeDeck.length){
+    const el=document.getElementById('sent-practice-vn');
+    if(el)el.textContent='Chưa có câu nào';return;
+  }
+  sentPracticeIdx=Math.min(sentPracticeIdx,sentPracticeDeck.length-1);
+  const s=sentPracticeDeck[sentPracticeIdx];
+  document.getElementById('sent-practice-vn').textContent=s.vn;
+  const noteEl=document.getElementById('sent-practice-note');
+  if(noteEl){noteEl.textContent=s.note?'💡 '+s.note:'';noteEl.style.display=s.note?'block':'none';}
+  document.getElementById('sent-practice-input').value='';
+  document.getElementById('sent-practice-result').textContent='';
+  document.getElementById('sent-practice-answer').style.display='none';
+}
+function nextSentPractice(){sentPracticeIdx=(sentPracticeIdx+1)%Math.max(1,sentPracticeDeck.length);renderSentPractice();}
+function speakSentPractice(){const s=sentPracticeDeck[sentPracticeIdx];if(s)speak(s.jp);}
+function revealSentPractice(){
+  const s=sentPracticeDeck[sentPracticeIdx];if(!s)return;
+  document.getElementById('sent-practice-answer').style.display='block';
+  document.getElementById('sent-practice-answer').innerHTML='<strong>Đáp án:</strong> '+s.jp+(s.reading?'<br><em>'+s.reading+'</em>':'');
+  document.getElementById('sent-practice-result').innerHTML='<span style="color:var(--info)">👁 Đáp án đã hiển thị</span>';
+}
+function checkSentPractice(){
+  const s=sentPracticeDeck[sentPracticeIdx];if(!s)return;
+  const input=document.getElementById('sent-practice-input').value.trim();
+  const correct=s.jp.trim();
+  const norm=t=>t.replace(/[。、！？\s,.!?]/g,'');
+  const h=norm(input),t=norm(correct);
+  let matches=0;for(let i=0;i<Math.min(h.length,t.length);i++)if(h[i]===t[i])matches++;
+  const pct=t.length>0?Math.round(matches/t.length*100):0;
+  const resultEl=document.getElementById('sent-practice-result');
+  const answerEl=document.getElementById('sent-practice-answer');
+  if(pct>=90){resultEl.innerHTML='<span style="color:var(--success)">✅ Chính xác! +10 điểm</span>';S.score+=10;save();showToast('+10 điểm! ✅','success');}
+  else if(pct>=60){resultEl.innerHTML='<span style="color:var(--warning)">😊 Gần đúng ('+pct+'%)</span>';answerEl.style.display='block';answerEl.innerHTML='<strong>Đáp án:</strong> '+correct+(s.reading?'<br><em>'+s.reading+'</em>':'');}
+  else{resultEl.innerHTML='<span style="color:var(--danger)">❌ Chưa đúng ('+pct+'%)</span>';answerEl.style.display='block';answerEl.innerHTML='<strong>Đáp án:</strong> '+correct+(s.reading?'<br><em>'+s.reading+'</em>':'');}
+}
+
+// ============================================================
+// OVERRIDE switchSentTab & switchSentLevel
+// ============================================================
+function switchSentLevel(lv,el){
+  sentLevel=lv;
+  document.querySelectorAll('#sentLevelTabs .level-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  currentSentTopic=null;
+  document.getElementById('sent-topic-list').style.display='block';
+  document.getElementById('sent-detail-view').style.display='none';
+  renderSentTopics();
+  if(sentTab==='flashcard'){sentFCDeck=[];renderSentFC();}
+  if(sentTab==='practice')renderSentPractice();
+}
+function switchSentTab(tab,el){
+  sentTab=tab;
+  document.querySelectorAll('#page-sentences .tab-group .tab-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('sent-list-section').style.display=tab==='list'?'block':'none';
+  document.getElementById('sent-flashcard-section').style.display=tab==='flashcard'?'block':'none';
+  document.getElementById('sent-practice-section').style.display=tab==='practice'?'block':'none';
+  if(tab==='flashcard'){sentFCDeck=buildSentFCDeck(sentFCSource);sentFCIdx=0;renderSentFC();}
+  if(tab==='practice')renderSentPractice();
+}
+
+// ============================================================
+// NAVIGATE to sentences - init topics
+// ============================================================
 function speak(text){if(!window.speechSynthesis)return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='ja-JP';u.rate=0.8;u.pitch=1;const voices=window.speechSynthesis.getVoices();const jp=voices.find(v=>v.lang.startsWith('ja'));if(jp)u.voice=jp;window.speechSynthesis.speak(u);}
 function openModal(id){document.getElementById(id).classList.add('open');}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
@@ -2925,6 +3793,8 @@ window.addEventListener('load',()=>{
   applyEditMode();
   // Init sample vocab data
   initVocabSampleData();
+  // Init auth
+  initAuth();
 });
 function sendHeight(){window.parent.postMessage({iframeHeight:document.documentElement.scrollHeight},'*');}
 window.addEventListener('load',sendHeight);window.addEventListener('resize',sendHeight);
