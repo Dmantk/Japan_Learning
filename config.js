@@ -9,17 +9,17 @@ const APP_CONFIG = {
 
   // ===== GITHUB SYNC =====
   github: {
-    enabled: false,
-    owner: "",        // GitHub username VD: "your-username"
-    repo: "",         // Tên repo data VD: "nihongo-data"
-    branch: "main",
-    token: "",        // Personal Access Token (repo scope)
+    enabled: true,
+    owner: "Dmantk",        // GitHub username VD: "your-username"
+    repo: "Japan_Learning",         // Tên repo data VD: "nihongo-data"
+    branch: "master",
+    token: "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",        // Personal Access Token (repo scope)
     data_path: "data" // Thư mục chứa data trong repo
   },
 
   // ===== AUTH =====
   auth: {
-    enabled: false,
+    enabled: true,
     allow_register: true,
     admin_password: "admin123"
   },
