@@ -1,7 +1,9 @@
 {
   "kanaStatus": {},
-  "starred": {},
-  "score": 0,
+  "starred": {
+    "N5_13": true
+  },
+  "score": 50,
   "theme": "light",
-  "lastSync": "2026-07-18T14:32:33.555Z"
+  "lastSync": "2026-07-18T14:37:27.325Z"
 }
