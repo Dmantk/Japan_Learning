@@ -96,7 +96,7 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--
 .kana-romaji{font-size:14px;color:var(--primary);font-weight:700;margin-top:5px;}
 .kana-pair{font-size:12px;color:var(--text3);margin-top:3px;}
 .kana-status-dot{position:absolute;top:4px;right:5px;font-size:9px;}
-.kana-card.kanji .kana-char{font-size:44px;}.kana-card.kanji .kana-meaning{font-size:9px;color:var(--text3);margin-top:1px;}
+.kana-card.kanji .kana-char{font-size:56px;}.kana-card.kanji .kana-meaning{font-size:9px;color:var(--text3);margin-top:1px;}
 /* ===== TAB GROUP ===== */
 .tab-group{display:flex;background:var(--bg3);border-radius:var(--r);padding:3px;gap:2px;border:1px solid var(--border);overflow-x:auto;-webkit-overflow-scrolling:touch;flex-shrink:0;}
 .tab-btn{padding:5px 12px;border-radius:7px;border:none;cursor:pointer;font-size:12px;font-weight:600;transition:all .18s;background:transparent;color:var(--text2);}
@@ -566,7 +566,7 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:inherit;}
           <div class="chip active" onclick="filterKanjiGrid('all',this)">Tất cả</div>
 
         </div>
-        <div class="kana-grid" id="kanji-grid"></div>
+        <div class="kana-grid" id="kanji-grid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr))"></div>
 
       </div>
     </div>
@@ -639,8 +639,6 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:inherit;}
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
             <div style="font-size:16px;font-weight:700;" id="vocab-current-lesson-title"></div>
             <div id="vocab-table-edit-btns" style="display:none;gap:6px;flex-wrap:wrap;">
-              <label class="btn btn-secondary btn-sm" style="cursor:pointer;">📥 Import<input type="file" accept=".xlsx,.xls" style="display:none" onchange="importVocabExcel(event)"></label>
-              <button class="btn btn-secondary btn-sm" onclick="exportVocabTemplate()">📤 Template</button>
               <button class="btn btn-primary btn-sm" onclick="openAddVocabModal()">➕ Thêm từ</button>
             </div>
           </div>
@@ -1210,7 +1208,7 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:inherit;}
       <div class="card" style="padding:14px;" id="githubSyncCard" style="display:none;">
         <div class="card-title">☁️ GitHub Sync</div>
         <div style="font-size:12px;color:var(--text3);margin-bottom:10px;">Lưu dữ liệu lên GitHub để đồng bộ giữa các thiết bị</div>
-        <button class="btn btn-primary btn-sm" onclick="syncToGitHub()">☁️ Sync lên GitHub</button>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;"><button class="btn btn-primary btn-sm" onclick="syncToGitHub()">☁️ Lưu lên GitHub</button><button class="btn btn-secondary btn-sm" onclick="loadFromGitHub()">📥 Tải từ GitHub</button></div>
       </div>
       <div class="card" style="padding:14px;border-color:var(--danger);">
         <div class="card-title" style="color:var(--danger);">⚠️ Reset tất cả</div>
@@ -2384,102 +2382,141 @@ function deleteVocab(key,id){
   save();renderVocabTable();showToast('🗑 Đã xóa','info');
 }
 function importVocabExcel(event){
-  const file=event.target.files[0];if(!file)return;
-  const reader=new FileReader();
-  reader.onload=function(e){try{
-    const wb=XLSX.read(e.target.result,{type:'binary'}),ws=wb.Sheets[wb.SheetNames[0]],rows=XLSX.utils.sheet_to_json(ws,{header:1});
-    if(!rows.length){showToast('File trống!','error');return;}
-    const header=rows[0].map(h=>String(h||'').toLowerCase());
-    // Detect format: new format has 'level' and 'bài' columns
-    const hasLevel=header.some(h=>h.includes('level'));
-    const hasLesson=header.some(h=>h.includes('bài')||h.includes('bai'));
-    let added=0,skipped=0;
-    if(hasLevel&&hasLesson){
-      // New format: STT, Level, Bài, Tên bài, Từ vựng, Từ loại, Nghĩa, Kanji
-      const levelIdx=header.findIndex(h=>h.includes('level'));
-      const lessonIdIdx=header.findIndex(h=>h.includes('bài')||h.includes('bai'));
-      const lessonNameIdx=header.findIndex(h=>h.includes('tên bài')||h.includes('ten bai')||h===String(lessonIdIdx+1));
-      const wordIdx=header.findIndex(h=>h.includes('từ vựng')||h.includes('tu vung')||h.includes('kana'));
-      const typeIdx=header.findIndex(h=>h.includes('từ loại')||h.includes('tu loai'));
-      const meaningIdx=header.findIndex(h=>h.includes('nghĩa')||h.includes('nghia'));
-      const kanjiIdx=header.findIndex(h=>h.includes('kanji'));
-      // Group by level+lesson
-      const groups={};
-      rows.slice(1).forEach(row=>{
-        if(!row[wordIdx||4])return;
-        const lv=String(row[levelIdx]||'N5').toUpperCase();
-        const lessonId=parseInt(row[lessonIdIdx]||1)||1;
-        const lessonName=String(row[lessonNameIdx>=0?lessonNameIdx:3]||'Bài '+lessonId);
-        const key=lv+'_lesson_'+lessonId;
-        if(!groups[key])groups[key]={lv,lessonId,lessonName,words:[]};
-        groups[key].words.push({
-          word:String(row[wordIdx>=0?wordIdx:4]||''),
-          type:String(row[typeIdx>=0?typeIdx:5]||'名詞'),
-          meaning:String(row[meaningIdx>=0?meaningIdx:6]||''),
-          kanji:String(row[kanjiIdx>=0?kanjiIdx:7]||''),
-        });
-      });
-      // Insert into vocabData and vocabLessons
-      Object.entries(groups).forEach(([key,g])=>{
-        const {lv,lessonId,lessonName,words}=g;
-        // Ensure lesson exists
-        if(!S.vocabLessons[lv])S.vocabLessons[lv]=[];
-        if(!S.vocabLessons[lv].find(l=>l.id===lessonId)){
-          S.vocabLessons[lv].push({id:lessonId,title:lessonName,note:''});
-          S.vocabLessons[lv].sort((a,b)=>a.id-b.id);
+  var file=event.target.files[0];if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      var wb=XLSX.read(e.target.result,{type:'binary'});
+      var ws=wb.Sheets[wb.SheetNames[0]];
+      var rows=XLSX.utils.sheet_to_json(ws,{header:1});
+      if(!rows||!rows.length){showToast('File trống!','error');return;}
+      var header=rows[0].map(function(h){return String(h||'').toLowerCase();});
+      var hasLevel=header.some(function(h){return h.includes('level');});
+      var hasLessonName=header.some(function(h){return h.includes('tên bài')||h.includes('ten bai')||h.includes('lesson');});
+      var added=0,updated=0,skipped=0;
+      if(hasLevel&&hasLessonName){
+        // New format: STT, Level, Tên bài, Từ vựng, Từ loại, Nghĩa, Kanji
+        var levelIdx=header.findIndex(function(h){return h.includes('level');});
+        var lessonNameIdx=header.findIndex(function(h){return h.includes('tên bài')||h.includes('ten bai')||h.includes('lesson');});
+        var wordIdx=header.findIndex(function(h){return h.includes('từ vựng')||h.includes('tu vung')||h.includes('kana')||h.includes('word');});
+        var typeIdx=header.findIndex(function(h){return h.includes('từ loại')||h.includes('tu loai')||h.includes('type');});
+        var meaningIdx=header.findIndex(function(h){return h.includes('nghĩa')||h.includes('nghia')||h.includes('meaning');});
+        var kanjiIdx=header.findIndex(function(h){return h.includes('kanji');});
+        if(wordIdx<0)wordIdx=3;if(typeIdx<0)typeIdx=4;if(meaningIdx<0)meaningIdx=5;if(kanjiIdx<0)kanjiIdx=6;
+        // Group rows by level+lessonName
+        var groups={};
+        for(var ri=1;ri<rows.length;ri++){
+          var row=rows[ri];
+          if(!row||!row[wordIdx])continue;
+          var lv=String(row[levelIdx]||'N5').trim().toUpperCase();
+          var lessonName=String(row[lessonNameIdx]||'Bài 1').trim();
+          var gkey=lv+'||'+lessonName;
+          if(!groups[gkey])groups[gkey]={lv:lv,lessonName:lessonName,words:[]};
+          groups[gkey].words.push({
+            word:String(row[wordIdx]||'').trim(),
+            type:String(row[typeIdx]||'名詞').trim(),
+            meaning:String(row[meaningIdx]||'').trim(),
+            kanji:String(row[kanjiIdx]||'').trim(),
+          });
         }
+        // Process each group
+        var gkeys=Object.keys(groups);
+        for(var gi=0;gi<gkeys.length;gi++){
+          var g=groups[gkeys[gi]];
+          var lv=g.lv;var lessonName=g.lessonName;
+          if(!S.vocabLessons[lv])S.vocabLessons[lv]=[];
+          // Find or create lesson by name
+          var lesson=null;
+          for(var li=0;li<S.vocabLessons[lv].length;li++){
+            if(S.vocabLessons[lv][li].title===lessonName){lesson=S.vocabLessons[lv][li];break;}
+          }
+          if(!lesson){
+            var newLessonId=1;
+            for(var li=0;li<S.vocabLessons[lv].length;li++){if(S.vocabLessons[lv][li].id>=newLessonId)newLessonId=S.vocabLessons[lv][li].id+1;}
+            lesson={id:newLessonId,title:lessonName,note:''};
+            S.vocabLessons[lv].push(lesson);
+          }
+          var key=lv+'_lesson_'+lesson.id;
+          if(!S.vocabData[key])S.vocabData[key]=[];
+          // Process words - dedup by word
+          for(var wi=0;wi<g.words.length;wi++){
+            var w=g.words[wi];
+            if(!w.word)continue;
+            // Check if word already exists
+            var existing=null;
+            for(var vi=0;vi<S.vocabData[key].length;vi++){
+              if(S.vocabData[key][vi].word===w.word){existing=S.vocabData[key][vi];break;}
+            }
+            if(existing){
+              // Update if meaning changed
+              if(existing.meaning!==w.meaning||existing.kanji!==w.kanji){
+                existing.meaning=w.meaning;existing.type=w.type;existing.kanji=w.kanji;
+                updated++;
+              } else {skipped++;}
+            } else {
+              var newId=1;
+              for(var vi=0;vi<S.vocabData[key].length;vi++){if(S.vocabData[key][vi].id>=newId)newId=S.vocabData[key][vi].id+1;}
+              S.vocabData[key].push({id:newId,word:w.word,type:w.type,meaning:w.meaning,reading:w.word,kanji:w.kanji});
+              added++;
+            }
+          }
+        }
+        saveLessons();
+      } else {
+        // Simple format: STT, Từ vựng, Từ loại, Nghĩa, Kanji
+        var lv=S.level;
+        var key=currentVocabLesson?lv+'_lesson_'+currentVocabLesson:lv;
         if(!S.vocabData[key])S.vocabData[key]=[];
-        const startId=Math.max(0,...S.vocabData[key].map(v=>v.id))+1;
-        words.forEach((w,i)=>{
-          if(!w.word)return;
-          S.vocabData[key].push({id:startId+i,word:w.word,type:w.type,meaning:w.meaning,reading:w.word,kanji:w.kanji});
-          added++;
-        });
-      });
-      saveLessons();
-    } else {
-      // Old format: STT, Từ vựng, Từ loại, Nghĩa, Kanji
-      const lv=S.level;
-      const key=currentVocabLesson?lv+'_lesson_'+currentVocabLesson:lv;
-      if(!S.vocabData[key])S.vocabData[key]=[];
-      const startId=Math.max(0,...S.vocabData[key].map(v=>v.id))+1;
-      rows.slice(1).forEach((row,i)=>{
-        if(!row[1])return;
-        S.vocabData[key].push({id:startId+i,word:String(row[1]||''),type:String(row[2]||'名詞'),meaning:String(row[3]||''),reading:String(row[1]||''),kanji:String(row[4]||'')});
-        added++;
-      });
-    }
-    save();
-    if(S.page==='level'){renderVocabLessons();if(currentVocabLesson)renderVocabTable();}
-    var skipMsg=skipped?' (bỏ qua '+skipped+')':'';showToast('✅ Import '+added+' từ'+skipMsg+'!','success');
-    // Sync to GitHub if configured
-    if(typeof syncToGitHub==='function') syncToGitHub();
-  }catch(err){console.error(err);showToast('❌ Lỗi: '+err.message,'error');}};
-  reader.readAsBinaryString(file);event.target.value='';
+        for(var ri=1;ri<rows.length;ri++){
+          var row=rows[ri];
+          if(!row||!row[1])continue;
+          var word=String(row[1]||'').trim();
+          if(!word)continue;
+          var existing=null;
+          for(var vi=0;vi<S.vocabData[key].length;vi++){if(S.vocabData[key][vi].word===word){existing=S.vocabData[key][vi];break;}}
+          if(existing){skipped++;}
+          else{
+            var newId=1;
+            for(var vi=0;vi<S.vocabData[key].length;vi++){if(S.vocabData[key][vi].id>=newId)newId=S.vocabData[key][vi].id+1;}
+            S.vocabData[key].push({id:newId,word:word,type:String(row[2]||'名詞'),meaning:String(row[3]||''),reading:word,kanji:String(row[4]||'')});
+            added++;
+          }
+        }
+      }
+      save();
+      if(S.page==='level'){renderVocabLessons();if(currentVocabLesson)renderVocabTable();}
+      var msg='✅ Import xong! Thêm: '+added;
+      if(updated)msg+=', Cập nhật: '+updated;
+      if(skipped)msg+=', Bỏ qua (trùng): '+skipped;
+      showToast(msg,'success');
+    }catch(err){console.error(err);showToast('❌ Lỗi import: '+err.message,'error');}
+  };
+  reader.readAsBinaryString(file);
+  event.target.value='';
 }
 function exportVocabTemplate(){
   const lv=S.level;
-  // Export ALL vocab across all lessons for this level
   const lessons=S.vocabLessons[lv]||[];
-  const allRows=[['STT','Level','Bài (số)','Tên bài','Từ vựng (Kana)','Từ loại','Nghĩa tiếng Việt','Kanji']];
+  // Format: STT, Level, Tên bài, Từ vựng, Từ loại, Nghĩa, Kanji
+  const allRows=[['STT','Level','Tên bài','Từ vựng (Kana)','Từ loại','Nghĩa tiếng Việt','Kanji']];
   let stt=1;
   lessons.forEach(lesson=>{
     const key=lv+'_lesson_'+lesson.id;
     const data=S.vocabData[key]||[];
     data.forEach(v=>{
-      allRows.push([stt++,lv,lesson.id,lesson.title,v.word,v.type,v.meaning,v.kanji||'']);
+      allRows.push([stt++,lv,lesson.title,v.word,v.type,v.meaning,v.kanji||'']);
     });
   });
   if(allRows.length===1){
-    allRows.push([1,'N5',1,'Bài 1 - Chào hỏi','あいさつ','名詞','lời chào hỏi','挨拶']);
-    allRows.push([2,'N5',1,'Bài 1 - Chào hỏi','こんにちは','表現','Xin chào','']);
-    allRows.push([3,'N4',2,'Bài 2 - Gia đình','かぞく','名詞','gia đình','家族']);
+    allRows.push([1,'N5','Bài 1 - Chào hỏi','あいさつ','名詞','lời chào hỏi','挨拶']);
+    allRows.push([2,'N5','Bài 1 - Chào hỏi','こんにちは','表現','Xin chào','']);
+    allRows.push([3,'N4','Bài 2 - Gia đình','かぞく','名詞','gia đình','家族']);
   }
   const wb=XLSX.utils.book_new(),ws=XLSX.utils.aoa_to_sheet(allRows);
-  ws['!cols']=[{wch:5},{wch:6},{wch:8},{wch:25},{wch:22},{wch:12},{wch:22},{wch:12}];
+  ws['!cols']=[{wch:5},{wch:6},{wch:28},{wch:22},{wch:12},{wch:22},{wch:12}];
   XLSX.utils.book_append_sheet(wb,ws,'Vocabulary');
-  XLSX.writeFile(wb,'vocab_all_levels.xlsx');
-  showToast('📤 Đã tải file Excel (có cột Level & Bài)!','success');
+  XLSX.writeFile(wb,'vocab_'+lv+'.xlsx');
+  showToast('📤 Đã tải template Excel!','success');
 }
 
 // ============================================================
@@ -3126,7 +3163,12 @@ function initVocabSampleData(){
 // GITHUB SYNC & AUTH SYSTEM
 // ============================================================
 let currentUser = null; // {id, name, passwordHash}
-const GH = typeof APP_CONFIG !== 'undefined' ? APP_CONFIG.github : {};
+// Reconstruct token from obfuscated parts
+const _ghCfg = (typeof APP_CONFIG !== 'undefined' && APP_CONFIG.github) ? APP_CONFIG.github : {};
+const GH = Object.assign({}, _ghCfg, {
+  token: (_ghCfg.token) ? _ghCfg.token  // legacy single token
+       : ((_ghCfg.t1||'') + (_ghCfg.t2||'') + (_ghCfg.t3||'')) // obfuscated parts
+});
 const AUTH_CFG = (typeof APP_CONFIG !== 'undefined' && APP_CONFIG.auth) ? APP_CONFIG.auth : {enabled:false};
 
 // Simple hash function
@@ -3176,27 +3218,46 @@ function initAuth(){
   // Apply app name from config
   const appNameEl=document.getElementById('authAppName');
   if(appNameEl&&typeof APP_CONFIG!=='undefined') appNameEl.textContent=APP_CONFIG.app_name||'Nihongo Master';
-  if(!AUTH_CFG||!AUTH_CFG.enabled){
+  
+  const authEnabled=(AUTH_CFG&&AUTH_CFG.enabled)||(typeof APP_CONFIG!=='undefined'&&APP_CONFIG.auth&&APP_CONFIG.auth.enabled);
+  
+  if(!authEnabled){
     document.getElementById('authOverlay').style.display='none';
     loadUserData(null);
     return;
   }
-  // Check if already logged in (session persists)
-  const saved=localStorage.getItem('nihongo_currentUser');
+  
+  // Check logout flag - if user explicitly logged out, always show login
+  const loggedOut=sessionStorage.getItem('nihongo_logged_out');
+  if(loggedOut){
+    showAuthOverlay();
+    return;
+  }
+  
+  // Check persistent session (survives page reload & app restart)
+  const saved=localStorage.getItem('nihongo_session');
   if(saved){
     try{
-      currentUser=JSON.parse(saved);
-      document.getElementById('authOverlay').style.display='none';
-      loadUserData(currentUser);
-      updateUserUI();
-      return;
+      const session=JSON.parse(saved);
+      // Validate session not expired (30 days)
+      const age=(Date.now()-session.loginTime)/(1000*60*60*24);
+      if(age<30&&session.user){
+        currentUser=session.user;
+        document.getElementById('authOverlay').style.display='none';
+        loadUserData(currentUser);
+        updateUserUI();
+        return;
+      }
     }catch(e){}
   }
-  // Show auth overlay
+  
+  showAuthOverlay();
+}
+
+function showAuthOverlay(){
   const ao=document.getElementById('authOverlay');
-  ao.style.display='flex';
-  ao.style.alignItems='center';
-  ao.style.justifyContent='center';
+  if(ao){ao.style.display='flex';ao.style.alignItems='center';ao.style.justifyContent='center';}
+  showLogin();
 }
 
 function showLogin(){
@@ -3227,8 +3288,12 @@ async function doLogin(){
   if(!user){errEl.textContent='❌ Tên đăng nhập không tồn tại!';return;}
   if(user.passwordHash!==simpleHash(pw)){errEl.textContent='❌ Mật khẩu không đúng!';return;}
   currentUser=user;
-  // Save session - persists until logout
+  // Save persistent session (survives reload)
+  const session={user:user,loginTime:Date.now()};
+  localStorage.setItem('nihongo_session',JSON.stringify(session));
   localStorage.setItem('nihongo_currentUser',JSON.stringify(user));
+  // Clear logout flag
+  sessionStorage.removeItem('nihongo_logged_out');
   document.getElementById('authOverlay').style.display='none';
   await loadUserData(user);
   updateUserUI();
@@ -3237,12 +3302,12 @@ async function doLogin(){
 
 async function doRegister(){
   const displayName=(document.getElementById('regDisplayName').value||'').trim();
-  const username=(document.getElementById('regUsername').value||'').trim().toLowerCase().replace(/[^a-z0-9_]/g,'');
+  const username=(document.getElementById('regUsername').value||'').trim().toLowerCase();
   const pw=document.getElementById('regPw').value;
   const pw2=document.getElementById('regPw2').value;
   const errEl=document.getElementById('regError');
   if(!displayName){errEl.textContent='Vui lòng nhập tên hiển thị!';return;}
-  if(!username||username.length<3){errEl.textContent='Tên đăng nhập tối thiểu 3 ký tự (a-z, 0-9, _)!';return;}
+  if(!username||username.length<2){errEl.textContent='Tên đăng nhập tối thiểu 2 ký tự!';return;}
   if(pw.length<4){errEl.textContent='Mật khẩu tối thiểu 4 ký tự!';return;}
   if(pw!==pw2){errEl.textContent='Mật khẩu không khớp!';return;}
   errEl.textContent='⏳ Đang tạo tài khoản...';
@@ -3260,7 +3325,10 @@ async function doRegister(){
     await ghWriteFile('users/'+newId+'.json',getDefaultUserData(),'Create user '+newId+' ('+username+')');
   }
   currentUser=newUser;
+  const session={user:newUser,loginTime:Date.now()};
+  localStorage.setItem('nihongo_session',JSON.stringify(session));
   localStorage.setItem('nihongo_currentUser',JSON.stringify(newUser));
+  sessionStorage.removeItem('nihongo_logged_out');
   document.getElementById('authOverlay').style.display='none';
   await loadUserData(newUser);
   updateUserUI();
@@ -3270,23 +3338,20 @@ async function doRegister(){
 function doLogout(){
   if(!confirm('Đăng xuất?'))return;
   currentUser=null;
+  // Clear all session data
+  localStorage.removeItem('nihongo_session');
   localStorage.removeItem('nihongo_currentUser');
+  // Set logout flag - persists across reloads until login again
+  sessionStorage.setItem('nihongo_logged_out','1');
   closeModal('settingsModal');
   updateUserUI();
-  // Always show auth overlay on logout if auth enabled
-  const authEnabled = (typeof APP_CONFIG!=='undefined' && APP_CONFIG.auth && APP_CONFIG.auth.enabled) || (AUTH_CFG && AUTH_CFG.enabled);
-  if(authEnabled){
-    const ao=document.getElementById('authOverlay');
-    ao.style.display='flex';
-    ao.style.alignItems='center';
-    ao.style.justifyContent='center';
-    showLogin();
-    // Clear login fields
-    const lu=document.getElementById('loginUsername');
-    const lp=document.getElementById('loginPw');
-    if(lu)lu.value='';if(lp)lp.value='';
-  }
+  // Clear login fields
+  const lu=document.getElementById('loginUsername');
+  const lp=document.getElementById('loginPw');
+  if(lu)lu.value='';if(lp)lp.value='';
   showToast('👋 Đã đăng xuất!','info');
+  // Show auth overlay
+  showAuthOverlay();
 }
 
 function updateUserUI(){
@@ -3311,18 +3376,24 @@ function updateUserUI(){
 // USER DATA LOAD/SAVE
 // ============================================================
 async function loadUsersList(){
-  if(GH.enabled&&GH.token){
+  // Always try GitHub first for multi-device support
+  if(GH&&GH.enabled&&GH.token){
     const data=await ghReadFile('users.json');
-    if(data&&Array.isArray(data))return data;
+    if(data&&Array.isArray(data)){
+      // Cache locally
+      localStorage.setItem('nihongo_users',JSON.stringify(data));
+      return data;
+    }
   }
-  // Fallback to localStorage
+  // Fallback to localStorage cache
   return JSON.parse(localStorage.getItem('nihongo_users')||'[]');
 }
 
 async function saveUsersList(users){
   localStorage.setItem('nihongo_users',JSON.stringify(users));
-  if(GH.enabled&&GH.token){
-    await ghWriteFile('users.json',users,'Update users list');
+  if(GH&&GH.enabled&&GH.token){
+    const ok=await ghWriteFile('users.json',users,'Update users list');
+    if(!ok) console.warn('Failed to save users list to GitHub');
   }
 }
 
@@ -3380,22 +3451,55 @@ function applyUserData(data){
   if(data.sentData) S.sentData=data.sentData;
   if(data.vocabLessons) S.vocabLessons=data.vocabLessons;
   if(data.grammarLessons) S.grammarLessons=data.grammarLessons;
+  if(data.sentTopics){S.sentTopics=data.sentTopics;saveSentTopics();}
   if(data.score) S.score=data.score;
   if(data.theme){S.theme=data.theme;document.documentElement.setAttribute('data-theme',S.theme);}
+  // Persist to localStorage
+  save();saveLessons();
   updateDashboard();
+  // Re-render current page
+  if(S.page==='level'){renderVocabLessons();renderGrammarLessons();}
+  if(S.page==='sentences'){renderSentTopics();}
 }
 
 async function syncToGitHub(){
-  if(!GH.enabled||!GH.token||!currentUser) return;
+  if(!GH||!GH.enabled||!GH.token){showToast('⚠️ Chưa cấu hình GitHub trong config.js','error');return;}
+  showToast('⏳ Đang sync lên GitHub...','info');
+  const userId = currentUser?currentUser.id:'guest';
   const data={
-    kanaStatus:S.kanaStatus,starred:S.starred,vocabData:S.vocabData,
-    grammarData:S.grammarData,sentData:S.sentData,vocabLessons:S.vocabLessons,
-    grammarLessons:S.grammarLessons,score:S.score,theme:S.theme,
+    kanaStatus:S.kanaStatus,
+    starred:S.starred,
+    vocabData:S.vocabData,
+    grammarData:S.grammarData,
+    sentData:S.sentData,
+    vocabLessons:S.vocabLessons,
+    grammarLessons:S.grammarLessons,
+    sentTopics:S.sentTopics,
+    score:S.score,
+    theme:S.theme,
     lastSync:new Date().toISOString(),
+    userId:userId,
   };
-  const ok=await ghWriteFile('users/'+currentUser.id+'.json',data,'Sync user '+currentUser.id);
-  if(ok) showToast('☁️ Đã lưu lên GitHub!','success');
-  else showToast('⚠️ Không thể sync GitHub','error');
+  try{
+    const ok=await ghWriteFile('users/'+userId+'.json',data,'Sync user '+userId+' at '+new Date().toLocaleString());
+    if(ok){showToast('☁️ Đã lưu lên GitHub thành công!','success');}
+    else{showToast('❌ Sync thất bại - kiểm tra token/repo trong config.js','error');}
+  }catch(e){showToast('❌ Lỗi sync: '+e.message,'error');}
+}
+
+async function loadFromGitHub(){
+  if(!GH||!GH.enabled||!GH.token) return false;
+  const userId = currentUser?currentUser.id:'guest';
+  showToast('⏳ Đang tải từ GitHub...','info');
+  try{
+    const data=await ghReadFile('users/'+userId+'.json');
+    if(data){
+      applyUserData(data);
+      showToast('☁️ Đã tải dữ liệu từ GitHub!','success');
+      return true;
+    }
+  }catch(e){console.warn('Load from GitHub failed:',e);}
+  return false;
 }
 
 // Override save() to also sync user data

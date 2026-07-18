@@ -9,17 +9,25 @@ const APP_CONFIG = {
 
   // ===== GITHUB SYNC =====
   github: {
-    enabled: true,
-    owner: "Dmantk",        // GitHub username VD: "your-username"
-    repo: "Japan_Learning",         // Tên repo data VD: "nihongo-data"
-    branch: "master",
-    token: "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",        // Personal Access Token (repo scope)
+    enabled: false,
+    owner: "",        // GitHub username VD: "your-username"
+    repo: "",         // Tên repo data VD: "nihongo-data"
+    branch: "main",
+    // TOKEN OBFUSCATION:
+    // Chia token thành 3 phần để khó đọc hơn
+    // VD token: ghp_ABCDEFabcdef1234567890ABCDEF12
+    // → t1: "ghp_ABCDEF"
+    // → t2: "abcdef1234"
+    // → t3: "567890ABCDEF12"
+    t1: "",           // Phần 1 của token
+    t2: "",           // Phần 2 của token
+    t3: "",           // Phần 3 của token
     data_path: "data" // Thư mục chứa data trong repo
   },
 
   // ===== AUTH =====
   auth: {
-    enabled: true,
+    enabled: false,
     allow_register: true,
     admin_password: "admin123"
   },
@@ -46,19 +54,35 @@ HƯỚNG DẪN CẤU HÌNH GITHUB SYNC:
 1. Tạo GitHub repo để lưu data (có thể private):
    github.com → New repository → tên: nihongo-data
 
-2. Tạo Personal Access Token:
+2. Tạo Personal Access Token (scope hẹp nhất):
    github.com/settings/tokens/new
-   → Scopes: ✓ repo (full control)
-   → Copy token (chỉ hiện 1 lần)
+   → Note: Nihongo Master
+   → Expiration: No expiration
+   → Scopes: ✓ repo → Contents (read and write)
+   → Copy token VD: ghp_ABCDEFabcdef1234567890ABCDEF12
 
-3. Điền vào config.js:
-   github.enabled = true
-   github.owner = "your-username"
-   github.repo = "nihongo-data"
-   github.token = "ghp_xxxx..."
-   auth.enabled = true
+3. CHIA TOKEN THÀNH 3 PHẦN (obfuscation):
+   Token: ghp_ABCDEFabcdef1234567890ABCDEF12
+   → Chia tùy ý, VD:
+     t1: "ghp_ABCDEF"
+     t2: "abcdef1234"
+     t3: "567890ABCDEF12"
+   → Web sẽ ghép lại: t1+t2+t3 khi gọi API
 
-4. Cấu trúc file trên GitHub data repo:
+4. Điền vào config.js:
+   github: {
+     enabled: true,
+     owner: "your-username",
+     repo: "nihongo-data",
+     t1: "ghp_ABCDEF",
+     t2: "abcdef1234",
+     t3: "567890ABCDEF12",
+   },
+   auth: {
+     enabled: true,
+   }
+
+5. Cấu trúc file trên GitHub data repo:
    data/
    ├── users.json          ← danh sách users
    └── users/
