@@ -1,1 +1,9 @@
-[]
+[
+  {
+    "id": "001",
+    "username": "thukha",
+    "displayName": "Xíu xiu",
+    "passwordHash": "o04tou",
+    "createdAt": "2026-07-18T15:29:31.168Z"
+  }
+]
