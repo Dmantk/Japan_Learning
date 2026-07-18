@@ -139,10 +139,59 @@
         "sentences": [
           {
             "id": 1,
-            "jp": "Fnxncabc",
-            "reading": "Abc",
-            "vn": "Abc",
-            "note": "Abc"
+            "jp": "私は学生です。",
+            "reading": "Watashi wa gakusei desu.",
+            "vn": "Tôi là học sinh.",
+            "note": "Mẫu 〜は〜です"
+          },
+          {
+            "id": 2,
+            "jp": "これは本です。",
+            "reading": "Kore wa hon desu.",
+            "vn": "Đây là quyển sách.",
+            "note": "Đại từ chỉ định これ"
+          },
+          {
+            "id": 3,
+            "jp": "今日は天気がいいです。",
+            "reading": "Kyou wa tenki ga ii desu.",
+            "vn": "Hôm nay thời tiết đẹp.",
+            "note": "Trợ từ が"
+          },
+          {
+            "id": 4,
+            "jp": "私は毎日日本語を勉強します。",
+            "reading": "Watashi wa mainichi nihongo wo benkyou shimasu.",
+            "vn": "Tôi học tiếng Nhật mỗi ngày.",
+            "note": "Trợ từ を, 毎日=mỗi ngày"
+          },
+          {
+            "id": 5,
+            "jp": "どこに行きますか？",
+            "reading": "Doko ni ikimasu ka?",
+            "vn": "Bạn đi đâu vậy?",
+            "note": "疑問文, trợ từ に"
+          },
+          {
+            "id": 6,
+            "jp": "ご飯を食べましたか？",
+            "reading": "Gohan wo tabemashita ka?",
+            "vn": "Bạn đã ăn cơm chưa?",
+            "note": "Thể quá khứ 〜ました"
+          },
+          {
+            "id": 7,
+            "jp": "日本語が少し話せます。",
+            "reading": "Nihongo ga sukoshi hanasemasu.",
+            "vn": "Tôi có thể nói một chút tiếng Nhật.",
+            "note": "Thể khả năng 〜できます"
+          },
+          {
+            "id": 8,
+            "jp": "ここに座ってもいいですか？",
+            "reading": "Koko ni suwatte mo ii desu ka?",
+            "vn": "Tôi có thể ngồi đây không?",
+            "note": "Xin phép 〜てもいいですか"
           }
         ]
       }
