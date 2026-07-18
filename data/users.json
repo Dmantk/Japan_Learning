@@ -1,1 +1,9 @@
-[]
+[
+  {
+    "id": "001",
+    "username": "ann",
+    "displayName": "Annn",
+    "passwordHash": "wcoy",
+    "createdAt": "2026-07-18T18:34:55.806Z"
+  }
+]
