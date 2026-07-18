@@ -121,6 +121,26 @@
         "reading": "なまえ",
         "kanji": "名前"
       }
+    ],
+    "N5_lesson_4": [
+      {
+        "id": 1,
+        "word": "Abc",
+        "type": "形容動詞",
+        "meaning": "Abc",
+        "reading": "Abc",
+        "kanji": "Bc"
+      }
+    ],
+    "N3_lesson_2": [
+      {
+        "id": 1,
+        "word": "Abc",
+        "type": "名詞",
+        "meaning": "Abc",
+        "reading": "Abc",
+        "kanji": ""
+      }
     ]
   },
   "vocabLessons": {
@@ -142,6 +162,16 @@
         "title": "Bài 3 - Số đếm & Thời gian",
         "note": "数字、時間",
         "vocabIds": []
+      },
+      {
+        "id": 4,
+        "title": "Abc",
+        "note": ""
+      },
+      {
+        "id": 5,
+        "title": "Abc",
+        "note": ""
       }
     ],
     "N4": [
@@ -158,6 +188,11 @@
         "title": "Bài 1 - Cảm xúc & Tính cách",
         "note": "感情・性格",
         "vocabIds": []
+      },
+      {
+        "id": 2,
+        "title": "Abc",
+        "note": ""
       }
     ],
     "N2": [
