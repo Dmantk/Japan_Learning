@@ -134,17 +134,53 @@
     "N5": [
       {
         "id": 1,
-        "title": "Abc",
-        "note": "Anc",
-        "sentences": [
-          {
-            "id": 1,
-            "jp": "Fnxncabc",
-            "reading": "Abc",
-            "vn": "Abc",
-            "note": "Abc"
-          }
-        ]
+        "title": "Chào hỏi",
+        "note": "あいさつ",
+        "sentences": []
+      },
+      {
+        "id": 2,
+        "title": "Gia đình",
+        "note": "家族",
+        "sentences": []
+      },
+      {
+        "id": 3,
+        "title": "Trường học",
+        "note": "学校",
+        "sentences": []
+      }
+    ],
+    "N4": [
+      {
+        "id": 1,
+        "title": "Hành động hàng ngày",
+        "note": "日常動作",
+        "sentences": []
+      }
+    ],
+    "N3": [
+      {
+        "id": 1,
+        "title": "Cảm xúc & Tính cách",
+        "note": "感情・性格",
+        "sentences": []
+      }
+    ],
+    "N2": [
+      {
+        "id": 1,
+        "title": "Kinh tế & Xã hội",
+        "note": "経済・社会",
+        "sentences": []
+      }
+    ],
+    "N1": [
+      {
+        "id": 1,
+        "title": "Văn học & Triết học",
+        "note": "文学・哲学",
+        "sentences": []
       }
     ]
   }
