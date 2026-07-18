@@ -3167,10 +3167,18 @@ function initVocabSampleData(){
 // ============================================================
 let currentUser = null; // {id, name, passwordHash}
 // Reconstruct token from obfuscated parts
-const _ghCfg = (typeof APP_CONFIG !== 'undefined' && APP_CONFIG.github) ? APP_CONFIG.github : {};
-const GH = Object.assign({}, _ghCfg, {
-  token: (_ghCfg.token) ? _ghCfg.token  // legacy single token
-       : ((_ghCfg.t1||'') + (_ghCfg.t2||'') + (_ghCfg.t3||'')) // obfuscated parts
+// GH config - lazy getter để đảm bảo đọc sau khi config.js load xong
+function getGH(){
+  const cfg = (typeof APP_CONFIG !== 'undefined' && APP_CONFIG.github) ? APP_CONFIG.github : {};
+  return Object.assign({}, cfg, {
+    token: cfg.token ? cfg.token : ((cfg.t1||'')+(cfg.t2||'')+(cfg.t3||''))
+  });
+}
+// GH là proxy - luôn đọc mới nhất từ APP_CONFIG
+const GH = new Proxy({}, {
+  get: function(target, prop){
+    return getGH()[prop];
+  }
 });
 const AUTH_CFG = (typeof APP_CONFIG !== 'undefined' && APP_CONFIG.auth) ? APP_CONFIG.auth : {enabled:false};
 
@@ -3199,21 +3207,37 @@ async function ghRequest(method, path, body){
 
 // Test GitHub connection
 async function testGitHubConnection(){
-  showToast('⏳ Đang kiểm tra kết nối GitHub...','info');
-  const url='https://api.github.com/repos/'+GH.owner+'/'+GH.repo;
-  const tokenType=GH.token.startsWith('github_pat_')?'Bearer':'token';
+  const gh = getGH();
+  // Debug: show current config
+  console.log('GH config:', {enabled:gh.enabled, owner:gh.owner, repo:gh.repo, hasToken:!!gh.token, tokenLen:gh.token?gh.token.length:0});
+  
+  if(!gh.enabled){showToast('⚠️ GitHub chưa bật (enabled:false trong config.js)','error');return false;}
+  if(!gh.token){showToast('❌ Chưa có token (t1+t2+t3 trống trong config.js)','error');return false;}
+  if(!gh.owner){showToast('❌ Chưa điền owner trong config.js','error');return false;}
+  if(!gh.repo){showToast('❌ Chưa điền repo trong config.js','error');return false;}
+  
+  showToast('⏳ Đang kiểm tra: '+gh.owner+'/'+gh.repo+'...','info');
+  const url='https://api.github.com/repos/'+gh.owner+'/'+gh.repo;
+  const tokenType=gh.token.startsWith('github_pat_')?'Bearer':'token';
   try{
-    const res=await fetch(url,{headers:{'Authorization':tokenType+' '+GH.token,'Accept':'application/vnd.github.v3+json'}});
+    const res=await fetch(url,{headers:{
+      'Authorization':tokenType+' '+gh.token,
+      'Accept':'application/vnd.github.v3+json',
+      'X-GitHub-Api-Version':'2022-11-28'
+    }});
     const data=await res.json();
     if(res.ok){
-      showToast('✅ Kết nối GitHub thành công! Repo: '+data.full_name,'success');
+      showToast('✅ Kết nối OK! Repo: '+data.full_name+' ('+data.visibility+')','success');
       return true;
     } else {
-      showToast('❌ Lỗi '+res.status+': '+data.message,'error');
+      if(res.status===401) showToast('❌ 401: Token không hợp lệ hoặc hết hạn!','error');
+      else if(res.status===403) showToast('❌ 403: Token không có quyền!','error');
+      else if(res.status===404) showToast('❌ 404: Không tìm thấy repo '+gh.owner+'/'+gh.repo,'error');
+      else showToast('❌ Lỗi '+res.status+': '+data.message,'error');
       return false;
     }
   }catch(e){
-    showToast('❌ Không thể kết nối: '+e.message,'error');
+    showToast('❌ Không thể kết nối GitHub: '+e.message,'error');
     return false;
   }
 }
