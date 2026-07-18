@@ -1,0 +1,14 @@
+{
+  "name": "Nihongo Master",
+  "short_name": "Nihongo",
+  "description": "Học Tiếng Nhật Hiệu Quả",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f5f6fa",
+  "theme_color": "#5c6bc0",
+  "orientation": "portrait-primary",
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png"}
+  ]
+}
