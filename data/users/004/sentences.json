@@ -129,5 +129,23 @@
         "note": "〜につれて khi...thì"
       }
     ]
+  },
+  "sentTopics": {
+    "N5": [
+      {
+        "id": 1,
+        "title": "Abc",
+        "note": "Anc",
+        "sentences": [
+          {
+            "id": 1,
+            "jp": "Fnxncabc",
+            "reading": "Abc",
+            "vn": "Abc",
+            "note": "Abc"
+          }
+        ]
+      }
+    ]
   }
 }
