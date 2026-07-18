@@ -2363,7 +2363,7 @@ function saveVocab(){
     S.vocabData[key].push({id:newId,word,type,meaning,reading:word,kanji});
     showToast('✅ Đã thêm từ mới!','success');
   }
-  save();closeModal('addVocabModal');renderVocabTable();
+  save();saveUserData();closeModal('addVocabModal');renderVocabTable();
   if(currentVocabLesson) renderVocabLessons();
 }
 function editVocab(key,id){
@@ -2483,8 +2483,11 @@ function importVocabExcel(event){
           }
         }
       }
-      save();
-      if(S.page==='level'){renderVocabLessons();if(currentVocabLesson)renderVocabTable();}
+      save();saveUserData();
+      // Render ngay không cần đổi tab
+      renderVocabLessons();
+      if(currentVocabLesson)renderVocabTable();
+      if(S.page==='level'){renderVocabLessons();}
       var msg='✅ Import xong! Thêm: '+added;
       if(updated)msg+=', Cập nhật: '+updated;
       if(skipped)msg+=', Bỏ qua (trùng): '+skipped;
@@ -3180,43 +3183,18 @@ function simpleHash(str){
 // ============================================================
 // GITHUB API HELPERS
 // ============================================================
+// ghRequest kept for backward compat - ghReadFile/ghWriteFile now handle directly
 async function ghRequest(method, path, body){
-  // Validate config
-  if(!GH.enabled){console.warn('GH: not enabled');return null;}
-  if(!GH.token){console.warn('GH: no token');showToast('❌ Chưa điền token trong config.js','error');return null;}
-  if(!GH.owner){console.warn('GH: no owner');showToast('❌ Chưa điền owner trong config.js','error');return null;}
-  if(!GH.repo){console.warn('GH: no repo');showToast('❌ Chưa điền repo trong config.js','error');return null;}
-  
-  const dataPath = GH.data_path || 'data';
-  const url = 'https://api.github.com/repos/'+GH.owner+'/'+GH.repo+'/contents/'+dataPath+'/'+path;
-  
-  // Use Bearer for github_pat_ tokens, token for ghp_ tokens
-  const tokenType = GH.token.startsWith('github_pat_') ? 'Bearer' : 'token';
-  const headers = {
-    'Authorization': tokenType+' '+GH.token,
-    'Content-Type': 'application/json',
-    'Accept': 'application/vnd.github.v3+json',
-    'X-GitHub-Api-Version': '2022-11-28'
-  };
-  
-  console.log('GH API:', method, url);
+  if(!GH||!GH.enabled||!GH.token||!GH.owner||!GH.repo) return null;
+  const dataPath=GH.data_path||'data';
+  const url='https://api.github.com/repos/'+GH.owner+'/'+GH.repo+'/contents/'+dataPath+'/'+path;
+  const tokenType=GH.token.startsWith('github_pat_')?'Bearer':'token';
+  const headers={'Authorization':tokenType+' '+GH.token,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json','X-GitHub-Api-Version':'2022-11-28'};
   try{
-    const res = await fetch(url, {method, headers, body: body ? JSON.stringify(body) : undefined});
-    const data = await res.json();
-    if(!res.ok){
-      console.warn('GH API error:', res.status, data.message);
-      if(res.status===401) showToast('❌ Token không hợp lệ hoặc hết hạn!','error');
-      else if(res.status===403) showToast('❌ Token không có quyền ghi vào repo!','error');
-      else if(res.status===404) showToast('❌ Không tìm thấy repo: '+GH.owner+'/'+GH.repo,'error');
-      else showToast('❌ GitHub API lỗi: '+data.message,'error');
-      return null;
-    }
-    return data;
-  }catch(e){
-    console.warn('GH fetch error:',e);
-    showToast('❌ Không thể kết nối GitHub API','error');
-    return null;
-  }
+    const res=await fetch(url,{method,headers,body:body?JSON.stringify(body):undefined});
+    if(!res.ok){const e=await res.json();console.warn('GH API:',res.status,e.message);return null;}
+    return await res.json();
+  }catch(e){console.warn('GH fetch:',e);return null;}
 }
 
 // Test GitHub connection
@@ -3241,33 +3219,107 @@ async function testGitHubConnection(){
 }
 
 async function ghReadFile(path){
-  const data=await ghRequest('GET',path);
-  if(!data||!data.content) return null;
-  try{return JSON.parse(atob(data.content.replace(/\n/g,'')));}
-  catch(e){return null;}
+  if(!GH||!GH.enabled||!GH.token) return null;
+  
+  const dataPath = GH.data_path || 'data';
+  const url = 'https://api.github.com/repos/'+GH.owner+'/'+GH.repo+'/contents/'+dataPath+'/'+path;
+  const tokenType = GH.token.startsWith('github_pat_') ? 'Bearer' : 'token';
+  const headers = {
+    'Authorization': tokenType+' '+GH.token,
+    'Accept': 'application/vnd.github.v3+json',
+    'X-GitHub-Api-Version': '2022-11-28'
+  };
+  
+  try{
+    const res = await fetch(url, {method:'GET', headers});
+    if(res.status === 404) return null; // File not exist yet - OK
+    if(!res.ok){
+      const e = await res.json();
+      console.warn('ghReadFile error:', res.status, path, e.message);
+      return null;
+    }
+    const data = await res.json();
+    if(!data||!data.content) return null;
+    // Decode base64 with Unicode support (Vietnamese, Japanese)
+    try{
+      const b64 = data.content.replace(/\n/g,'');
+      const binary = atob(b64);
+      if(typeof TextDecoder !== 'undefined'){
+        const bytes = new Uint8Array(binary.length);
+        for(let i=0;i<binary.length;i++) bytes[i]=binary.charCodeAt(i);
+        return JSON.parse(new TextDecoder('utf-8').decode(bytes));
+      } else {
+        return JSON.parse(decodeURIComponent(escape(binary)));
+      }
+    }catch(e){
+      try{ return JSON.parse(atob(data.content.replace(/\n/g,''))); }
+      catch(e2){ console.error('Decode error:',e2); return null; }
+    }
+  }catch(e){
+    console.warn('ghReadFile fetch error:', path, e);
+    return null;
+  }
 }
 
 async function ghWriteFile(path, jsonData, message){
-  // Get current SHA if file exists (needed for update)
-  const existing = await ghRequest('GET', path);
-  const sha = existing ? existing.sha : undefined;
+  if(!GH||!GH.enabled||!GH.token) return null;
   
-  // Encode content as base64
+  const dataPath = GH.data_path || 'data';
+  const url = 'https://api.github.com/repos/'+GH.owner+'/'+GH.repo+'/contents/'+dataPath+'/'+path;
+  const tokenType = GH.token.startsWith('github_pat_') ? 'Bearer' : 'token';
+  const headers = {
+    'Authorization': tokenType+' '+GH.token,
+    'Content-Type': 'application/json',
+    'Accept': 'application/vnd.github.v3+json',
+    'X-GitHub-Api-Version': '2022-11-28'
+  };
+
+  // Step 1: GET current SHA (if file exists)
+  let sha = undefined;
+  try{
+    const getRes = await fetch(url, {method:'GET', headers});
+    if(getRes.ok){
+      const existing = await getRes.json();
+      sha = existing.sha;
+    }
+    // 404 = file doesn't exist yet = OK, will create new
+  }catch(e){ /* ignore */ }
+
+  // Step 2: Encode content
   let encoded;
   try{
-    encoded = btoa(unescape(encodeURIComponent(JSON.stringify(jsonData, null, 2))));
+    const jsonStr = JSON.stringify(jsonData, null, 2);
+    // Handle Unicode (Vietnamese, Japanese chars)
+    encoded = btoa(unescape(encodeURIComponent(jsonStr)));
   }catch(e){
-    encoded = btoa(JSON.stringify(jsonData));
+    try{ encoded = btoa(JSON.stringify(jsonData)); }
+    catch(e2){ console.error('Encode error:',e2); return null; }
   }
-  
+
+  // Step 3: PUT (create or update)
   const body = {
     message: message || 'Update '+path,
     content: encoded,
     branch: GH.branch || 'main',
   };
   if(sha) body.sha = sha;
-  
-  return await ghRequest('PUT', path, body);
+
+  try{
+    const putRes = await fetch(url, {
+      method: 'PUT',
+      headers,
+      body: JSON.stringify(body)
+    });
+    const data = await putRes.json();
+    if(!putRes.ok){
+      console.warn('ghWriteFile error:', putRes.status, path, data.message);
+      return null;
+    }
+    return data;
+  }catch(e){
+    console.error('ghWriteFile fetch error:', path, e);
+    return null;
+  }
 }
 
 // ============================================================
@@ -3365,47 +3417,77 @@ async function doRegister(){
   const pw=document.getElementById('regPw').value;
   const pw2=document.getElementById('regPw2').value;
   const errEl=document.getElementById('regError');
+
+  // Validate
   if(!displayName){errEl.textContent='Vui lòng nhập tên hiển thị!';return;}
   if(!username||username.length<2){errEl.textContent='Tên đăng nhập tối thiểu 2 ký tự!';return;}
   if(pw.length<4){errEl.textContent='Mật khẩu tối thiểu 4 ký tự!';return;}
   if(pw!==pw2){errEl.textContent='Mật khẩu không khớp!';return;}
+
+  errEl.style.color='var(--info)';
   errEl.textContent='⏳ Đang tạo tài khoản...';
+
+  // Load users list
   const users=await loadUsersList();
-  // Check username unique
-  if(users.find(u=>u.username===username)){errEl.textContent='❌ Tên đăng nhập đã tồn tại!';return;}
+  if(users.find(u=>u.username===username)){
+    errEl.style.color='var(--danger)';
+    errEl.textContent='❌ Tên đăng nhập đã tồn tại!';
+    return;
+  }
+
   // Generate new ID
   const maxId=users.reduce((m,u)=>Math.max(m,parseInt(u.id)||0),0);
   const newId=String(maxId+1).padStart(3,'0');
-  const newUser={id:newId,username,displayName,passwordHash:simpleHash(pw),createdAt:new Date().toISOString()};
+  const newUser={
+    id:newId,
+    username,
+    displayName,
+    passwordHash:simpleHash(pw),
+    createdAt:new Date().toISOString()
+  };
   users.push(newUser);
+
+  // Step 1: Save users list (localStorage + GitHub)
+  errEl.textContent='⏳ [1/3] Lưu danh sách tài khoản...';
   await saveUsersList(users);
-  // Create user folder structure on GitHub
+
+  // Step 2: Create user data files on GitHub
   if(GH&&GH.enabled&&GH.token){
-    const defaultData = getDefaultUserData();
-    const profile = {id:newId,displayName,username,createdAt:new Date().toISOString()};
-    const status = {kanaStatus:{},starred:{},score:0,theme:'light'};
-    const vocab = {vocabData:defaultData.vocabData,vocabLessons:defaultData.vocabLessons};
-    const grammar = {grammarData:defaultData.grammarData,grammarLessons:defaultData.grammarLessons};
-    const sentences = {sentData:defaultData.sentData,sentTopics:defaultData.sentTopics||{}};
-    // Create all files for new user
-    await Promise.all([
-      ghWriteFile(getUserDataPath(newId,'profile.json'), profile, 'Create user '+newId),
-      ghWriteFile(getUserDataPath(newId,'status.json'), status, 'Init status'),
-      ghWriteFile(getUserDataPath(newId,'vocab.json'), vocab, 'Init vocab'),
-      ghWriteFile(getUserDataPath(newId,'grammar.json'), grammar, 'Init grammar'),
-      ghWriteFile(getUserDataPath(newId,'sentences.json'), sentences, 'Init sentences'),
-    ]);
-    showToast('☁️ Đã tạo folder user trên GitHub!','success');
+    errEl.textContent='⏳ [2/3] Tạo dữ liệu trên GitHub...';
+    const defaultData=getDefaultUserData();
+    const profile={id:newId,displayName,username,createdAt:new Date().toISOString()};
+    const status={kanaStatus:{},starred:{},score:0,theme:'light'};
+    const vocab={vocabData:defaultData.vocabData,vocabLessons:defaultData.vocabLessons};
+    const grammar={grammarData:defaultData.grammarData,grammarLessons:defaultData.grammarLessons};
+    const sentences={sentData:defaultData.sentData,sentTopics:defaultData.sentTopics||{}};
+
+    // Sequential to avoid race condition
+    await ghWriteFile(getUserDataPath(newId,'profile.json'),  profile,   'Create user '+newId);
+    await new Promise(r=>setTimeout(r,300));
+    await ghWriteFile(getUserDataPath(newId,'status.json'),   status,    'Init status');
+    await new Promise(r=>setTimeout(r,300));
+    await ghWriteFile(getUserDataPath(newId,'vocab.json'),    vocab,     'Init vocab');
+    await new Promise(r=>setTimeout(r,300));
+    await ghWriteFile(getUserDataPath(newId,'grammar.json'),  grammar,   'Init grammar');
+    await new Promise(r=>setTimeout(r,300));
+    await ghWriteFile(getUserDataPath(newId,'sentences.json'),sentences, 'Init sentences');
   }
+
+  // Step 3: Login immediately
+  errEl.textContent='⏳ [3/3] Đăng nhập...';
   currentUser=newUser;
   const session={user:newUser,loginTime:Date.now()};
   localStorage.setItem('nihongo_session',JSON.stringify(session));
   localStorage.setItem('nihongo_currentUser',JSON.stringify(newUser));
   sessionStorage.removeItem('nihongo_logged_out');
+
+  // Hide auth overlay
   document.getElementById('authOverlay').style.display='none';
   await loadUserData(newUser);
   updateUserUI();
-  showToast('✅ Tạo tài khoản thành công! Chào '+displayName+'!','success');
+
+  const ghMsg = (GH&&GH.enabled&&GH.token) ? ' & đã lưu lên GitHub!' : '';
+  showToast('✅ Tạo tài khoản thành công! Chào '+displayName+ghMsg,'success');
 }
 
 function doLogout(){
@@ -3594,21 +3676,30 @@ async function syncToGitHub(){
       lastSync: new Date().toISOString(),
     };
 
-    // Write all files in parallel
-    const results = await Promise.all([
-      ghWriteFile(getUserDataPath(userId,'profile.json'), profile, 'Update profile'),
-      ghWriteFile(getUserDataPath(userId,'status.json'), status, 'Update status'),
-      ghWriteFile(getUserDataPath(userId,'vocab.json'), vocab, 'Update vocab'),
-      ghWriteFile(getUserDataPath(userId,'grammar.json'), grammar, 'Update grammar'),
-      ghWriteFile(getUserDataPath(userId,'sentences.json'), sentences, 'Update sentences'),
-    ]);
+    // Write files sequentially to avoid SHA race condition
+    const filesToSync = [
+      {path: getUserDataPath(userId,'profile.json'),  data: profile,   msg: 'Update profile'},
+      {path: getUserDataPath(userId,'status.json'),   data: status,    msg: 'Update status'},
+      {path: getUserDataPath(userId,'vocab.json'),    data: vocab,     msg: 'Update vocab'},
+      {path: getUserDataPath(userId,'grammar.json'),  data: grammar,   msg: 'Update grammar'},
+      {path: getUserDataPath(userId,'sentences.json'),data: sentences, msg: 'Update sentences'},
+    ];
+    const results = [];
+    for(const f of filesToSync){
+      const r = await ghWriteFile(f.path, f.data, f.msg);
+      results.push(r);
+      // Small delay to avoid rate limiting
+      await new Promise(res=>setTimeout(res,300));
+    }
 
-    const allOk = results.every(r=>r!==null);
-    if(allOk){
-      showToast('☁️ Đã lưu lên GitHub thành công! (5 files)','success');
+    const failed = results.filter(r=>r===null).length;
+    const ok = results.filter(r=>r!==null).length;
+    if(failed===0){
+      showToast('☁️ Sync thành công! Đã lưu '+ok+'/5 files lên GitHub','success');
+    } else if(ok>0){
+      showToast('⚠️ Sync một phần: '+ok+' OK, '+failed+' lỗi. Thử lại lần nữa.','error');
     } else {
-      const failed = results.filter(r=>r===null).length;
-      showToast('⚠️ Sync một phần - '+failed+' file thất bại','error');
+      showToast('❌ Sync thất bại hoàn toàn. Kiểm tra token & quyền repo.','error');
     }
   }catch(e){
     console.error('Sync error:',e);
@@ -3621,13 +3712,11 @@ async function loadFromGitHub(){
   const userId = currentUser?currentUser.id:'guest';
   showToast('⏳ Đang tải từ GitHub...','info');
   try{
-    // Load all files in parallel
-    const [status, vocab, grammar, sentences] = await Promise.all([
-      ghReadFile(getUserDataPath(userId,'status.json')),
-      ghReadFile(getUserDataPath(userId,'vocab.json')),
-      ghReadFile(getUserDataPath(userId,'grammar.json')),
-      ghReadFile(getUserDataPath(userId,'sentences.json')),
-    ]);
+    // Load files sequentially
+    const status    = await ghReadFile(getUserDataPath(userId,'status.json'));
+    const vocab     = await ghReadFile(getUserDataPath(userId,'vocab.json'));
+    const grammar   = await ghReadFile(getUserDataPath(userId,'grammar.json'));
+    const sentences = await ghReadFile(getUserDataPath(userId,'sentences.json'));
 
     let loaded = 0;
     if(status){
@@ -3670,13 +3759,15 @@ async function loadFromGitHub(){
   return false;
 }
 
-// Override save() - lưu đầy đủ tất cả data của user
-const _origSave = save;
-function save(){
-  _origSave();
-  if(currentUser){
-    const prefix='nihongo_user_'+currentUser.id+'_';
-    // Lưu toàn bộ data user vào localStorage
+// ============================================================
+// USER DATA PERSISTENCE - lưu data theo user prefix
+// Không override để tránh call stack overflow
+// Gọi saveUserData() sau mỗi thao tác quan trọng
+// ============================================================
+function saveUserData(){
+  if(!currentUser) return;
+  const prefix='nihongo_user_'+currentUser.id+'_';
+  try{
     localStorage.setItem(prefix+'kanaStatus',    JSON.stringify(S.kanaStatus));
     localStorage.setItem(prefix+'starred',       JSON.stringify(S.starred));
     localStorage.setItem(prefix+'vocabData',     JSON.stringify(S.vocabData));
@@ -3685,30 +3776,9 @@ function save(){
     localStorage.setItem(prefix+'grammarLessons',JSON.stringify(S.grammarLessons));
     localStorage.setItem(prefix+'sentData',      JSON.stringify(S.sentData));
     localStorage.setItem(prefix+'sentTopics',    JSON.stringify(S.sentTopics||{}));
-    localStorage.setItem(prefix+'score',         S.score);
-    localStorage.setItem(prefix+'theme',         S.theme);
-  }
-}
-
-// saveLessons() cũng lưu theo user prefix
-const _origSaveLessons = saveLessons;
-function saveLessons(){
-  _origSaveLessons();
-  if(currentUser){
-    const prefix='nihongo_user_'+currentUser.id+'_';
-    localStorage.setItem(prefix+'vocabLessons',  JSON.stringify(S.vocabLessons));
-    localStorage.setItem(prefix+'grammarLessons',JSON.stringify(S.grammarLessons));
-  }
-}
-
-// saveSentTopics() cũng lưu theo user prefix
-const _origSaveSentTopics = saveSentTopics;
-function saveSentTopics(){
-  _origSaveSentTopics();
-  if(currentUser){
-    const prefix='nihongo_user_'+currentUser.id+'_';
-    localStorage.setItem(prefix+'sentTopics', JSON.stringify(S.sentTopics||{}));
-  }
+    localStorage.setItem(prefix+'score',         String(S.score));
+    localStorage.setItem(prefix+'theme',         S.theme||'light');
+  }catch(e){console.warn('saveUserData error:',e);}
 }
 
 // Add sync button to settings
@@ -3917,7 +3987,7 @@ function saveSentence(){
     arr.push({id:newId,jp,reading,vn,note});
     showToast('✅ Đã thêm câu!','success');
   }
-  if(topic)saveSentTopics();else saveSentData();
+  if(topic)saveSentTopics();else saveSentData();saveUserData();
   closeModal('addSentModal');renderSentList();
   if(currentSentTopic)renderSentTopics();
 }
