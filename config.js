@@ -9,27 +9,27 @@ const APP_CONFIG = {
 
   // ===== GITHUB SYNC =====
   github: {
-    enabled: false,
-    owner: "",        // GitHub username VD: "your-username"
-    repo: "",         // Tên repo data VD: "nihongo-data"
-    branch: "main",
+    enabled: true,
+    owner: "Dmantk",        // GitHub username VD: "your-username"
+    repo: "Japan_Learning",         // Tên repo data VD: "nihongo-data"
+    branch: "master",
     // TOKEN OBFUSCATION:
     // Chia token thành 3 phần để khó đọc hơn
     // VD token: ghp_ABCDEFabcdef1234567890ABCDEF12
     // → t1: "ghp_ABCDEF"
     // → t2: "abcdef1234"
     // → t3: "567890ABCDEF12"
-    t1: "",           // Phần 1 của token
-    t2: "",           // Phần 2 của token
-    t3: "",           // Phần 3 của token
+    t1: "github_pat_11A74U7BQ0C5ZfL5BTN2RX_Vi",           // Phần 1 của token
+    t2: "UMEV6HnIABy4J8Nr4TqPScYbCguVY",           // Phần 2 của token
+    t3: "paNFZ6FGAvUITANZBFGLfG5J67xj",           // Phần 3 của token
     data_path: "data" // Thư mục chứa data trong repo
   },
 
   // ===== AUTH =====
   auth: {
-    enabled: false,
+    enabled: true,
     allow_register: true,
-    admin_password: "admin123"
+    admin_password: "13082015"
   },
 
   // ===== TÍNH NĂNG =====
