@@ -1208,7 +1208,7 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:inherit;}
       <div class="card" style="padding:14px;" id="githubSyncCard" style="display:none;">
         <div class="card-title">☁️ GitHub Sync</div>
         <div style="font-size:12px;color:var(--text3);margin-bottom:10px;">Lưu dữ liệu lên GitHub để đồng bộ giữa các thiết bị</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;"><button class="btn btn-primary btn-sm" onclick="syncToGitHub()">☁️ Lưu lên GitHub</button><button class="btn btn-secondary btn-sm" onclick="loadFromGitHub()">📥 Tải từ GitHub</button></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;"><button class="btn btn-secondary btn-sm" onclick="testGitHubConnection()">🔌 Test kết nối</button><button class="btn btn-primary btn-sm" onclick="syncToGitHub()">☁️ Lưu lên GitHub</button><button class="btn btn-secondary btn-sm" onclick="loadFromGitHub()">📥 Tải từ GitHub</button></div>
       </div>
       <div class="card" style="padding:14px;border-color:var(--danger);">
         <div class="card-title" style="color:var(--danger);">⚠️ Reset tất cả</div>
@@ -3181,14 +3181,63 @@ function simpleHash(str){
 // GITHUB API HELPERS
 // ============================================================
 async function ghRequest(method, path, body){
-  if(!GH.enabled||!GH.token||!GH.owner||!GH.repo) return null;
-  const url=`https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/${GH.data_path}/${path}`;
-  const headers={'Authorization':'token '+GH.token,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'};
+  // Validate config
+  if(!GH.enabled){console.warn('GH: not enabled');return null;}
+  if(!GH.token){console.warn('GH: no token');showToast('❌ Chưa điền token trong config.js','error');return null;}
+  if(!GH.owner){console.warn('GH: no owner');showToast('❌ Chưa điền owner trong config.js','error');return null;}
+  if(!GH.repo){console.warn('GH: no repo');showToast('❌ Chưa điền repo trong config.js','error');return null;}
+  
+  const dataPath = GH.data_path || 'data';
+  const url = 'https://api.github.com/repos/'+GH.owner+'/'+GH.repo+'/contents/'+dataPath+'/'+path;
+  
+  // Use Bearer for github_pat_ tokens, token for ghp_ tokens
+  const tokenType = GH.token.startsWith('github_pat_') ? 'Bearer' : 'token';
+  const headers = {
+    'Authorization': tokenType+' '+GH.token,
+    'Content-Type': 'application/json',
+    'Accept': 'application/vnd.github.v3+json',
+    'X-GitHub-Api-Version': '2022-11-28'
+  };
+  
+  console.log('GH API:', method, url);
   try{
-    const res=await fetch(url,{method,headers,body:body?JSON.stringify(body):undefined});
-    if(!res.ok){const e=await res.json();console.warn('GH API error:',e.message);return null;}
-    return await res.json();
-  }catch(e){console.warn('GH fetch error:',e);return null;}
+    const res = await fetch(url, {method, headers, body: body ? JSON.stringify(body) : undefined});
+    const data = await res.json();
+    if(!res.ok){
+      console.warn('GH API error:', res.status, data.message);
+      if(res.status===401) showToast('❌ Token không hợp lệ hoặc hết hạn!','error');
+      else if(res.status===403) showToast('❌ Token không có quyền ghi vào repo!','error');
+      else if(res.status===404) showToast('❌ Không tìm thấy repo: '+GH.owner+'/'+GH.repo,'error');
+      else showToast('❌ GitHub API lỗi: '+data.message,'error');
+      return null;
+    }
+    return data;
+  }catch(e){
+    console.warn('GH fetch error:',e);
+    showToast('❌ Không thể kết nối GitHub API','error');
+    return null;
+  }
+}
+
+// Test GitHub connection
+async function testGitHubConnection(){
+  showToast('⏳ Đang kiểm tra kết nối GitHub...','info');
+  const url='https://api.github.com/repos/'+GH.owner+'/'+GH.repo;
+  const tokenType=GH.token.startsWith('github_pat_')?'Bearer':'token';
+  try{
+    const res=await fetch(url,{headers:{'Authorization':tokenType+' '+GH.token,'Accept':'application/vnd.github.v3+json'}});
+    const data=await res.json();
+    if(res.ok){
+      showToast('✅ Kết nối GitHub thành công! Repo: '+data.full_name,'success');
+      return true;
+    } else {
+      showToast('❌ Lỗi '+res.status+': '+data.message,'error');
+      return false;
+    }
+  }catch(e){
+    showToast('❌ Không thể kết nối: '+e.message,'error');
+    return false;
+  }
 }
 
 async function ghReadFile(path){
@@ -3199,16 +3248,26 @@ async function ghReadFile(path){
 }
 
 async function ghWriteFile(path, jsonData, message){
-  // Get current SHA if file exists
-  const existing=await ghRequest('GET',path);
-  const sha=existing?existing.sha:undefined;
-  const body={
-    message:message||'Update '+path,
-    content:btoa(unescape(encodeURIComponent(JSON.stringify(jsonData,null,2)))),
-    branch:GH.branch||'main',
+  // Get current SHA if file exists (needed for update)
+  const existing = await ghRequest('GET', path);
+  const sha = existing ? existing.sha : undefined;
+  
+  // Encode content as base64
+  let encoded;
+  try{
+    encoded = btoa(unescape(encodeURIComponent(JSON.stringify(jsonData, null, 2))));
+  }catch(e){
+    encoded = btoa(JSON.stringify(jsonData));
+  }
+  
+  const body = {
+    message: message || 'Update '+path,
+    content: encoded,
+    branch: GH.branch || 'main',
   };
-  if(sha) body.sha=sha;
-  return await ghRequest('PUT',path,body);
+  if(sha) body.sha = sha;
+  
+  return await ghRequest('PUT', path, body);
 }
 
 // ============================================================
@@ -3320,9 +3379,23 @@ async function doRegister(){
   const newUser={id:newId,username,displayName,passwordHash:simpleHash(pw),createdAt:new Date().toISOString()};
   users.push(newUser);
   await saveUsersList(users);
-  // Create user data file on GitHub
+  // Create user folder structure on GitHub
   if(GH&&GH.enabled&&GH.token){
-    await ghWriteFile('users/'+newId+'.json',getDefaultUserData(),'Create user '+newId+' ('+username+')');
+    const defaultData = getDefaultUserData();
+    const profile = {id:newId,displayName,username,createdAt:new Date().toISOString()};
+    const status = {kanaStatus:{},starred:{},score:0,theme:'light'};
+    const vocab = {vocabData:defaultData.vocabData,vocabLessons:defaultData.vocabLessons};
+    const grammar = {grammarData:defaultData.grammarData,grammarLessons:defaultData.grammarLessons};
+    const sentences = {sentData:defaultData.sentData,sentTopics:defaultData.sentTopics||{}};
+    // Create all files for new user
+    await Promise.all([
+      ghWriteFile(getUserDataPath(newId,'profile.json'), profile, 'Create user '+newId),
+      ghWriteFile(getUserDataPath(newId,'status.json'), status, 'Init status'),
+      ghWriteFile(getUserDataPath(newId,'vocab.json'), vocab, 'Init vocab'),
+      ghWriteFile(getUserDataPath(newId,'grammar.json'), grammar, 'Init grammar'),
+      ghWriteFile(getUserDataPath(newId,'sentences.json'), sentences, 'Init sentences'),
+    ]);
+    showToast('☁️ Đã tạo folder user trên GitHub!','success');
   }
   currentUser=newUser;
   const session={user:newUser,loginTime:Date.now()};
@@ -3406,6 +3479,7 @@ function getDefaultUserData(){
     sentData:JSON.parse(JSON.stringify(SENTENCES_DEFAULT)),
     vocabLessons:JSON.parse(JSON.stringify(DEFAULT_VOCAB_LESSONS)),
     grammarLessons:JSON.parse(JSON.stringify(DEFAULT_GRAMMAR_LESSONS)),
+    sentTopics:JSON.parse(JSON.stringify(DEFAULT_SENT_TOPICS||{})),
     score:0,
     theme:'light',
     editMode:false,
@@ -3427,64 +3501,119 @@ async function loadUserData(user){
       return;
     }
   }
-  // Fallback: load from localStorage with user prefix
+  // Fallback: load từ localStorage với user prefix
   const prefix='nihongo_user_'+user.id+'_';
-  const keys=['kanaStatus','starred','vocabData','grammarData','sentData','vocabLessons','grammarLessons','score','theme'];
+  const keys=[
+    'kanaStatus','starred',
+    'vocabData','vocabLessons',
+    'grammarData','grammarLessons',
+    'sentData','sentTopics',
+    'score','theme'
+  ];
+  let loaded=0;
   keys.forEach(k=>{
     const val=localStorage.getItem(prefix+k);
     if(val){
       try{
         if(k==='score') S.score=parseInt(val)||0;
-        else if(k==='theme') S.theme=val;
+        else if(k==='theme'){S.theme=val;document.documentElement.setAttribute('data-theme',val);}
         else S[k]=JSON.parse(val);
-      }catch(e){}
+        loaded++;
+      }catch(e){console.warn('Failed to load',k,e);}
     }
   });
+  if(loaded>0) showToast('📱 Đã tải dữ liệu từ thiết bị này ('+loaded+' mục)','info');
   updateDashboard();
 }
 
 function applyUserData(data){
-  if(data.kanaStatus) S.kanaStatus=data.kanaStatus;
-  if(data.starred) S.starred=data.starred;
-  if(data.vocabData) S.vocabData=data.vocabData;
-  if(data.grammarData) S.grammarData=data.grammarData;
-  if(data.sentData) S.sentData=data.sentData;
-  if(data.vocabLessons) S.vocabLessons=data.vocabLessons;
-  if(data.grammarLessons) S.grammarLessons=data.grammarLessons;
-  if(data.sentTopics){S.sentTopics=data.sentTopics;saveSentTopics();}
-  if(data.score) S.score=data.score;
+  // Status
+  if(data.kanaStatus!==undefined) S.kanaStatus=data.kanaStatus;
+  if(data.starred!==undefined) S.starred=data.starred;
+  if(data.score!==undefined) S.score=data.score;
   if(data.theme){S.theme=data.theme;document.documentElement.setAttribute('data-theme',S.theme);}
+  // Vocab - thẻ bài + từ vựng
+  if(data.vocabData!==undefined) S.vocabData=data.vocabData;
+  if(data.vocabLessons!==undefined) S.vocabLessons=data.vocabLessons;
+  // Grammar - thẻ bài + ngữ pháp
+  if(data.grammarData!==undefined) S.grammarData=data.grammarData;
+  if(data.grammarLessons!==undefined) S.grammarLessons=data.grammarLessons;
+  // Sentences - chủ đề + câu
+  if(data.sentData!==undefined) S.sentData=data.sentData;
+  if(data.sentTopics!==undefined) S.sentTopics=data.sentTopics;
   // Persist to localStorage
   save();saveLessons();
+  if(S.sentTopics) localStorage.setItem('sentTopics',JSON.stringify(S.sentTopics));
   updateDashboard();
   // Re-render current page
   if(S.page==='level'){renderVocabLessons();renderGrammarLessons();}
   if(S.page==='sentences'){renderSentTopics();}
 }
 
+// ============================================================
+// GITHUB USER DATA - lưu theo folder users/{id}/
+// ============================================================
+function getUserDataPath(userId, file){
+  return 'users/'+userId+'/'+file;
+}
+
 async function syncToGitHub(){
   if(!GH||!GH.enabled||!GH.token){showToast('⚠️ Chưa cấu hình GitHub trong config.js','error');return;}
   showToast('⏳ Đang sync lên GitHub...','info');
   const userId = currentUser?currentUser.id:'guest';
-  const data={
-    kanaStatus:S.kanaStatus,
-    starred:S.starred,
-    vocabData:S.vocabData,
-    grammarData:S.grammarData,
-    sentData:S.sentData,
-    vocabLessons:S.vocabLessons,
-    grammarLessons:S.grammarLessons,
-    sentTopics:S.sentTopics,
-    score:S.score,
-    theme:S.theme,
-    lastSync:new Date().toISOString(),
-    userId:userId,
-  };
+  
   try{
-    const ok=await ghWriteFile('users/'+userId+'.json',data,'Sync user '+userId+' at '+new Date().toLocaleString());
-    if(ok){showToast('☁️ Đã lưu lên GitHub thành công!','success');}
-    else{showToast('❌ Sync thất bại - kiểm tra token/repo trong config.js','error');}
-  }catch(e){showToast('❌ Lỗi sync: '+e.message,'error');}
+    // Save status (tiến độ học)
+    const status = {
+      kanaStatus: S.kanaStatus,
+      starred: S.starred,
+      score: S.score,
+      theme: S.theme,
+      lastSync: new Date().toISOString(),
+    };
+    // Save vocab (từ vựng + tất cả thẻ bài user đã tạo)
+    const vocab = {
+      vocabData: S.vocabData,       // từ vựng trong từng bài
+      vocabLessons: S.vocabLessons, // danh sách thẻ bài (N1-N5)
+    };
+    // Save grammar (ngữ pháp + tất cả thẻ bài ngữ pháp user đã tạo)
+    const grammar = {
+      grammarData: S.grammarData,       // nội dung ngữ pháp
+      grammarLessons: S.grammarLessons, // danh sách thẻ bài ngữ pháp
+    };
+    // Save sentences (câu + tất cả chủ đề user đã tạo)
+    const sentences = {
+      sentData: S.sentData,     // câu cũ (legacy)
+      sentTopics: S.sentTopics, // chủ đề câu + câu trong từng chủ đề
+    };
+    // Save profile
+    const profile = {
+      id: userId,
+      displayName: currentUser?currentUser.displayName:'Guest',
+      username: currentUser?currentUser.username:'guest',
+      lastSync: new Date().toISOString(),
+    };
+
+    // Write all files in parallel
+    const results = await Promise.all([
+      ghWriteFile(getUserDataPath(userId,'profile.json'), profile, 'Update profile'),
+      ghWriteFile(getUserDataPath(userId,'status.json'), status, 'Update status'),
+      ghWriteFile(getUserDataPath(userId,'vocab.json'), vocab, 'Update vocab'),
+      ghWriteFile(getUserDataPath(userId,'grammar.json'), grammar, 'Update grammar'),
+      ghWriteFile(getUserDataPath(userId,'sentences.json'), sentences, 'Update sentences'),
+    ]);
+
+    const allOk = results.every(r=>r!==null);
+    if(allOk){
+      showToast('☁️ Đã lưu lên GitHub thành công! (5 files)','success');
+    } else {
+      const failed = results.filter(r=>r===null).length;
+      showToast('⚠️ Sync một phần - '+failed+' file thất bại','error');
+    }
+  }catch(e){
+    console.error('Sync error:',e);
+    showToast('❌ Lỗi sync: '+e.message,'error');
+  }
 }
 
 async function loadFromGitHub(){
@@ -3492,28 +3621,93 @@ async function loadFromGitHub(){
   const userId = currentUser?currentUser.id:'guest';
   showToast('⏳ Đang tải từ GitHub...','info');
   try{
-    const data=await ghReadFile('users/'+userId+'.json');
-    if(data){
-      applyUserData(data);
-      showToast('☁️ Đã tải dữ liệu từ GitHub!','success');
-      return true;
+    // Load all files in parallel
+    const [status, vocab, grammar, sentences] = await Promise.all([
+      ghReadFile(getUserDataPath(userId,'status.json')),
+      ghReadFile(getUserDataPath(userId,'vocab.json')),
+      ghReadFile(getUserDataPath(userId,'grammar.json')),
+      ghReadFile(getUserDataPath(userId,'sentences.json')),
+    ]);
+
+    let loaded = 0;
+    if(status){
+      if(status.kanaStatus) S.kanaStatus=status.kanaStatus;
+      if(status.starred) S.starred=status.starred;
+      if(status.score) S.score=status.score;
+      if(status.theme){S.theme=status.theme;document.documentElement.setAttribute('data-theme',S.theme);}
+      loaded++;
     }
-  }catch(e){console.warn('Load from GitHub failed:',e);}
+    if(vocab){
+      if(vocab.vocabData) S.vocabData=vocab.vocabData;
+      if(vocab.vocabLessons) S.vocabLessons=vocab.vocabLessons;
+      loaded++;
+    }
+    if(grammar){
+      if(grammar.grammarData) S.grammarData=grammar.grammarData;
+      if(grammar.grammarLessons) S.grammarLessons=grammar.grammarLessons;
+      loaded++;
+    }
+    if(sentences){
+      if(sentences.sentData) S.sentData=sentences.sentData;
+      if(sentences.sentTopics){S.sentTopics=sentences.sentTopics;saveSentTopics();}
+      loaded++;
+    }
+
+    if(loaded>0){
+      save(); saveLessons();
+      updateDashboard();
+      if(S.page==='level'){renderVocabLessons();renderGrammarLessons();}
+      if(S.page==='sentences'){renderSentTopics();}
+      showToast('☁️ Đã tải '+loaded+'/4 files từ GitHub!','success');
+      return true;
+    } else {
+      showToast('⚠️ Không tìm thấy data trên GitHub','info');
+    }
+  }catch(e){
+    console.warn('Load from GitHub failed:',e);
+    showToast('❌ Lỗi tải: '+e.message,'error');
+  }
   return false;
 }
 
-// Override save() to also sync user data
+// Override save() - lưu đầy đủ tất cả data của user
 const _origSave = save;
 function save(){
   _origSave();
-  // Save with user prefix if logged in
   if(currentUser){
     const prefix='nihongo_user_'+currentUser.id+'_';
-    localStorage.setItem(prefix+'kanaStatus',JSON.stringify(S.kanaStatus));
-    localStorage.setItem(prefix+'starred',JSON.stringify(S.starred));
-    localStorage.setItem(prefix+'vocabData',JSON.stringify(S.vocabData));
-    localStorage.setItem(prefix+'score',S.score);
-    localStorage.setItem(prefix+'theme',S.theme);
+    // Lưu toàn bộ data user vào localStorage
+    localStorage.setItem(prefix+'kanaStatus',    JSON.stringify(S.kanaStatus));
+    localStorage.setItem(prefix+'starred',       JSON.stringify(S.starred));
+    localStorage.setItem(prefix+'vocabData',     JSON.stringify(S.vocabData));
+    localStorage.setItem(prefix+'vocabLessons',  JSON.stringify(S.vocabLessons));
+    localStorage.setItem(prefix+'grammarData',   JSON.stringify(S.grammarData));
+    localStorage.setItem(prefix+'grammarLessons',JSON.stringify(S.grammarLessons));
+    localStorage.setItem(prefix+'sentData',      JSON.stringify(S.sentData));
+    localStorage.setItem(prefix+'sentTopics',    JSON.stringify(S.sentTopics||{}));
+    localStorage.setItem(prefix+'score',         S.score);
+    localStorage.setItem(prefix+'theme',         S.theme);
+  }
+}
+
+// saveLessons() cũng lưu theo user prefix
+const _origSaveLessons = saveLessons;
+function saveLessons(){
+  _origSaveLessons();
+  if(currentUser){
+    const prefix='nihongo_user_'+currentUser.id+'_';
+    localStorage.setItem(prefix+'vocabLessons',  JSON.stringify(S.vocabLessons));
+    localStorage.setItem(prefix+'grammarLessons',JSON.stringify(S.grammarLessons));
+  }
+}
+
+// saveSentTopics() cũng lưu theo user prefix
+const _origSaveSentTopics = saveSentTopics;
+function saveSentTopics(){
+  _origSaveSentTopics();
+  if(currentUser){
+    const prefix='nihongo_user_'+currentUser.id+'_';
+    localStorage.setItem(prefix+'sentTopics', JSON.stringify(S.sentTopics||{}));
   }
 }
 
@@ -3899,6 +4093,12 @@ window.addEventListener('load',()=>{
   initVocabSampleData();
   // Init auth
   initAuth();
+  // Show GitHub sync card if enabled
+  const ghCard = document.getElementById('githubSyncCard');
+  if(ghCard){
+    const ghEnabled = typeof APP_CONFIG!=='undefined' && APP_CONFIG.github && APP_CONFIG.github.enabled;
+    ghCard.style.display = ghEnabled ? 'block' : 'none';
+  }
 });
 function sendHeight(){window.parent.postMessage({iframeHeight:document.documentElement.scrollHeight},'*');}
 window.addEventListener('load',sendHeight);window.addEventListener('resize',sendHeight);
