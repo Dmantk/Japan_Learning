@@ -19,9 +19,9 @@ const APP_CONFIG = {
     // → t1: "ghp_ABCDEF"
     // → t2: "abcdef1234"
     // → t3: "567890ABCDEF12"
-    t1: "ghp_ykE9On3yE",           // Phần 1 của token
-    t2: "RTX7BjsCw1kXF",           // Phần 2 của token
-    t3: "ZbC4auGm3kzLJ9",           // Phần 3 của token
+    t1: "github_pat_11A74U7BQ0C5ZfL5BTN2RX_Vi",           // Phần 1 của token
+    t2: "UMEV6HnIABy4J8Nr4TqPScYbCguVY",           // Phần 2 của token
+    t3: "paNFZ6FGAvUITANZBFGLfG5J67xj",           // Phần 3 của token
     data_path: "data" // Thư mục chứa data trong repo
   },
 
