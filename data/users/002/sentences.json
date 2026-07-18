@@ -1,0 +1,187 @@
+{
+  "sentData": {
+    "N5": [
+      {
+        "id": 1,
+        "jp": "私は学生です。",
+        "reading": "Watashi wa gakusei desu.",
+        "vn": "Tôi là học sinh.",
+        "note": "Mẫu 〜は〜です"
+      },
+      {
+        "id": 2,
+        "jp": "これは本です。",
+        "reading": "Kore wa hon desu.",
+        "vn": "Đây là quyển sách.",
+        "note": "Đại từ chỉ định これ"
+      },
+      {
+        "id": 3,
+        "jp": "今日は天気がいいです。",
+        "reading": "Kyou wa tenki ga ii desu.",
+        "vn": "Hôm nay thời tiết đẹp.",
+        "note": "Trợ từ が"
+      },
+      {
+        "id": 4,
+        "jp": "私は毎日日本語を勉強します。",
+        "reading": "Watashi wa mainichi nihongo wo benkyou shimasu.",
+        "vn": "Tôi học tiếng Nhật mỗi ngày.",
+        "note": "Trợ từ を, 毎日=mỗi ngày"
+      },
+      {
+        "id": 5,
+        "jp": "どこに行きますか？",
+        "reading": "Doko ni ikimasu ka?",
+        "vn": "Bạn đi đâu vậy?",
+        "note": "疑問文, trợ từ に"
+      },
+      {
+        "id": 6,
+        "jp": "ご飯を食べましたか？",
+        "reading": "Gohan wo tabemashita ka?",
+        "vn": "Bạn đã ăn cơm chưa?",
+        "note": "Thể quá khứ 〜ました"
+      },
+      {
+        "id": 7,
+        "jp": "日本語が少し話せます。",
+        "reading": "Nihongo ga sukoshi hanasemasu.",
+        "vn": "Tôi có thể nói một chút tiếng Nhật.",
+        "note": "Thể khả năng 〜できます"
+      },
+      {
+        "id": 8,
+        "jp": "ここに座ってもいいですか？",
+        "reading": "Koko ni suwatte mo ii desu ka?",
+        "vn": "Tôi có thể ngồi đây không?",
+        "note": "Xin phép 〜てもいいですか"
+      }
+    ],
+    "N4": [
+      {
+        "id": 1,
+        "jp": "もっとゆっくり話してください。",
+        "reading": "Motto yukkuri hanashite kudasai.",
+        "vn": "Xin hãy nói chậm hơn.",
+        "note": "Yêu cầu lịch sự 〜てください"
+      },
+      {
+        "id": 2,
+        "jp": "電車が遅れているようです。",
+        "reading": "Densha ga okurete iru you desu.",
+        "vn": "Có vẻ tàu điện đang bị trễ.",
+        "note": "〜ようです phỏng đoán"
+      },
+      {
+        "id": 3,
+        "jp": "宿題を忘れてしまいました。",
+        "reading": "Shukudai wo wasurete shimaimashita.",
+        "vn": "Tôi đã quên mất bài tập về nhà.",
+        "note": "〜てしまう hoàn thành/hối tiếc"
+      },
+      {
+        "id": 4,
+        "jp": "友達に手紙を書いてあげました。",
+        "reading": "Tomodachi ni tegami wo kaite agemashita.",
+        "vn": "Tôi đã viết thư cho bạn.",
+        "note": "〜てあげる cho người khác"
+      },
+      {
+        "id": 5,
+        "jp": "日本に来る前に、日本語を勉強しました。",
+        "reading": "Nihon ni kuru mae ni, nihongo wo benkyou shimashita.",
+        "vn": "Trước khi đến Nhật, tôi đã học tiếng Nhật.",
+        "note": "〜前に trước khi"
+      }
+    ],
+    "N3": [
+      {
+        "id": 1,
+        "jp": "彼女は歌が上手なだけでなく、ダンスも得意です。",
+        "reading": "Kanojo wa uta ga jouzu na dake de naku, dansu mo tokui desu.",
+        "vn": "Cô ấy không chỉ hát hay mà còn giỏi nhảy.",
+        "note": "〜だけでなく không chỉ...mà còn"
+      },
+      {
+        "id": 2,
+        "jp": "若いうちに、いろいろな経験をしておくべきです。",
+        "reading": "Wakai uchi ni, iroiro na keiken wo shite oku beki desu.",
+        "vn": "Khi còn trẻ, nên tích lũy nhiều kinh nghiệm.",
+        "note": "〜うちに trong khi, 〜べき nên"
+      }
+    ],
+    "N2": [
+      {
+        "id": 1,
+        "jp": "いかなる困難にも負けずに前進し続けることが大切です。",
+        "reading": "Ikanaru konnan ni mo makezu ni zenshin shi tsuzukeru koto ga taisetsu desu.",
+        "vn": "Điều quan trọng là tiếp tục tiến về phía trước mà không khuất phục trước bất kỳ khó khăn nào.",
+        "note": "〜ずに không làm, 〜続ける tiếp tục"
+      }
+    ],
+    "N1": [
+      {
+        "id": 1,
+        "jp": "経済のグローバル化が進むにつれて、異文化理解の重要性が増している。",
+        "reading": "Keizai no guroobaru-ka ga susumu ni tsurete, ibunka rikai no juuyousei ga mashite iru.",
+        "vn": "Khi toàn cầu hóa kinh tế tiến triển, tầm quan trọng của việc hiểu văn hóa khác ngày càng tăng.",
+        "note": "〜につれて khi...thì"
+      }
+    ]
+  },
+  "sentTopics": {
+    "N5": [
+      {
+        "id": 1,
+        "title": "Chào hỏi",
+        "note": "あいさつ",
+        "sentences": []
+      },
+      {
+        "id": 2,
+        "title": "Gia đình",
+        "note": "家族",
+        "sentences": []
+      },
+      {
+        "id": 3,
+        "title": "Trường học",
+        "note": "学校",
+        "sentences": []
+      }
+    ],
+    "N4": [
+      {
+        "id": 1,
+        "title": "Hành động hàng ngày",
+        "note": "日常動作",
+        "sentences": []
+      }
+    ],
+    "N3": [
+      {
+        "id": 1,
+        "title": "Cảm xúc & Tính cách",
+        "note": "感情・性格",
+        "sentences": []
+      }
+    ],
+    "N2": [
+      {
+        "id": 1,
+        "title": "Kinh tế & Xã hội",
+        "note": "経済・社会",
+        "sentences": []
+      }
+    ],
+    "N1": [
+      {
+        "id": 1,
+        "title": "Văn học & Triết học",
+        "note": "文学・哲学",
+        "sentences": []
+      }
+    ]
+  }
+}
