@@ -1528,56 +1528,6 @@
   ],
   "kanjiCustomChars": [
     {
-      "kana": "口",
-      "romaji": "kou/kuchi",
-      "meaning": "miệng/cửa",
-      "hanviet": "Khẩu",
-      "onyomi": "コウ、ク",
-      "kunyomi": "くち",
-      "example": "入口 (いりぐち) - lối vào",
-      "group": "custom"
-    },
-    {
-      "kana": "目",
-      "romaji": "moku/me",
-      "meaning": "mắt",
-      "hanviet": "Mục",
-      "onyomi": "モク、ボク",
-      "kunyomi": "め",
-      "example": "目 (め) - mắt",
-      "group": "custom"
-    },
-    {
-      "kana": "耳",
-      "romaji": "ji/mimi",
-      "meaning": "tai",
-      "hanviet": "Nhĩ",
-      "onyomi": "ジ",
-      "kunyomi": "みみ",
-      "example": "耳 (みみ) - tai",
-      "group": "custom"
-    },
-    {
-      "kana": "手",
-      "romaji": "shu/te",
-      "meaning": "tay",
-      "hanviet": "Thủ",
-      "onyomi": "シュ",
-      "kunyomi": "て",
-      "example": "手紙 (てがみ) - thư",
-      "group": "custom"
-    },
-    {
-      "kana": "足",
-      "romaji": "soku/ashi",
-      "meaning": "chân",
-      "hanviet": "Túc",
-      "onyomi": "ソク",
-      "kunyomi": "あし",
-      "example": "足 (あし) - chân",
-      "group": "custom"
-    },
-    {
       "kana": "心",
       "romaji": "shin/kokoro",
       "meaning": "tim/tâm",
@@ -2629,5 +2579,5 @@
     }
   ],
   "kanjiCustomRadicals": [],
-  "lastSync": "2026-07-19T10:29:20.300Z"
+  "lastSync": "2026-07-19T10:29:31.872Z"
 }
