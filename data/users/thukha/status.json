@@ -1528,56 +1528,6 @@
   ],
   "kanjiCustomChars": [
     {
-      "kana": "中",
-      "romaji": "chuu/naka",
-      "meaning": "giữa/trong",
-      "hanviet": "Trung",
-      "onyomi": "チュウ",
-      "kunyomi": "なか",
-      "example": "中国 (ちゅうごく) - Trung Quốc",
-      "group": "custom"
-    },
-    {
-      "kana": "上",
-      "romaji": "jou/ue",
-      "meaning": "trên",
-      "hanviet": "Thượng",
-      "onyomi": "ジョウ",
-      "kunyomi": "うえ",
-      "example": "上手 (じょうず) - giỏi",
-      "group": "custom"
-    },
-    {
-      "kana": "下",
-      "romaji": "ka/shita",
-      "meaning": "dưới",
-      "hanviet": "Hạ",
-      "onyomi": "カ、ゲ",
-      "kunyomi": "した",
-      "example": "地下 (ちか) - dưới đất",
-      "group": "custom"
-    },
-    {
-      "kana": "左",
-      "romaji": "sa/hidari",
-      "meaning": "trái",
-      "hanviet": "Tả",
-      "onyomi": "サ",
-      "kunyomi": "ひだり",
-      "example": "左 (ひだり) - bên trái",
-      "group": "custom"
-    },
-    {
-      "kana": "右",
-      "romaji": "u/migi",
-      "meaning": "phải",
-      "hanviet": "Hữu",
-      "onyomi": "ウ、ユウ",
-      "kunyomi": "みぎ",
-      "example": "右 (みぎ) - bên phải",
-      "group": "custom"
-    },
-    {
       "kana": "東",
       "romaji": "tou/higashi",
       "meaning": "đông",
@@ -2539,5 +2489,5 @@
     }
   ],
   "kanjiCustomRadicals": [],
-  "lastSync": "2026-07-19T10:29:43.544Z"
+  "lastSync": "2026-07-19T10:29:55.313Z"
 }
