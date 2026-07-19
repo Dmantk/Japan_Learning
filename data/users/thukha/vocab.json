@@ -361,7 +361,748 @@
         "reading": "さくらだいがく",
         "kanji": "さ‌く‌ら‌大‌学"
       }
-    ]
+    ],
+    "N5_lesson_2": [
+      {
+        "id": 1,
+        "word": "これ",
+        "type": "名詞",
+        "meaning": "Cái này, đây (vật ở gần người nói)",
+        "reading": "これ",
+        "kanji": ""
+      },
+      {
+        "id": 2,
+        "word": "それ",
+        "type": "名詞",
+        "meaning": "Cái đó, đó (vật ở gần người nghe)",
+        "reading": "それ",
+        "kanji": ""
+      },
+      {
+        "id": 3,
+        "word": "あれ",
+        "type": "名詞",
+        "meaning": "Cái kia, kia (vật ở xa cả người nói và người nghe)",
+        "reading": "あれ",
+        "kanji": ""
+      },
+      {
+        "id": 4,
+        "word": "この~",
+        "type": "名詞",
+        "meaning": "~ này",
+        "reading": "この~",
+        "kanji": ""
+      },
+      {
+        "id": 5,
+        "word": "その~",
+        "type": "名詞",
+        "meaning": "~ đó",
+        "reading": "その~",
+        "kanji": ""
+      },
+      {
+        "id": 6,
+        "word": "あの~",
+        "type": "名詞",
+        "meaning": "~ kia",
+        "reading": "あの~",
+        "kanji": ""
+      },
+      {
+        "id": 7,
+        "word": "ほん",
+        "type": "名詞",
+        "meaning": "Sách",
+        "reading": "ほん",
+        "kanji": "本"
+      },
+      {
+        "id": 8,
+        "word": "じしょ",
+        "type": "名詞",
+        "meaning": "Từ điển",
+        "reading": "じしょ",
+        "kanji": "辞書"
+      },
+      {
+        "id": 9,
+        "word": "ざっし",
+        "type": "名詞",
+        "meaning": "Tạp chí",
+        "reading": "ざっし",
+        "kanji": "雑誌"
+      },
+      {
+        "id": 10,
+        "word": "しんぶん",
+        "type": "名詞",
+        "meaning": "Báo",
+        "reading": "しんぶん",
+        "kanji": "新聞"
+      },
+      {
+        "id": 11,
+        "word": "ノート",
+        "type": "名詞",
+        "meaning": "Vở",
+        "reading": "ノート",
+        "kanji": ""
+      },
+      {
+        "id": 12,
+        "word": "てちょう",
+        "type": "名詞",
+        "meaning": "Sổ tay",
+        "reading": "てちょう",
+        "kanji": "手帳"
+      },
+      {
+        "id": 13,
+        "word": "めいし",
+        "type": "名詞",
+        "meaning": "Danh thiếp",
+        "reading": "めいし",
+        "kanji": "名詞"
+      },
+      {
+        "id": 14,
+        "word": "カード",
+        "type": "名詞",
+        "meaning": "Thẻ, cạc",
+        "reading": "カード",
+        "kanji": ""
+      },
+      {
+        "id": 15,
+        "word": "テレホンカード",
+        "type": "名詞",
+        "meaning": "Thẻ điện thoại",
+        "reading": "テレホンカード",
+        "kanji": ""
+      },
+      {
+        "id": 16,
+        "word": "えんぴつ",
+        "type": "名詞",
+        "meaning": "Bút chì",
+        "reading": "えんぴつ",
+        "kanji": "鉛筆"
+      },
+      {
+        "id": 17,
+        "word": "ボールペン",
+        "type": "名詞",
+        "meaning": "Bút bi",
+        "reading": "ボールペン",
+        "kanji": ""
+      },
+      {
+        "id": 18,
+        "word": "シャープペンシル",
+        "type": "名詞",
+        "meaning": "Bút chì kim, bút chì bấm",
+        "reading": "シャープペンシル",
+        "kanji": ""
+      },
+      {
+        "id": 19,
+        "word": "かぎ",
+        "type": "名詞",
+        "meaning": "Chìa khóa",
+        "reading": "かぎ",
+        "kanji": ""
+      },
+      {
+        "id": 20,
+        "word": "とけい",
+        "type": "名詞",
+        "meaning": "Đồng hồ",
+        "reading": "とけい",
+        "kanji": "時計"
+      },
+      {
+        "id": 21,
+        "word": "かさ",
+        "type": "名詞",
+        "meaning": "ô, dù",
+        "reading": "かさ",
+        "kanji": "傘"
+      },
+      {
+        "id": 22,
+        "word": "かばん",
+        "type": "名詞",
+        "meaning": "Cặp sách, túi sách",
+        "reading": "かばん",
+        "kanji": ""
+      },
+      {
+        "id": 23,
+        "word": "[カセット] テーブ",
+        "type": "名詞",
+        "meaning": "Băng [cát-xét]",
+        "reading": "[カセット] テーブ",
+        "kanji": ""
+      },
+      {
+        "id": 24,
+        "word": "テープレコーダー",
+        "type": "名詞",
+        "meaning": "Máy ghi âm",
+        "reading": "テープレコーダー",
+        "kanji": ""
+      },
+      {
+        "id": 25,
+        "word": "テレビ",
+        "type": "名詞",
+        "meaning": "Tivi",
+        "reading": "テレビ",
+        "kanji": ""
+      },
+      {
+        "id": 26,
+        "word": "ラジオ",
+        "type": "名詞",
+        "meaning": "Radio",
+        "reading": "ラジオ",
+        "kanji": ""
+      },
+      {
+        "id": 27,
+        "word": "カメラ",
+        "type": "名詞",
+        "meaning": "Máy ảnh",
+        "reading": "カメラ",
+        "kanji": ""
+      },
+      {
+        "id": 28,
+        "word": "コンピュータ",
+        "type": "名詞",
+        "meaning": "Máy vi tính",
+        "reading": "コンピュータ",
+        "kanji": ""
+      },
+      {
+        "id": 29,
+        "word": "じどうしゃ",
+        "type": "名詞",
+        "meaning": "Ô tô, xe hơi",
+        "reading": "じどうしゃ",
+        "kanji": "自動車"
+      },
+      {
+        "id": 30,
+        "word": "つくえ",
+        "type": "名詞",
+        "meaning": "Cái bàn",
+        "reading": "つくえ",
+        "kanji": "机"
+      },
+      {
+        "id": 31,
+        "word": "いす",
+        "type": "名詞",
+        "meaning": "Ghế",
+        "reading": "いす",
+        "kanji": ""
+      },
+      {
+        "id": 32,
+        "word": "チョコレート",
+        "type": "名詞",
+        "meaning": "Chocolate",
+        "reading": "チョコレート",
+        "kanji": ""
+      },
+      {
+        "id": 33,
+        "word": "コーヒー",
+        "type": "名詞",
+        "meaning": "Cà phê",
+        "reading": "コーヒー",
+        "kanji": ""
+      },
+      {
+        "id": 34,
+        "word": "えいご",
+        "type": "名詞",
+        "meaning": "Tiếng Anh",
+        "reading": "えいご",
+        "kanji": "英語"
+      },
+      {
+        "id": 35,
+        "word": "にほんご",
+        "type": "名詞",
+        "meaning": "Tiếng Nhật",
+        "reading": "にほんご",
+        "kanji": "日本語"
+      },
+      {
+        "id": 36,
+        "word": "∼ご",
+        "type": "名詞",
+        "meaning": "Tiếng~",
+        "reading": "∼ご",
+        "kanji": "∼語"
+      },
+      {
+        "id": 37,
+        "word": "なん",
+        "type": "名詞",
+        "meaning": "Cái gì",
+        "reading": "なん",
+        "kanji": "何"
+      },
+      {
+        "id": 38,
+        "word": "そう",
+        "type": "名詞",
+        "meaning": "Đúng vậy",
+        "reading": "そう",
+        "kanji": ""
+      },
+      {
+        "id": 39,
+        "word": "ちがいます。",
+        "type": "名詞",
+        "meaning": "Nhầm rồi",
+        "reading": "ちがいます。",
+        "kanji": "違います。"
+      },
+      {
+        "id": 40,
+        "word": "そうですか。",
+        "type": "名詞",
+        "meaning": "Thế à?",
+        "reading": "そうですか。",
+        "kanji": ""
+      },
+      {
+        "id": 41,
+        "word": "あのう",
+        "type": "名詞",
+        "meaning": "À…(được sử dụng để thể hiện sự do dự)",
+        "reading": "あのう",
+        "kanji": ""
+      },
+      {
+        "id": 42,
+        "word": "ほんのきもちです",
+        "type": "名詞",
+        "meaning": "Đây là chút quà nhỏ của tôi",
+        "reading": "ほんのきもちです",
+        "kanji": "ほんの気持ちです"
+      },
+      {
+        "id": 43,
+        "word": "どうぞ",
+        "type": "名詞",
+        "meaning": "Xin mời",
+        "reading": "どうぞ",
+        "kanji": ""
+      },
+      {
+        "id": 44,
+        "word": "どうも",
+        "type": "名詞",
+        "meaning": "Cảm ơn",
+        "reading": "どうも",
+        "kanji": ""
+      },
+      {
+        "id": 45,
+        "word": "[どうも] ありがとう[ございます]",
+        "type": "名詞",
+        "meaning": "Cảm ơn nhiều",
+        "reading": "[どうも] ありがとう[ございます]",
+        "kanji": ""
+      },
+      {
+        "id": 46,
+        "word": "これから おせわになります",
+        "type": "名詞",
+        "meaning": "Từ này mong được anh/chị giúp đỡ",
+        "reading": "これから おせわになります",
+        "kanji": "これから お世話になります"
+      },
+      {
+        "id": 47,
+        "word": "こちらこそ よろしく",
+        "type": "名詞",
+        "meaning": "Chính tôi mới mong được anh/chị giúp đỡ",
+        "reading": "こちらこそ よろしく",
+        "kanji": ""
+      }
+    ],
+    "N5_lesson_3": [
+      {
+        "id": 1,
+        "word": "ここ",
+        "type": "名詞",
+        "meaning": "chỗ này, đây",
+        "reading": "ここ",
+        "kanji": ""
+      },
+      {
+        "id": 2,
+        "word": "そこ",
+        "type": "名詞",
+        "meaning": "chỗ đó, đó",
+        "reading": "そこ",
+        "kanji": ""
+      },
+      {
+        "id": 3,
+        "word": "あそこ",
+        "type": "名詞",
+        "meaning": "chỗ kia, kia",
+        "reading": "あそこ",
+        "kanji": ""
+      },
+      {
+        "id": 4,
+        "word": "どこ",
+        "type": "名詞",
+        "meaning": "chỗ nào, đâu",
+        "reading": "どこ",
+        "kanji": ""
+      },
+      {
+        "id": 5,
+        "word": "こちら",
+        "type": "名詞",
+        "meaning": "phía này, đằng này, chỗ này, đây (là cách nói lịch sự của ここ)",
+        "reading": "こちら",
+        "kanji": ""
+      },
+      {
+        "id": 6,
+        "word": "そちら",
+        "type": "名詞",
+        "meaning": "phía đó, đằng đó, chỗ đó, đó (là cách nói lịch sự của そこ)",
+        "reading": "そちら",
+        "kanji": ""
+      },
+      {
+        "id": 7,
+        "word": "あちら",
+        "type": "名詞",
+        "meaning": "phía kia, đằng kia, chỗ kia, kia (cách nói lịch sự của あそこ)",
+        "reading": "あちら",
+        "kanji": ""
+      },
+      {
+        "id": 8,
+        "word": "どちら",
+        "type": "名詞",
+        "meaning": "phía nào, đằng nào, chỗ nào, đâu (cách nói lịch sự của どこ )",
+        "reading": "どちら",
+        "kanji": ""
+      },
+      {
+        "id": 9,
+        "word": "きょうしつ",
+        "type": "名詞",
+        "meaning": "lớp học, phòng học",
+        "reading": "きょうしつ",
+        "kanji": "教室"
+      },
+      {
+        "id": 10,
+        "word": "しょくどう",
+        "type": "名詞",
+        "meaning": "nhà ăn",
+        "reading": "しょくどう",
+        "kanji": "食堂"
+      },
+      {
+        "id": 11,
+        "word": "じむしょ",
+        "type": "名詞",
+        "meaning": "văn phòng",
+        "reading": "じむしょ",
+        "kanji": "事務所"
+      },
+      {
+        "id": 12,
+        "word": "かいぎしつ",
+        "type": "名詞",
+        "meaning": "phòng họp",
+        "reading": "かいぎしつ",
+        "kanji": "会議室"
+      },
+      {
+        "id": 13,
+        "word": "うけつけ",
+        "type": "名詞",
+        "meaning": "bộ phận tiếp tân, phòng thường trực, lễ tân",
+        "reading": "うけつけ",
+        "kanji": "受付"
+      },
+      {
+        "id": 14,
+        "word": "ロビー",
+        "type": "名詞",
+        "meaning": "hành lang, đại sảnh",
+        "reading": "ロビー",
+        "kanji": ""
+      },
+      {
+        "id": 15,
+        "word": "へや",
+        "type": "名詞",
+        "meaning": "căn phòng",
+        "reading": "へや",
+        "kanji": "部屋"
+      },
+      {
+        "id": 16,
+        "word": "トイレ（おてあらい）",
+        "type": "名詞",
+        "meaning": "nhà vệ sinh, phòng vệ sinh, toa-lét",
+        "reading": "トイレ（おてあらい）",
+        "kanji": "(お手洗い）"
+      },
+      {
+        "id": 17,
+        "word": "かいだん",
+        "type": "名詞",
+        "meaning": "cầu thang",
+        "reading": "かいだん",
+        "kanji": "階段"
+      },
+      {
+        "id": 18,
+        "word": "エレベーター",
+        "type": "名詞",
+        "meaning": "thang máy",
+        "reading": "エレベーター",
+        "kanji": ""
+      },
+      {
+        "id": 19,
+        "word": "エスカレーター",
+        "type": "名詞",
+        "meaning": "thang cuốn",
+        "reading": "エスカレーター",
+        "kanji": ""
+      },
+      {
+        "id": 20,
+        "word": "[お]くに",
+        "type": "名詞",
+        "meaning": "đất nước",
+        "reading": "[お]くに",
+        "kanji": "[お]国"
+      },
+      {
+        "id": 21,
+        "word": "かいしゃ",
+        "type": "名詞",
+        "meaning": "công ty",
+        "reading": "かいしゃ",
+        "kanji": "会社"
+      },
+      {
+        "id": 22,
+        "word": "うち",
+        "type": "名詞",
+        "meaning": "nhà",
+        "reading": "うち",
+        "kanji": ""
+      },
+      {
+        "id": 23,
+        "word": "でんわ",
+        "type": "名詞",
+        "meaning": "máy điện thoại, điện thoại",
+        "reading": "でんわ",
+        "kanji": "電話"
+      },
+      {
+        "id": 24,
+        "word": "くつ",
+        "type": "名詞",
+        "meaning": "giày",
+        "reading": "くつ",
+        "kanji": "靴"
+      },
+      {
+        "id": 25,
+        "word": "ネクタイ",
+        "type": "名詞",
+        "meaning": "cà vạt",
+        "reading": "ネクタイ",
+        "kanji": ""
+      },
+      {
+        "id": 26,
+        "word": "ワイン",
+        "type": "名詞",
+        "meaning": "rượu vang",
+        "reading": "ワイン",
+        "kanji": ""
+      },
+      {
+        "id": 27,
+        "word": "たばこ",
+        "type": "名詞",
+        "meaning": "thuốc lá",
+        "reading": "たばこ",
+        "kanji": ""
+      },
+      {
+        "id": 28,
+        "word": "うりば",
+        "type": "名詞",
+        "meaning": "quầy bán (trong một cửa hàng bách hóa)",
+        "reading": "うりば",
+        "kanji": "売り場"
+      },
+      {
+        "id": 29,
+        "word": "ちか",
+        "type": "名詞",
+        "meaning": "tầng hầm, dưới mặt đất",
+        "reading": "ちか",
+        "kanji": "地下"
+      },
+      {
+        "id": 30,
+        "word": "―かい（－がい）",
+        "type": "名詞",
+        "meaning": "tầng thứ –",
+        "reading": "―かい（－がい）",
+        "kanji": "－階"
+      },
+      {
+        "id": 31,
+        "word": "なんがい",
+        "type": "名詞",
+        "meaning": "tầng mấy",
+        "reading": "なんがい",
+        "kanji": "何階"
+      },
+      {
+        "id": 32,
+        "word": "―えん",
+        "type": "名詞",
+        "meaning": "yên",
+        "reading": "―えん",
+        "kanji": "―円"
+      },
+      {
+        "id": 33,
+        "word": "いくら",
+        "type": "名詞",
+        "meaning": "bao nhiêu tiền",
+        "reading": "いくら",
+        "kanji": ""
+      },
+      {
+        "id": 34,
+        "word": "ひゃく",
+        "type": "名詞",
+        "meaning": "trăm",
+        "reading": "ひゃく",
+        "kanji": "百"
+      },
+      {
+        "id": 35,
+        "word": "せん",
+        "type": "名詞",
+        "meaning": "nghìn",
+        "reading": "せん",
+        "kanji": "千"
+      },
+      {
+        "id": 36,
+        "word": "まん",
+        "type": "名詞",
+        "meaning": "mười nghìn, vạn",
+        "reading": "まん",
+        "kanji": "万"
+      },
+      {
+        "id": 37,
+        "word": "すみません",
+        "type": "名詞",
+        "meaning": "Xin lỗi",
+        "reading": "すみません",
+        "kanji": ""
+      },
+      {
+        "id": 38,
+        "word": "～でございます",
+        "type": "名詞",
+        "meaning": "(cách nói lịch sự của 「です」)",
+        "reading": "～でございます",
+        "kanji": ""
+      },
+      {
+        "id": 39,
+        "word": "みせてください",
+        "type": "名詞",
+        "meaning": "cho tôi xem [~]",
+        "reading": "みせてください",
+        "kanji": "[～を]見せてください"
+      },
+      {
+        "id": 40,
+        "word": "じゃ",
+        "type": "名詞",
+        "meaning": "Thế thì, vậy thì",
+        "reading": "じゃ",
+        "kanji": ""
+      },
+      {
+        "id": 41,
+        "word": "[～を]ください",
+        "type": "名詞",
+        "meaning": "cho tôi [~]",
+        "reading": "[～を]ください",
+        "kanji": ""
+      },
+      {
+        "id": 42,
+        "word": "しんおおさか",
+        "type": "名詞",
+        "meaning": "tên một nhà ga ở Osaka",
+        "reading": "しんおおさか",
+        "kanji": "新大阪"
+      },
+      {
+        "id": 43,
+        "word": "イタリア",
+        "type": "名詞",
+        "meaning": "Ý",
+        "reading": "イタリア",
+        "kanji": ""
+      },
+      {
+        "id": 44,
+        "word": "スイス",
+        "type": "名詞",
+        "meaning": "Thụy Sĩ",
+        "reading": "スイス",
+        "kanji": ""
+      },
+      {
+        "id": 45,
+        "word": "ＭＴ/ヨーネン/アキックス",
+        "type": "名詞",
+        "meaning": "tên các công ty giả tưởng",
+        "reading": "ＭＴ/ヨーネン/アキックス",
+        "kanji": ""
+      }
+    ],
+    "N5_lesson_4": []
   },
   "vocabLessons": {
     "N5": [
@@ -379,6 +1120,11 @@
       {
         "id": 3,
         "title": "Bài 3",
+        "note": ""
+      },
+      {
+        "id": 4,
+        "title": "Bài 4",
         "note": ""
       }
     ],
