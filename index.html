@@ -3923,7 +3923,12 @@ function saveUserData(){
     if(typeof kanjiCustomChars!=='undefined') localStorage.setItem(prefix+'kanjiCustomChars', JSON.stringify(kanjiCustomChars));
     if(typeof kanjiCustomRadicals!=='undefined') localStorage.setItem(prefix+'kanjiCustomRadicals', JSON.stringify(kanjiCustomRadicals));
   }catch(e){console.warn('saveUserData error:',e);}
-  if(typeof scheduleAutoSync==='function')scheduleAutoSync();
+  // LƯU Ý: KHÔNG gọi scheduleAutoSync() ở đây - hàm này đã được gọi TỪ trong scheduleAutoSync(),
+  // gọi ngược lại sẽ tạo vòng lặp đệ quy vô hạn (Maximum call stack size exceeded).
+  if(GH&&GH.enabled&&GH.token){
+    clearTimeout(_autoSyncTimer);
+    _autoSyncTimer = setTimeout(runAutoSync, AUTO_SYNC_DELAY);
+  }
 }
 
 // Add sync button to settings
