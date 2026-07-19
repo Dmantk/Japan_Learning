@@ -1528,46 +1528,6 @@
   ],
   "kanjiCustomChars": [
     {
-      "kana": "男",
-      "romaji": "dan/otoko",
-      "meaning": "đàn ông",
-      "hanviet": "Nam",
-      "onyomi": "ダン、ナン",
-      "kunyomi": "おとこ",
-      "example": "男の子 (おとこのこ) - bé trai",
-      "group": "custom"
-    },
-    {
-      "kana": "友",
-      "romaji": "yuu/tomo",
-      "meaning": "bạn bè",
-      "hanviet": "Hữu",
-      "onyomi": "ユウ",
-      "kunyomi": "とも",
-      "example": "友達 (ともだち) - bạn bè",
-      "group": "custom"
-    },
-    {
-      "kana": "先",
-      "romaji": "sen/saki",
-      "meaning": "trước/thầy",
-      "hanviet": "Tiên",
-      "onyomi": "セン",
-      "kunyomi": "さき",
-      "example": "先生 (せんせい) - giáo viên",
-      "group": "custom"
-    },
-    {
-      "kana": "生",
-      "romaji": "sei/nama",
-      "meaning": "sinh/sống",
-      "hanviet": "Sinh",
-      "onyomi": "セイ、ショウ",
-      "kunyomi": "なま、い",
-      "example": "学生 (がくせい) - học sinh",
-      "group": "custom"
-    },
-    {
       "kana": "口",
       "romaji": "kou/kuchi",
       "meaning": "miệng/cửa",
@@ -2669,5 +2629,5 @@
     }
   ],
   "kanjiCustomRadicals": [],
-  "lastSync": "2026-07-19T10:29:08.936Z"
+  "lastSync": "2026-07-19T10:29:20.300Z"
 }
