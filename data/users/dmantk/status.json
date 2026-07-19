@@ -1,0 +1,53 @@
+{
+  "kanaStatus": {},
+  "starred": {},
+  "score": 50,
+  "theme": "dark",
+  "kanaCustom": {
+    "hiragana": [
+      {
+        "kana": "Abc",
+        "romaji": "Abc",
+        "meaning": "Abc",
+        "group": "custom"
+      },
+      {
+        "kana": "123",
+        "romaji": "123",
+        "meaning": "123",
+        "group": "custom"
+      },
+      {
+        "kana": "Qqq",
+        "romaji": "Qqq",
+        "meaning": "Qqq",
+        "group": "custom"
+      },
+      {
+        "kana": "Annn ne",
+        "romaji": "Annn ne",
+        "meaning": "Annn ne",
+        "group": "custom"
+      }
+    ],
+    "katakana": [
+      {
+        "kana": "Abc",
+        "romaji": "Abc",
+        "meaning": "Abc",
+        "group": "custom"
+      },
+      {
+        "kana": "123",
+        "romaji": "123",
+        "meaning": "123",
+        "group": "custom"
+      }
+    ]
+  },
+  "kanaHidden": {
+    "hiragana": [],
+    "katakana": []
+  },
+  "lastSync": "2026-07-19T07:57:13.225Z"
+}
