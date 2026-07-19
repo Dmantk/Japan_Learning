@@ -1528,66 +1528,6 @@
   ],
   "kanjiCustomChars": [
     {
-      "kana": "来",
-      "romaji": "rai/ku",
-      "meaning": "đến",
-      "hanviet": "Lai",
-      "onyomi": "ライ",
-      "kunyomi": "く、き",
-      "example": "来る (くる) - đến",
-      "group": "custom"
-    },
-    {
-      "kana": "行",
-      "romaji": "kou/i",
-      "meaning": "đi",
-      "hanviet": "Hành",
-      "onyomi": "コウ、ギョウ",
-      "kunyomi": "い、ゆ",
-      "example": "行く (いく) - đi",
-      "group": "custom"
-    },
-    {
-      "kana": "帰",
-      "romaji": "ki/kae",
-      "meaning": "về",
-      "hanviet": "Quy",
-      "onyomi": "キ",
-      "kunyomi": "かえ",
-      "example": "帰る (かえる) - về nhà",
-      "group": "custom"
-    },
-    {
-      "kana": "入",
-      "romaji": "nyuu/i",
-      "meaning": "vào",
-      "hanviet": "Nhập",
-      "onyomi": "ニュウ",
-      "kunyomi": "い、はい",
-      "example": "入る (はいる) - vào",
-      "group": "custom"
-    },
-    {
-      "kana": "出",
-      "romaji": "shutsu/de",
-      "meaning": "ra",
-      "hanviet": "Xuất",
-      "onyomi": "シュツ",
-      "kunyomi": "で、だ",
-      "example": "出る (でる) - ra",
-      "group": "custom"
-    },
-    {
-      "kana": "買",
-      "romaji": "bai/ka",
-      "meaning": "mua",
-      "hanviet": "Mãi",
-      "onyomi": "バイ",
-      "kunyomi": "か",
-      "example": "買う (かう) - mua",
-      "group": "custom"
-    },
-    {
       "kana": "高",
       "romaji": "kou/taka",
       "meaning": "cao/đắt",
@@ -2179,5 +2119,5 @@
     }
   ],
   "kanjiCustomRadicals": [],
-  "lastSync": "2026-07-19T10:31:06.039Z"
+  "lastSync": "2026-07-19T10:31:17.766Z"
 }
