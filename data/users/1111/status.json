@@ -27,22 +27,11 @@
       "builtin": true
     }
   ],
-  "kanjiCustomChars": [
-    {
-      "kana": "半a",
-      "romaji": "han",
-      "meaning": "nửa",
-      "hanviet": "Bán",
-      "onyomi": "ハン",
-      "kunyomi": "なか",
-      "example": "半分 (はんぶん) - một nửa",
-      "group": "custom"
-    }
-  ],
+  "kanjiCustomChars": [],
   "kanjiCustomRadicals": [],
   "kanjiHidden": {
     "chars": [],
     "radicals": []
   },
-  "lastSync": "2026-07-19T12:51:58.026Z"
+  "lastSync": "2026-07-19T12:52:16.161Z"
 }
