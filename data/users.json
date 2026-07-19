@@ -1,1 +1,9 @@
-[]
+[
+  {
+    "id": "001",
+    "username": "dmantk",
+    "displayName": "Dmantk",
+    "passwordHash": "hgspkk",
+    "createdAt": "2026-07-19T07:13:17.134Z"
+  }
+]
