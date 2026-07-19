@@ -4,7 +4,14 @@
   "score": 0,
   "theme": "light",
   "kanaCustom": {
-    "hiragana": [],
+    "hiragana": [
+      {
+        "kana": "1111",
+        "romaji": "1111",
+        "meaning": "1111",
+        "group": "custom"
+      }
+    ],
     "katakana": []
   },
   "customHiragana": [],
@@ -29,5 +36,5 @@
   ],
   "kanjiCustomChars": [],
   "kanjiCustomRadicals": [],
-  "lastSync": "2026-07-19T09:27:48.048Z"
+  "lastSync": "2026-07-19T09:28:08.649Z"
 }
