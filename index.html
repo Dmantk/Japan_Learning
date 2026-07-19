@@ -632,9 +632,10 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:inherit;}
           <button class="tab-btn" onclick="setFCSource('learning',this)">📌 Đang học</button>
         </div>
         <button class="btn btn-secondary btn-sm" onclick="shuffleFC()">🔀 Xáo trộn</button>
+        <button class="btn btn-secondary btn-sm" id="fcFlipModeBtn" onclick="toggleFCReverse()">🔁 Lật: A→B</button>
       </div>
       <div class="fc-wrap">
-        <div class="fc-container" onclick="flipCard()">
+        <div class="fc-container" onclick="flip('main')">
           <div class="fc-inner" id="flashcard">
             <div class="fc-face fc-front"><div class="fc-char" id="fc-front-char">あ</div><div class="fc-hint">Nhấn để lật thẻ</div></div>
             <div class="fc-face fc-back"><div class="fc-answer" id="fc-back-answer">a</div><div class="fc-sub" id="fc-back-sub">Hiragana</div></div>
@@ -976,7 +977,7 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:inherit;}
           <button class="btn btn-secondary btn-sm" onclick="shuffleSentFC()">🔀 Xáo trộn</button>
         </div>
         <div class="fc-wrap">
-          <div style="width:100%;max-width:520px;cursor:pointer;margin:0 auto;" onclick="flipSentCard()">
+          <div style="width:100%;max-width:520px;cursor:pointer;margin:0 auto;" onclick="flip('sent')">
             <div id="sent-flashcard">
               <div id="sent-fc-front" style="background:var(--card);border:1.5px solid var(--border);border-radius:var(--r2);padding:24px;min-height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;">
                 <div id="sent-fc-jp" style="font-size:clamp(14px,3vw,22px);font-weight:700;color:var(--text);line-height:1.6;word-break:break-all;overflow-wrap:break-word;width:100%;"></div>
@@ -1295,7 +1296,7 @@ const S={
   grammarData:JSON.parse(localStorage.getItem('grammarData')||'null')||JSON.parse(JSON.stringify(GRAMMAR)),
   score:parseInt(localStorage.getItem('score')||'0'),
   theme:localStorage.getItem('theme')||'light',
-  fcSource:'hiragana',fcIndex:0,fcDeck:[],fcFlipped:false,
+  fcSource:'hiragana',fcIndex:0,fcDeck:[],fcFlipped:false,fcReversed:false,
   quizType:'hiragana',quizData:[],quizIndex:0,quizScore:0,quizTimer:null,quizTimeLeft:30,quizCorrect:0,quizTotal:0,
   writingSource:'hiragana',writingIndex:0,writingDeck:[],
   listeningSource:'hiragana',listeningIndex:0,listeningDeck:[],listenCorrect:0,listenWrong:0,
@@ -1486,7 +1487,7 @@ function renderKanaMatrix(type,filtered,prefix){
     const dot=st==='learned'?'✅':st==='learning'?'📌':'';
     const kanaEsc=k.kana.replace(/'/g,"\\'");
     const romajiEsc=k.romaji.replace(/'/g,"\\'");
-    return `<div class="kana-matrix-cell ${st}" id="mc-${type}-${k.kana.codePointAt(0)}" onclick="flipMatrixCell(this,'${kanaEsc}','${romajiEsc}','${type}')">
+    return `<div class="kana-matrix-cell ${st}" id="mc-${type}-${k.kana.codePointAt(0)}" onclick="flip('matrix',this,'${kanaEsc}','${romajiEsc}')">
       <div class="km-status">${dot}</div>
       <div class="km-kana">${k.kana}</div>
       <div class="km-romaji">${k.romaji}</div>
@@ -1495,11 +1496,6 @@ function renderKanaMatrix(type,filtered,prefix){
   }).join('');
 }
 
-function flipMatrixCell(el,kana,romaji,type){
-  el.classList.toggle('flipped');
-  // Always speak when clicking (whether flipping open or closed)
-  speak(kana);
-}
 
 function flipAllMatrix(type,open){
   document.querySelectorAll('#'+type+'-matrix-grid .kana-matrix-cell').forEach(el=>{
@@ -1590,19 +1586,6 @@ function renderSentFC(){
   const data=S.sentData[sentLevel]||[];if(!data.length){const jp=document.getElementById('sent-fc-jp');if(jp)jp.textContent='Chưa có câu nào';return;}
   sentFCIndex=Math.min(sentFCIndex,data.length-1);const s=data[sentFCIndex];
   document.getElementById('sent-fc-jp').textContent=s.jp;document.getElementById('sent-fc-vn').textContent=s.vn;document.getElementById('sent-fc-note').textContent=s.note||'';document.getElementById('sent-fc-progress').textContent=`${sentFCIndex+1} / ${data.length}`;document.getElementById('sent-flashcard').classList.remove('flipped');
-}
-function flipSentCard(){
-  const fc=document.getElementById('sent-flashcard');
-  const front=fc.children[0];
-  const back=fc.children[1];
-  if(!front||!back)return;
-  const isFlipped=back.style.display!=='none';
-  if(isFlipped){
-    front.style.display='flex';back.style.display='none';
-  } else {
-    front.style.display='none';back.style.display='flex';
-    const s=(S.sentData[sentLevel]||[])[sentFCIndex];if(s)speak(s.jp);
-  }
 }
 function nextSentFC(){const d=S.sentData[sentLevel]||[];sentFCIndex=(sentFCIndex+1)%Math.max(1,d.length);renderSentFC();}
 function prevSentFC(){const d=S.sentData[sentLevel]||[];sentFCIndex=(sentFCIndex-1+d.length)%Math.max(1,d.length);renderSentFC();}
@@ -1759,8 +1742,64 @@ function buildFCDeck(src){
   return HIRAGANA.map(k=>({char:k.kana,answer:k.romaji,sub:'Hiragana'}));
 }
 function initFlashcard(){S.fcDeck=buildFCDeck(S.fcSource);S.fcIndex=0;S.fcFlipped=false;renderFC();}
-function renderFC(){const c=S.fcDeck[S.fcIndex];if(!c)return;document.getElementById('fc-front-char').textContent=c.char;document.getElementById('fc-back-answer').textContent=c.answer;document.getElementById('fc-back-sub').textContent=c.sub;document.getElementById('fc-progress').textContent=`${S.fcIndex+1} / ${S.fcDeck.length}`;document.getElementById('flashcard').classList.remove('flipped');S.fcFlipped=false;}
-function flipCard(){S.fcFlipped=!S.fcFlipped;document.getElementById('flashcard').classList.toggle('flipped',S.fcFlipped);if(S.fcFlipped){const c=S.fcDeck[S.fcIndex];if(c)speak(c.char);}}
+function renderFC(){
+  const c=S.fcDeck[S.fcIndex];if(!c)return;
+  // Chế độ mặc định: mặt trước = câu hỏi (char), mặt sau = đáp án (answer+sub).
+  // Chế độ đảo (fcReversed): mặt trước = đáp án (answer), mặt sau = câu hỏi (char) — sub vẫn hiện ở mặt sau.
+  const frontText=S.fcReversed?c.answer:c.char;
+  const backText=S.fcReversed?c.char:c.answer;
+  document.getElementById('fc-front-char').textContent=frontText;
+  document.getElementById('fc-back-answer').textContent=backText;
+  document.getElementById('fc-back-sub').textContent=c.sub;
+  document.getElementById('fc-progress').textContent=`${S.fcIndex+1} / ${S.fcDeck.length}`;
+  document.getElementById('flashcard').classList.remove('flipped');S.fcFlipped=false;
+}
+function toggleFCReverse(){
+  S.fcReversed=!S.fcReversed;
+  const btn=document.getElementById('fcFlipModeBtn');
+  if(btn)btn.textContent=S.fcReversed?'🔁 Lật: B→A':'🔁 Lật: A→B';
+  renderFC();
+  showToast(S.fcReversed?'🔁 Chế độ: xem đáp án trước':'🔁 Chế độ: xem câu hỏi trước','info');
+}
+// Unified flip handler for every flashcard in the app.
+// kind: 'main' (trang Flashcard), 'sent' (Flashcard câu), 'matrix' (bảng kana), 'card' (ô kana/kanji dạng lưới)
+function flip(kind,el,a,b){
+  if(kind==='main'){
+    S.fcFlipped=!S.fcFlipped;
+    document.getElementById('flashcard').classList.toggle('flipped',S.fcFlipped);
+    if(S.fcFlipped){const c=S.fcDeck[S.fcIndex];if(c)speak(c.char);}
+    return;
+  }
+  if(kind==='sent'){
+    const front=document.getElementById('sent-fc-front');
+    const back=document.getElementById('sent-fc-back');
+    if(!front||!back)return;
+    const isFlipped=back.style.display!=='none';
+    if(isFlipped){front.style.display='flex';back.style.display='none';}
+    else{front.style.display='none';back.style.display='flex';const s=sentFCDeck[sentFCIdx];if(s)speak(s.jp);}
+    return;
+  }
+  if(kind==='matrix'){
+    el.classList.toggle('flipped');
+    speak(a);
+    return;
+  }
+  if(kind==='card'){
+    const front=el.querySelector('.kana-fc-front');
+    const back=el.querySelector('.kana-fc-back');
+    if(!front||!back)return;
+    const isFlipped=front.style.display==='none';
+    if(isFlipped){
+      front.style.display='';back.style.display='none';
+      el.style.background='';el.style.borderColor='';
+    } else {
+      front.style.display='none';back.style.display='block';
+      el.style.background='var(--primary-l)';el.style.borderColor='var(--primary)';
+      speak(el.dataset.kana);
+    }
+    return;
+  }
+}
 function nextFC(){S.fcIndex=(S.fcIndex+1)%S.fcDeck.length;renderFC();}
 function prevFC(){S.fcIndex=(S.fcIndex-1+S.fcDeck.length)%S.fcDeck.length;renderFC();}
 function shuffleFC(){S.fcDeck=S.fcDeck.sort(()=>Math.random()-.5);S.fcIndex=0;renderFC();showToast('🔀 Đã xáo trộn!','info');}
@@ -2796,7 +2835,7 @@ function renderKanaGrid(type){
     const pair=type==='hiragana'?(HIRA_KATA[k.kana]||''):(KATA_HIRA[k.kana]||'');
     const pairLabel=type==='hiragana'?'Kata':'Hira';
     const kEsc=k.kana.replace(/"/g,'&quot;');
-    return '<div class="kana-card '+st+' kana-fc" data-kana="'+kEsc+'" data-type="'+type+'" onclick="flipKanaCard(this)">'
+    return '<div class="kana-card '+st+' kana-fc" data-kana="'+kEsc+'" data-type="'+type+'" onclick="flip(\'card\',this)">'
       +'<div class="kana-status-dot">'+dot+'</div>'
       +'<div class="kana-char kana-fc-front">'+k.kana+'</div>'
       +'<div class="kana-fc-back" style="display:none;">'
@@ -2807,19 +2846,6 @@ function renderKanaGrid(type){
   }).join('');
 }
 
-function flipKanaCard(el){
-  const front=el.querySelector('.kana-fc-front');
-  const back=el.querySelector('.kana-fc-back');
-  const isFlipped=front.style.display==='none';
-  if(isFlipped){
-    front.style.display='';back.style.display='none';
-    el.style.background='';el.style.borderColor='';
-  } else {
-    front.style.display='none';back.style.display='block';
-    el.style.background='var(--primary-l)';el.style.borderColor='var(--primary)';
-    speak(el.dataset.kana);
-  }
-}
 
 function flipAllKana(type,open){
   document.querySelectorAll('#'+type+'-grid .kana-fc').forEach(el=>{
@@ -4225,14 +4251,6 @@ function renderSentFC(){
   if(back)back.style.display='none';
 }
 
-function flipSentCard(){
-  const front=document.getElementById('sent-fc-front');
-  const back=document.getElementById('sent-fc-back');
-  if(!front||!back)return;
-  const isFlipped=back.style.display!=='none';
-  if(isFlipped){front.style.display='flex';back.style.display='none';}
-  else{front.style.display='none';back.style.display='flex';const s=sentFCDeck[sentFCIdx];if(s)speak(s.jp);}
-}
 function nextSentFC(){sentFCIdx=(sentFCIdx+1)%Math.max(1,sentFCDeck.length);renderSentFC();}
 function prevSentFC(){sentFCIdx=(sentFCIdx-1+sentFCDeck.length)%Math.max(1,sentFCDeck.length);renderSentFC();}
 function speakSentCurrent(){const s=sentFCDeck[sentFCIdx];if(s)speak(s.jp);}
@@ -4402,7 +4420,7 @@ function kanaRenderGrid(type){
         + '<button style="background:var(--danger);color:#fff;border:none;border-radius:4px;padding:2px 7px;font-size:11px;cursor:pointer;" data-type="'+type+'" data-kana="'+kEsc+'" onclick="kanaDeleteChar(this.dataset.type,this.dataset.kana)">🗑</button>'
         + '</div>'
       : '';
-    return '<div class="kana-card '+st+' kana-fc" data-kana="'+kEsc+'" data-type="'+type+'" onclick="kanaFlipCard(this)">'
+    return '<div class="kana-card '+st+' kana-fc" data-kana="'+kEsc+'" data-type="'+type+'" onclick="flip(\'card\',this)">'
       + '<div class="kana-status-dot">'+dot+'</div>'
       + '<div class="kana-char kana-fc-front" style="font-size:56px;font-weight:700;line-height:1.1;">'+k.kana+'</div>'
       + '<div class="kana-fc-back" style="display:none;text-align:center;">'
@@ -4414,20 +4432,6 @@ function kanaRenderGrid(type){
   }).join('');
 }
 
-function kanaFlipCard(el){
-  var front=el.querySelector('.kana-fc-front');
-  var back=el.querySelector('.kana-fc-back');
-  if(!front||!back)return;
-  var isFlipped=front.style.display==='none';
-  if(isFlipped){
-    front.style.display='';back.style.display='none';
-    el.style.background='';el.style.borderColor='';
-  } else {
-    front.style.display='none';back.style.display='block';
-    el.style.background='var(--primary-l)';el.style.borderColor='var(--primary)';
-  }
-  speak(el.dataset.kana);
-}
 
 function kanaFlipAll(type,open){
   document.querySelectorAll('#'+type+'-grid .kana-fc').forEach(function(el){
@@ -4639,7 +4643,7 @@ function kanjiRenderChars(){
         +'<button style="background:var(--danger);color:#fff;border:none;border-radius:4px;padding:2px 7px;font-size:11px;cursor:pointer;" data-kana="'+kEsc+'" onclick="kanjiDeleteChar(this.dataset.kana)">🗑</button>'
         +'</div>'
       :'';
-    return '<div class="kana-card kanji kana-fc" data-kana="'+kEsc+'" onclick="kanjiFlipCard(this)">'
+    return '<div class="kana-card kanji kana-fc" data-kana="'+kEsc+'" onclick="flip(\'card\',this)">'
       +'<div class="kana-status-dot">'+dot+'</div>'
       +'<div class="kana-fc-front" style="font-size:44px;font-weight:700;line-height:1.2;">'+k.kana+'</div>'
       +'<div class="kana-fc-back" style="display:none;text-align:center;">'+backHtml+'</div>'
@@ -4648,15 +4652,6 @@ function kanjiRenderChars(){
   }).join('');
 }
 
-function kanjiFlipCard(el){
-  var front=el.querySelector('.kana-fc-front');
-  var back=el.querySelector('.kana-fc-back');
-  if(!front||!back)return;
-  var isFlipped=front.style.display==='none';
-  if(isFlipped){front.style.display='';back.style.display='none';el.style.background='';el.style.borderColor='';}
-  else{front.style.display='none';back.style.display='block';el.style.background='var(--primary-l)';el.style.borderColor='var(--primary)';}
-  speak(el.dataset.kana);
-}
 function kanjiFlipAll(open){
   document.querySelectorAll('#kanji-grid .kana-fc').forEach(function(el){
     var front=el.querySelector('.kana-fc-front');var back=el.querySelector('.kana-fc-back');
