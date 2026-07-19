@@ -32,8 +32,8 @@
       "builtin": true
     },
     {
-      "id": "grp_1784450086900",
-      "title": "📚 Thu",
+      "id": "grp_1784450174864",
+      "title": "📚 Aaaaaa",
       "note": "",
       "icon": "📚",
       "items": [],
@@ -41,17 +41,6 @@
     }
   ],
   "kanjiCustomChars": [],
-  "kanjiCustomRadicals": [
-    {
-      "kana": "An",
-      "romaji": "",
-      "meaning": "An",
-      "hanviet": "",
-      "onyomi": "",
-      "kunyomi": "",
-      "example": "",
-      "group": "custom"
-    }
-  ],
-  "lastSync": "2026-07-19T08:36:38.886Z"
+  "kanjiCustomRadicals": [],
+  "lastSync": "2026-07-19T08:36:46.879Z"
 }
