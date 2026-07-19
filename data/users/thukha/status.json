@@ -1528,16 +1528,6 @@
   ],
   "kanjiCustomChars": [
     {
-      "kana": "二",
-      "romaji": "ni/futa",
-      "meaning": "hai",
-      "hanviet": "Nhị",
-      "onyomi": "ニ",
-      "kunyomi": "ふた",
-      "example": "二つ (ふたつ) - hai cái",
-      "group": "custom"
-    },
-    {
       "kana": "三",
       "romaji": "san/mi",
       "meaning": "ba",
@@ -3009,5 +2999,5 @@
     }
   ],
   "kanjiCustomRadicals": [],
-  "lastSync": "2026-07-19T10:27:04.700Z"
+  "lastSync": "2026-07-19T10:27:31.470Z"
 }
