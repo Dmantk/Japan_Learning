@@ -1528,66 +1528,6 @@
   ],
   "kanjiCustomChars": [
     {
-      "kana": "学",
-      "romaji": "gaku/mana",
-      "meaning": "học",
-      "hanviet": "Học",
-      "onyomi": "ガク",
-      "kunyomi": "まな",
-      "example": "学校 (がっこう) - trường học",
-      "group": "custom"
-    },
-    {
-      "kana": "校",
-      "romaji": "kou",
-      "meaning": "trường",
-      "hanviet": "Hiệu",
-      "onyomi": "コウ",
-      "kunyomi": "",
-      "example": "学校 (がっこう) - trường học",
-      "group": "custom"
-    },
-    {
-      "kana": "駅",
-      "romaji": "eki",
-      "meaning": "ga tàu",
-      "hanviet": "Dịch",
-      "onyomi": "エキ",
-      "kunyomi": "",
-      "example": "駅 (えき) - ga tàu",
-      "group": "custom"
-    },
-    {
-      "kana": "店",
-      "romaji": "ten/mise",
-      "meaning": "cửa hàng",
-      "hanviet": "Điếm",
-      "onyomi": "テン",
-      "kunyomi": "みせ",
-      "example": "お店 (おみせ) - cửa hàng",
-      "group": "custom"
-    },
-    {
-      "kana": "道",
-      "romaji": "dou/michi",
-      "meaning": "đường",
-      "hanviet": "Đạo",
-      "onyomi": "ドウ、トウ",
-      "kunyomi": "みち",
-      "example": "道 (みち) - con đường",
-      "group": "custom"
-    },
-    {
-      "kana": "車",
-      "romaji": "sha/kuruma",
-      "meaning": "xe",
-      "hanviet": "Xa",
-      "onyomi": "シャ",
-      "kunyomi": "くるま",
-      "example": "電車 (でんしゃ) - tàu điện",
-      "group": "custom"
-    },
-    {
       "kana": "電",
       "romaji": "den",
       "meaning": "điện",
@@ -2339,5 +2279,5 @@
     }
   ],
   "kanjiCustomRadicals": [],
-  "lastSync": "2026-07-19T10:30:31.060Z"
+  "lastSync": "2026-07-19T10:30:43.749Z"
 }
