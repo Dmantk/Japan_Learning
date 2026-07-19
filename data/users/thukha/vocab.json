@@ -1,13 +1,23 @@
 {
-  "vocabData": {
-    "N5_lesson_1": []
-  },
+  "vocabData": {},
   "vocabLessons": {
     "N5": [
       {
         "id": 1,
         "title": "Bài 1 - Chào hỏi & Giới thiệu",
         "note": "あいさつ、自己紹介",
+        "vocabIds": []
+      },
+      {
+        "id": 2,
+        "title": "Bài 2 - Gia đình",
+        "note": "家族の言葉",
+        "vocabIds": []
+      },
+      {
+        "id": 3,
+        "title": "Bài 3 - Số đếm & Thời gian",
+        "note": "数字、時間",
         "vocabIds": []
       }
     ],
