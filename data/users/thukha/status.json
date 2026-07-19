@@ -1528,66 +1528,6 @@
   ],
   "kanjiCustomChars": [
     {
-      "kana": "電",
-      "romaji": "den",
-      "meaning": "điện",
-      "hanviet": "Điện",
-      "onyomi": "デン",
-      "kunyomi": "",
-      "example": "電話 (でんわ) - điện thoại",
-      "group": "custom"
-    },
-    {
-      "kana": "本",
-      "romaji": "hon/moto",
-      "meaning": "sách/gốc",
-      "hanviet": "Bổn",
-      "onyomi": "ホン",
-      "kunyomi": "もと",
-      "example": "日本 (にほん) - Nhật Bản",
-      "group": "custom"
-    },
-    {
-      "kana": "語",
-      "romaji": "go/kata",
-      "meaning": "ngôn ngữ",
-      "hanviet": "Ngữ",
-      "onyomi": "ゴ",
-      "kunyomi": "かた",
-      "example": "日本語 (にほんご) - tiếng Nhật",
-      "group": "custom"
-    },
-    {
-      "kana": "食",
-      "romaji": "shoku/ta",
-      "meaning": "ăn/thức ăn",
-      "hanviet": "Thực",
-      "onyomi": "ショク",
-      "kunyomi": "た、く",
-      "example": "食べる (たべる) - ăn",
-      "group": "custom"
-    },
-    {
-      "kana": "飲",
-      "romaji": "in/no",
-      "meaning": "uống",
-      "hanviet": "Ẩm",
-      "onyomi": "イン",
-      "kunyomi": "の",
-      "example": "飲む (のむ) - uống",
-      "group": "custom"
-    },
-    {
-      "kana": "見",
-      "romaji": "ken/mi",
-      "meaning": "nhìn/thấy",
-      "hanviet": "Kiến",
-      "onyomi": "ケン",
-      "kunyomi": "み",
-      "example": "見る (みる) - nhìn",
-      "group": "custom"
-    },
-    {
       "kana": "聞",
       "romaji": "bun/ki",
       "meaning": "nghe/hỏi",
@@ -2279,5 +2219,5 @@
     }
   ],
   "kanjiCustomRadicals": [],
-  "lastSync": "2026-07-19T10:30:43.749Z"
+  "lastSync": "2026-07-19T10:30:55.014Z"
 }
