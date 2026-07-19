@@ -114,6 +114,9 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--
 .fc-answer{font-size:28px;font-weight:700;color:var(--primary);}
 .fc-sub{font-size:12px;color:var(--text2);margin-top:4px;}
 .fc-progress{font-size:12px;color:var(--text3);}
+#flashcard.fc-reversed .fc-front .fc-char{font-size:26px;color:var(--text);word-break:break-word;text-align:center;}
+#flashcard.fc-reversed .fc-back .fc-answer{font-size:52px;color:var(--primary);word-break:break-word;text-align:center;}
+.fc-toggle-btn.active{background:var(--primary);color:#fff;border-color:var(--primary);}
 .fc-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center;}
 .fc-rating{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;}
 /* ===== VOCAB TABLE ===== */
@@ -633,6 +636,7 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:inherit;}
           <button class="tab-btn" onclick="setFCSource('learning',this)">📌 Đang học</button>
         </div>
         <button class="btn btn-secondary btn-sm" onclick="shuffleFC()">🔀 Xáo trộn</button>
+        <button class="btn btn-secondary btn-sm fc-toggle-btn" id="fcReverseBtn" onclick="toggleFCReverse()">🔁 Đảo chiều</button>
       </div>
       <div id="fc-scope-label" style="display:none;font-size:12px;color:var(--text3);margin:-12px 0 14px;"></div>
       <div class="fc-wrap">
@@ -676,10 +680,13 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:inherit;}
         <div id="vocab-lesson-list">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
             <div style="font-size:13px;color:var(--text3);">Chọn bài để xem từ vựng</div>
-            <div id="vocab-lesson-edit-btns" style="display:none;gap:6px;">
-              <label class="btn btn-secondary btn-sm" style="cursor:pointer;">📥 Import Excel<input type="file" accept=".xlsx,.xls" style="display:none" onchange="importVocabExcel(event)"></label>
-              <button class="btn btn-secondary btn-sm" onclick="exportVocabTemplate()">📤 Template</button>
-              <button class="btn btn-primary btn-sm" onclick="openAddLessonModal('vocab')">➕ Thêm bài</button>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+              <button class="btn btn-primary btn-sm" onclick="startVocabLevelFlashcard()">🃏 Flashcard tất cả bài</button>
+              <div id="vocab-lesson-edit-btns" style="display:none;gap:6px;">
+                <label class="btn btn-secondary btn-sm" style="cursor:pointer;">📥 Import Excel<input type="file" accept=".xlsx,.xls" style="display:none" onchange="importVocabExcel(event)"></label>
+                <button class="btn btn-secondary btn-sm" onclick="exportVocabTemplate()">📤 Template</button>
+                <button class="btn btn-primary btn-sm" onclick="openAddLessonModal('vocab')">➕ Thêm bài</button>
+              </div>
             </div>
           </div>
           <div class="lesson-grid" id="vocab-lesson-grid"></div>
@@ -977,13 +984,14 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:inherit;}
             <button class="tab-btn" onclick="setSentFCSource('topic',this)">Chủ đề hiện tại</button>
           </div>
           <button class="btn btn-secondary btn-sm" onclick="shuffleSentFC()">🔀 Xáo trộn</button>
+          <button class="btn btn-secondary btn-sm fc-toggle-btn" id="sentFcReverseBtn" onclick="toggleSentFCReverse()">🔁 Đảo chiều</button>
         </div>
         <div class="fc-wrap">
           <div style="width:100%;max-width:520px;cursor:pointer;margin:0 auto;" onclick="flipSentCard()">
             <div id="sent-flashcard">
               <div id="sent-fc-front" style="background:var(--card);border:1.5px solid var(--border);border-radius:var(--r2);padding:24px;min-height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;">
                 <div id="sent-fc-jp" style="font-size:clamp(14px,3vw,22px);font-weight:700;color:var(--text);line-height:1.6;word-break:break-all;overflow-wrap:break-word;width:100%;"></div>
-                <div style="font-size:11px;color:var(--text3);margin-top:10px;">Nhấn để xem nghĩa</div>
+                <div id="sent-fc-hint" style="font-size:11px;color:var(--text3);margin-top:10px;">Nhấn để xem nghĩa</div>
               </div>
               <div id="sent-fc-back" style="background:var(--primary-l);border:1.5px solid var(--primary);border-radius:var(--r2);padding:24px;min-height:130px;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;">
                 <div id="sent-fc-vn" style="font-size:clamp(13px,2.5vw,18px);font-weight:600;color:var(--primary);line-height:1.6;word-break:break-word;width:100%;"></div>
@@ -1286,7 +1294,7 @@ const S={
   grammarData:JSON.parse(localStorage.getItem('grammarData')||'null')||JSON.parse(JSON.stringify(GRAMMAR)),
   score:parseInt(localStorage.getItem('score')||'0'),
   theme:localStorage.getItem('theme')||'light',
-  fcSource:'hiragana',fcIndex:0,fcDeck:[],fcFlipped:false,fcVocabKey:null,
+  fcSource:'hiragana',fcIndex:0,fcDeck:[],fcFlipped:false,fcVocabKey:null,fcReverse:false,
   quizType:'hiragana',quizData:[],quizIndex:0,quizScore:0,quizTimer:null,quizTimeLeft:30,quizCorrect:0,quizTotal:0,
   writingSource:'hiragana',writingIndex:0,writingDeck:[],
   listeningSource:'hiragana',listeningIndex:0,listeningDeck:[],listenCorrect:0,listenWrong:0,
@@ -1747,14 +1755,22 @@ function buildFCDeck(src){
   if(src==='kanji')return KANJI.map(k=>({char:k.kana,answer:(k.hanviet?k.hanviet+' — ':'')+k.meaning,sub:'On: '+k.onyomi+' | Kun: '+k.kunyomi}));
   if(src==='vocab'){
     const typeLabel=t=>(typeof TYPE_VN!=='undefined'&&TYPE_VN[t])?TYPE_VN[t]:(t||'');
+    const toCard=v=>({char:v.word,answer:v.meaning,sub:(v.kanji?v.kanji+' · ':'')+typeLabel(v.type)});
     let items=[];
-    if(S.fcVocabKey){
-      items=(S.vocabData[S.fcVocabKey]||[]).map(v=>({char:v.word,answer:v.meaning,sub:(v.kanji?v.kanji+' · ':'')+typeLabel(v.type)}));
-    } else {
+    if(S.fcVocabKey && /_lesson_/.test(S.fcVocabKey)){
+      // Phạm vi: đúng 1 bài
+      items=(S.vocabData[S.fcVocabKey]||[]).map(toCard);
+    } else if(S.fcVocabKey){
+      // Phạm vi: toàn bộ các bài trong 1 cấp độ (vd: tất cả bài của N5)
       Object.keys(S.vocabData||{}).forEach(k=>{
-        (S.vocabData[k]||[]).forEach(v=>{
-          items.push({char:v.word,answer:v.meaning,sub:(v.kanji?v.kanji+' · ':'')+typeLabel(v.type)});
-        });
+        if(k===S.fcVocabKey||k.indexOf(S.fcVocabKey+'_lesson_')===0){
+          (S.vocabData[k]||[]).forEach(v=>items.push(toCard(v)));
+        }
+      });
+    } else {
+      // Phạm vi: toàn bộ từ vựng, mọi cấp độ, mọi bài
+      Object.keys(S.vocabData||{}).forEach(k=>{
+        (S.vocabData[k]||[]).forEach(v=>items.push(toCard(v)));
       });
     }
     return items.length?items:[{char:'—',answer:'Chưa có từ vựng nào. Hãy thêm từ trong mục "Học theo cấp độ" trước!',sub:''}];
@@ -1766,26 +1782,43 @@ function buildFCDeck(src){
 function initFlashcard(){S.fcDeck=buildFCDeck(S.fcSource);S.fcIndex=0;S.fcFlipped=false;renderFC();}
 function renderFC(){
   const c=S.fcDeck[S.fcIndex];if(!c)return;
-  document.getElementById('fc-front-char').textContent=c.char;
-  document.getElementById('fc-back-answer').textContent=c.answer;
+  const fcEl=document.getElementById('flashcard');
+  fcEl.classList.toggle('fc-reversed',!!S.fcReverse);
+  if(S.fcReverse){
+    document.getElementById('fc-front-char').textContent=c.answer;
+    document.getElementById('fc-back-answer').textContent=c.char;
+  } else {
+    document.getElementById('fc-front-char').textContent=c.char;
+    document.getElementById('fc-back-answer').textContent=c.answer;
+  }
   document.getElementById('fc-back-sub').textContent=c.sub;
   document.getElementById('fc-progress').textContent=`${S.fcIndex+1} / ${S.fcDeck.length}`;
-  document.getElementById('flashcard').classList.remove('flipped');
+  fcEl.classList.remove('flipped');
   S.fcFlipped=false;
   const scopeEl=document.getElementById('fc-scope-label');
   if(scopeEl){
-    if(S.fcSource==='vocab'&&S.fcVocabKey){
+    if(S.fcSource==='vocab'&&S.fcVocabKey&&/_lesson_/.test(S.fcVocabKey)){
       const m=/^([^_]+)_lesson_(\d+)$/.exec(S.fcVocabKey);
       const lesson=m?(S.vocabLessons[m[1]]||[]).find(l=>l.id===+m[2]):null;
       scopeEl.textContent=lesson?('📖 Chỉ từ bài: '+lesson.title):'';
       scopeEl.style.display=lesson?'block':'none';
+    } else if(S.fcSource==='vocab'&&S.fcVocabKey){
+      scopeEl.textContent='📚 Tất cả các bài trong cấp độ '+S.fcVocabKey;
+      scopeEl.style.display='block';
     } else if(S.fcSource==='vocab'){
-      scopeEl.textContent='📚 Toàn bộ từ vựng (tất cả các bài)';
+      scopeEl.textContent='📚 Toàn bộ từ vựng (tất cả cấp độ, tất cả các bài)';
       scopeEl.style.display='block';
     } else {
       scopeEl.style.display='none';
     }
   }
+}
+function toggleFCReverse(){
+  S.fcReverse=!S.fcReverse;
+  const btn=document.getElementById('fcReverseBtn');
+  if(btn)btn.classList.toggle('active',S.fcReverse);
+  renderFC();
+  showToast(S.fcReverse?'🔁 Đảo chiều: xem nghĩa trước, lật ra tiếng Nhật':'🔁 Đã về chiều bình thường: xem tiếng Nhật trước','info');
 }
 function flipCard(){S.fcFlipped=!S.fcFlipped;document.getElementById('flashcard').classList.toggle('flipped',S.fcFlipped);if(S.fcFlipped){const c=S.fcDeck[S.fcIndex];if(c)speak(c.char);}}
 function nextFC(){S.fcIndex=(S.fcIndex+1)%S.fcDeck.length;renderFC();}
@@ -1805,6 +1838,17 @@ function startVocabLessonFlashcard(lessonId){
   if(!(S.vocabData[key]||[]).length){showToast('Bài này chưa có từ vựng nào!','info');return;}
   S.fcSource='vocab';
   S.fcVocabKey=key;
+  navigate('flashcard');
+  const tabBtn=document.getElementById('fcTabVocab');
+  if(tabBtn){document.querySelectorAll('#page-flashcard .tab-btn').forEach(b=>b.classList.remove('active'));tabBtn.classList.add('active');}
+}
+// Flashcard gộp TẤT CẢ các bài trong 1 cấp độ đang chọn (vd: N5 có 10 bài -> gộp từ vựng cả 10 bài)
+function startVocabLevelFlashcard(){
+  const lv=S.level;
+  const hasVocab=Object.keys(S.vocabData||{}).some(k=>(k===lv||k.indexOf(lv+'_lesson_')===0)&&(S.vocabData[k]||[]).length);
+  if(!hasVocab){showToast('Cấp độ '+lv+' chưa có từ vựng nào!','info');return;}
+  S.fcSource='vocab';
+  S.fcVocabKey=lv;
   navigate('flashcard');
   const tabBtn=document.getElementById('fcTabVocab');
   if(tabBtn){document.querySelectorAll('#page-flashcard .tab-btn').forEach(b=>b.classList.remove('active'));tabBtn.classList.add('active');}
@@ -4220,6 +4264,7 @@ function buildSentFCDeck(source){
 }
 
 let sentFCSource='all';
+let sentFCReverse=false;
 function setSentFCSource(src,el){
   sentFCSource=src;
   document.querySelectorAll('#sent-flashcard-section .tab-btn').forEach(b=>b.classList.remove('active'));
@@ -4244,12 +4289,26 @@ function renderSentFC(){
   }
   sentFCIdx=Math.min(sentFCIdx,data.length-1);
   const s=data[sentFCIdx];
-  document.getElementById('sent-fc-jp').textContent=s.jp;
-  document.getElementById('sent-fc-vn').textContent=s.vn;
+  if(sentFCReverse){
+    document.getElementById('sent-fc-jp').textContent=s.vn;
+    document.getElementById('sent-fc-vn').textContent=s.jp;
+  } else {
+    document.getElementById('sent-fc-jp').textContent=s.jp;
+    document.getElementById('sent-fc-vn').textContent=s.vn;
+  }
   document.getElementById('sent-fc-note').textContent=s.note||'';
   document.getElementById('sent-fc-progress').textContent=(sentFCIdx+1)+' / '+data.length;
+  const hint=document.getElementById('sent-fc-hint');
+  if(hint)hint.textContent=sentFCReverse?'Nhấn để xem tiếng Nhật':'Nhấn để xem nghĩa';
   if(front)front.style.display='flex';
   if(back)back.style.display='none';
+}
+function toggleSentFCReverse(){
+  sentFCReverse=!sentFCReverse;
+  const btn=document.getElementById('sentFcReverseBtn');
+  if(btn)btn.classList.toggle('active',sentFCReverse);
+  renderSentFC();
+  showToast(sentFCReverse?'🔁 Đảo chiều: xem nghĩa trước, lật ra câu tiếng Nhật':'🔁 Đã về chiều bình thường: xem câu tiếng Nhật trước','info');
 }
 
 function flipSentCard(){
