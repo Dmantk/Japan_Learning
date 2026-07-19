@@ -1,10 +1,17 @@
 {
   "kanaStatus": {},
   "starred": {},
-  "score": 0,
+  "score": 50,
   "theme": "light",
   "kanaCustom": {
-    "hiragana": [],
+    "hiragana": [
+      {
+        "kana": "1111",
+        "romaji": "1111",
+        "meaning": "1111",
+        "group": "custom"
+      }
+    ],
     "katakana": []
   },
   "customHiragana": [],
@@ -29,5 +36,5 @@
   ],
   "kanjiCustomChars": [],
   "kanjiCustomRadicals": [],
-  "lastSync": "2026-07-19T09:55:46.427Z"
+  "lastSync": "2026-07-19T09:55:57.821Z"
 }
