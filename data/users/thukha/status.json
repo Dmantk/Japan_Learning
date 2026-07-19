@@ -1528,46 +1528,6 @@
   ],
   "kanjiCustomChars": [
     {
-      "kana": "心",
-      "romaji": "shin/kokoro",
-      "meaning": "tim/tâm",
-      "hanviet": "Tâm",
-      "onyomi": "シン",
-      "kunyomi": "こころ",
-      "example": "心 (こころ) - trái tim",
-      "group": "custom"
-    },
-    {
-      "kana": "頭",
-      "romaji": "tou/atama",
-      "meaning": "đầu",
-      "hanviet": "Đầu",
-      "onyomi": "トウ、ズ",
-      "kunyomi": "あたま",
-      "example": "頭 (あたま) - cái đầu",
-      "group": "custom"
-    },
-    {
-      "kana": "大",
-      "romaji": "dai/oo",
-      "meaning": "lớn",
-      "hanviet": "Đại",
-      "onyomi": "ダイ、タイ",
-      "kunyomi": "おお",
-      "example": "大学 (だいがく) - đại học",
-      "group": "custom"
-    },
-    {
-      "kana": "小",
-      "romaji": "shou/ko",
-      "meaning": "nhỏ",
-      "hanviet": "Tiểu",
-      "onyomi": "ショウ",
-      "kunyomi": "こ、ちい",
-      "example": "小学校 (しょうがっこう) - tiểu học",
-      "group": "custom"
-    },
-    {
       "kana": "中",
       "romaji": "chuu/naka",
       "meaning": "giữa/trong",
@@ -2579,5 +2539,5 @@
     }
   ],
   "kanjiCustomRadicals": [],
-  "lastSync": "2026-07-19T10:29:31.872Z"
+  "lastSync": "2026-07-19T10:29:43.544Z"
 }
