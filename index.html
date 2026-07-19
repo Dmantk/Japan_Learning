@@ -1273,6 +1273,18 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:inherit;}
 
 <script>
 // ============================================================
+// HELPERS
+// ============================================================
+// Safe replacement for Math.max(0, ...arr.map(x=>x.id)) which throws
+// "Maximum call stack size exceeded" on large arrays because spread
+// passes every element as a separate function argument.
+function maxId(arr,getId){
+  getId=getId||function(x){return x.id;};
+  let m=0;
+  if(arr)for(let i=0;i<arr.length;i++){const v=getId(arr[i]);if(v>m)m=v;}
+  return m;
+}
+// ============================================================
 // STATE
 // ============================================================
 const S={
@@ -1569,7 +1581,7 @@ function saveSentence(){
   if(!jp||!vn){showToast('Vui lòng điền câu JP và nghĩa!','error');return;}
   const lv=sentLevel;if(!S.sentData[lv])S.sentData[lv]=[];
   if(S.editSentId){const idx=S.sentData[lv].findIndex(s=>s.id===S.editSentId);if(idx>=0)S.sentData[lv][idx]={...S.sentData[lv][idx],jp,reading,vn,note};showToast('✅ Đã cập nhật!','success');}
-  else{const newId=Math.max(0,...S.sentData[lv].map(s=>s.id))+1;S.sentData[lv].push({id:newId,jp,reading,vn,note});showToast('✅ Đã thêm câu!','success');}
+  else{const newId=maxId(S.sentData[lv])+1;S.sentData[lv].push({id:newId,jp,reading,vn,note});showToast('✅ Đã thêm câu!','success');}
   saveSentData();closeModal('addSentModal');renderSentList();
 }
 function deleteSentence(lv,id){if(!confirm('Xóa câu này?'))return;S.sentData[lv]=(S.sentData[lv]||[]).filter(s=>s.id!==id);saveSentData();renderSentList();showToast('🗑 Đã xóa','info');}
@@ -1618,7 +1630,7 @@ function revealSentPractice(){const s=(S.sentData[sentLevel]||[])[sentPracticeIn
 function speakSentPractice(){const s=(S.sentData[sentLevel]||[])[sentPracticeIndex];if(s)speak(s.jp);}
 function nextSentPractice(){const d=S.sentData[sentLevel]||[];sentPracticeIndex=(sentPracticeIndex+1)%Math.max(1,d.length);renderSentPractice();}
 
-function importSentExcel(event){const file=event.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=function(e){try{const wb=XLSX.read(e.target.result,{type:'binary'}),ws=wb.Sheets[wb.SheetNames[0]],rows=XLSX.utils.sheet_to_json(ws,{header:1}),lv=sentLevel;if(!S.sentData[lv])S.sentData[lv]=[];let added=0,skipped=0;const existingJp=new Set(S.sentData[lv].map(s=>String(s.jp||'').trim()));rows.slice(1).forEach((row,i)=>{if(!row[1])return;const jp=String(row[1]||'').trim();if(!jp)return;if(existingJp.has(jp)){skipped++;return;}const newId=Math.max(0,...S.sentData[lv].map(s=>s.id))+1;S.sentData[lv].push({id:newId,jp,reading:String(row[2]||''),vn:String(row[3]||''),note:String(row[4]||'')});existingJp.add(jp);added++;});saveSentData();renderSentList();let msg=`✅ Import ${added} câu!`;if(skipped)msg+=` Bỏ qua (trùng): ${skipped}`;showToast(msg,'success');}catch(err){showToast('❌ Lỗi đọc file!','error');}};reader.readAsBinaryString(file);event.target.value='';}
+function importSentExcel(event){const file=event.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=function(e){try{const wb=XLSX.read(e.target.result,{type:'binary'}),ws=wb.Sheets[wb.SheetNames[0]],rows=XLSX.utils.sheet_to_json(ws,{header:1}),lv=sentLevel;if(!S.sentData[lv])S.sentData[lv]=[];let added=0,skipped=0;const existingJp=new Set(S.sentData[lv].map(s=>String(s.jp||'').trim()));rows.slice(1).forEach((row,i)=>{if(!row[1])return;const jp=String(row[1]||'').trim();if(!jp)return;if(existingJp.has(jp)){skipped++;return;}const newId=maxId(S.sentData[lv])+1;S.sentData[lv].push({id:newId,jp,reading:String(row[2]||''),vn:String(row[3]||''),note:String(row[4]||'')});existingJp.add(jp);added++;});saveSentData();renderSentList();let msg=`✅ Import ${added} câu!`;if(skipped)msg+=` Bỏ qua (trùng): ${skipped}`;showToast(msg,'success');}catch(err){showToast('❌ Lỗi đọc file!','error');}};reader.readAsBinaryString(file);event.target.value='';}
 function exportSentTemplate(){const lv=sentLevel;const data=S.sentData[lv]||[];const ws_data=[['STT','Câu tiếng Nhật','Phiên âm','Nghĩa tiếng Việt','Ghi chú'],...data.map((s,i)=>[i+1,s.jp,s.reading||'',s.vn,s.note||''])];if(ws_data.length===1)ws_data.push([1,'私は学生です。','Watashi wa gakusei desu.','Tôi là học sinh.','Mẫu 〜は〜です'],[2,'ご飯を食べましたか？','Gohan wo tabemashita ka?','Bạn đã ăn cơm chưa?','Thể quá khứ 〜ました']);const wb=XLSX.utils.book_new(),ws=XLSX.utils.aoa_to_sheet(ws_data);ws['!cols']=[{wch:6},{wch:40},{wch:40},{wch:35},{wch:30}];XLSX.utils.book_append_sheet(wb,ws,'Sentences');XLSX.writeFile(wb,`sentences_${lv}.xlsx`);showToast('📤 Đã tải file Excel!','success');}
 
 // ============================================================
@@ -1776,7 +1788,7 @@ function filterVocabType(type,el){S.vocabTypeFilter=type;document.querySelectorA
 function toggleStar(lv,id){const k=lv+'_'+id;S.starred[k]=!S.starred[k];save();renderVocabTable();}
 function openAddVocabModal(){S.editVocabId=null;document.getElementById('addVocabTitle').textContent='Thêm từ vựng';['vocab-word-input','vocab-kanji-input','vocab-meaning-input'].forEach(id=>document.getElementById(id).value='');openModal('addVocabModal');}
 function editVocab(lv,id){const item=(S.vocabData[lv]||[]).find(v=>v.id===id);if(!item)return;S.editVocabId=id;document.getElementById('addVocabTitle').textContent='Chỉnh sửa từ vựng';document.getElementById('vocab-word-input').value=item.word;document.getElementById('vocab-kanji-input').value=item.kanji||'';document.getElementById('vocab-type-input').value=item.type;document.getElementById('vocab-meaning-input').value=item.meaning;openModal('addVocabModal');}
-function saveVocab(){const word=document.getElementById('vocab-word-input').value.trim(),kanji=document.getElementById('vocab-kanji-input').value.trim(),type=document.getElementById('vocab-type-input').value,meaning=document.getElementById('vocab-meaning-input').value.trim();if(!word||!meaning){showToast('Vui lòng điền đầy đủ!','error');return;}const lv=S.level;if(!S.vocabData[lv])S.vocabData[lv]=[];if(S.editVocabId){const idx=S.vocabData[lv].findIndex(v=>v.id===S.editVocabId);if(idx>=0)S.vocabData[lv][idx]={...S.vocabData[lv][idx],word,kanji,type,meaning,reading:word};showToast('✅ Đã cập nhật!','success');}else{const newId=Math.max(0,...S.vocabData[lv].map(v=>v.id))+1;S.vocabData[lv].push({id:newId,word,type,meaning,reading:word,kanji});showToast('✅ Đã thêm từ mới!','success');}save();closeModal('addVocabModal');renderVocabTable();}
+function saveVocab(){const word=document.getElementById('vocab-word-input').value.trim(),kanji=document.getElementById('vocab-kanji-input').value.trim(),type=document.getElementById('vocab-type-input').value,meaning=document.getElementById('vocab-meaning-input').value.trim();if(!word||!meaning){showToast('Vui lòng điền đầy đủ!','error');return;}const lv=S.level;if(!S.vocabData[lv])S.vocabData[lv]=[];if(S.editVocabId){const idx=S.vocabData[lv].findIndex(v=>v.id===S.editVocabId);if(idx>=0)S.vocabData[lv][idx]={...S.vocabData[lv][idx],word,kanji,type,meaning,reading:word};showToast('✅ Đã cập nhật!','success');}else{const newId=maxId(S.vocabData[lv])+1;S.vocabData[lv].push({id:newId,word,type,meaning,reading:word,kanji});showToast('✅ Đã thêm từ mới!','success');}save();closeModal('addVocabModal');renderVocabTable();}
 function deleteVocab(lv,id){if(!confirm('Xóa từ này?'))return;S.vocabData[lv]=(S.vocabData[lv]||[]).filter(v=>v.id!==id);save();renderVocabTable();showToast('🗑 Đã xóa','info');}
 
 // ============================================================
@@ -1785,7 +1797,7 @@ function deleteVocab(lv,id){if(!confirm('Xóa từ này?'))return;S.vocabData[lv
 function importVocabExcel(event){
   const file=event.target.files[0];if(!file)return;
   const reader=new FileReader();
-  reader.onload=function(e){try{const wb=XLSX.read(e.target.result,{type:'binary'}),ws=wb.Sheets[wb.SheetNames[0]],rows=XLSX.utils.sheet_to_json(ws,{header:1}),lv=S.level;if(!S.vocabData[lv])S.vocabData[lv]=[];let added=0;const startId=Math.max(0,...S.vocabData[lv].map(v=>v.id))+1;rows.slice(1).forEach((row,i)=>{if(!row[1])return;S.vocabData[lv].push({id:startId+i,word:String(row[1]||''),type:String(row[2]||'名詞'),meaning:String(row[3]||''),reading:String(row[1]||''),kanji:String(row[4]||'')});added++;});save();renderVocabTable();showToast(`✅ Import ${added} từ!`,'success');}catch(err){showToast('❌ Lỗi đọc file!','error');}};
+  reader.onload=function(e){try{const wb=XLSX.read(e.target.result,{type:'binary'}),ws=wb.Sheets[wb.SheetNames[0]],rows=XLSX.utils.sheet_to_json(ws,{header:1}),lv=S.level;if(!S.vocabData[lv])S.vocabData[lv]=[];let added=0;const startId=maxId(S.vocabData[lv])+1;rows.slice(1).forEach((row,i)=>{if(!row[1])return;S.vocabData[lv].push({id:startId+i,word:String(row[1]||''),type:String(row[2]||'名詞'),meaning:String(row[3]||''),reading:String(row[1]||''),kanji:String(row[4]||'')});added++;});save();renderVocabTable();showToast(`✅ Import ${added} từ!`,'success');}catch(err){showToast('❌ Lỗi đọc file!','error');}};
   reader.readAsBinaryString(file);event.target.value='';
 }
 function exportVocabTemplate(){
@@ -1828,7 +1840,7 @@ function saveGrammar(){
   if(!title||!desc){showToast('Điền tiêu đề và mô tả!','error');return;}
   const lv=S.level;if(!S.grammarData[lv])S.grammarData[lv]=[];
   if(S.editGrammarId){const idx=S.grammarData[lv].findIndex(g=>g.id===S.editGrammarId);if(idx>=0)S.grammarData[lv][idx]={...S.grammarData[lv][idx],title,category:cat,image:img,description:desc};showToast('✅ Đã cập nhật!','success');}
-  else{const newId=Math.max(0,...S.grammarData[lv].map(g=>g.id))+1;S.grammarData[lv].push({id:newId,title,category:cat,image:img,description:desc});showToast('✅ Đã thêm!','success');}
+  else{const newId=maxId(S.grammarData[lv])+1;S.grammarData[lv].push({id:newId,title,category:cat,image:img,description:desc});showToast('✅ Đã thêm!','success');}
   save();closeModal('grammarModal');renderGrammarGrid();
 }
 function deleteGrammar(lv,id){if(!confirm('Xóa ngữ pháp này?'))return;S.grammarData[lv]=(S.grammarData[lv]||[]).filter(g=>g.id!==id);save();renderGrammarGrid();showToast('🗑 Đã xóa','info');}
@@ -1848,7 +1860,7 @@ function importGrammarExcel(event){
       const title=String(row[1]||'').trim();
       if(!title)return;
       if(existingTitle.has(title)){skipped++;return;}
-      const newId=Math.max(0,...S.grammarData[lv].map(g=>g.id))+1;
+      const newId=maxId(S.grammarData[lv])+1;
       S.grammarData[lv].push({id:newId,title,category:String(row[2]||''),image:String(row[3]||''),description:String(row[4]||'')});
       existingTitle.add(title);
       added++;
@@ -2406,7 +2418,7 @@ function saveVocab(){
     if(idx>=0) S.vocabData[key][idx]={...S.vocabData[key][idx],word,kanji,type,meaning,reading:word};
     showToast('✅ Đã cập nhật!','success');
   } else {
-    const newId=Math.max(0,...S.vocabData[key].map(v=>v.id))+1;
+    const newId=maxId(S.vocabData[key])+1;
     S.vocabData[key].push({id:newId,word,type,meaning,reading:word,kanji});
     showToast('✅ Đã thêm từ mới!','success');
   }
@@ -2602,7 +2614,7 @@ function saveLesson(){
     if(idx>=0) arr[lv][idx]={...arr[lv][idx],title,note};
     showToast('✅ Đã cập nhật bài!','success');
   } else {
-    const newId=Math.max(0,...arr[lv].map(l=>l.id))+1;
+    const newId=maxId(arr[lv])+1;
     const newLesson = type==='vocab'
       ? {id:newId,title,note}
       : {id:newId,title,note,sections:[]};
@@ -4045,7 +4057,7 @@ function saveSentTopic(){
     if(idx>=0)S.sentTopics[lv][idx]={...S.sentTopics[lv][idx],title,note};
     showToast('✅ Đã cập nhật!','success');
   } else {
-    const newId=Math.max(0,...S.sentTopics[lv].map(t=>t.id))+1;
+    const newId=maxId(S.sentTopics[lv])+1;
     S.sentTopics[lv].push({id:newId,title,note,sentences:[]});
     showToast('✅ Đã thêm chủ đề!','success');
   }
@@ -4133,7 +4145,7 @@ function saveSentence(){
     if(idx>=0)arr[idx]={...arr[idx],jp,reading,vn,note};
     showToast('✅ Đã cập nhật!','success');
   } else {
-    const newId=Math.max(0,...arr.map(s=>s.id))+1;
+    const newId=maxId(arr)+1;
     arr.push({id:newId,jp,reading,vn,note});
     showToast('✅ Đã thêm câu!','success');
   }
