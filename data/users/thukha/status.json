@@ -31,11 +31,22 @@
       "title": "📚 moisw",
       "note": "",
       "icon": "📚",
-      "items": [],
+      "items": [
+        {
+          "kana": "ggu",
+          "romaji": "hfd",
+          "meaning": "gf",
+          "hanviet": "",
+          "onyomi": "",
+          "kunyomi": "",
+          "example": "",
+          "group": "custom"
+        }
+      ],
       "builtin": false
     }
   ],
   "kanjiCustomChars": [],
   "kanjiCustomRadicals": [],
-  "lastSync": "2026-07-19T09:38:33.915Z"
+  "lastSync": "2026-07-19T09:38:49.030Z"
 }
