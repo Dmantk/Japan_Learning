@@ -1528,56 +1528,6 @@
   ],
   "kanjiCustomChars": [
     {
-      "kana": "毎",
-      "romaji": "mai",
-      "meaning": "mỗi",
-      "hanviet": "Mỗi",
-      "onyomi": "マイ",
-      "kunyomi": "",
-      "example": "毎日 (まいにち) - mỗi ngày",
-      "group": "custom"
-    },
-    {
-      "kana": "週",
-      "romaji": "shuu",
-      "meaning": "tuần",
-      "hanviet": "Tuần",
-      "onyomi": "シュウ",
-      "kunyomi": "",
-      "example": "今週 (こんしゅう) - tuần này",
-      "group": "custom"
-    },
-    {
-      "kana": "国",
-      "romaji": "koku/kuni",
-      "meaning": "quốc gia",
-      "hanviet": "Quốc",
-      "onyomi": "コク",
-      "kunyomi": "くに",
-      "example": "外国 (がいこく) - nước ngoài",
-      "group": "custom"
-    },
-    {
-      "kana": "外",
-      "romaji": "gai/soto",
-      "meaning": "ngoài",
-      "hanviet": "Ngoại",
-      "onyomi": "ガイ、ゲ",
-      "kunyomi": "そと",
-      "example": "外国語 (がいこくご) - ngoại ngữ",
-      "group": "custom"
-    },
-    {
-      "kana": "家",
-      "romaji": "ka/ie",
-      "meaning": "nhà",
-      "hanviet": "Gia",
-      "onyomi": "カ、ケ",
-      "kunyomi": "いえ、うち",
-      "example": "家 (いえ) - ngôi nhà",
-      "group": "custom"
-    },
-    {
       "kana": "学",
       "romaji": "gaku/mana",
       "meaning": "học",
@@ -2389,5 +2339,5 @@
     }
   ],
   "kanjiCustomRadicals": [],
-  "lastSync": "2026-07-19T10:30:18.973Z"
+  "lastSync": "2026-07-19T10:30:31.060Z"
 }
