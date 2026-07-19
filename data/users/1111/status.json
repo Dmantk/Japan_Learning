@@ -2,7 +2,7 @@
   "kanaStatus": {},
   "starred": {},
   "score": 0,
-  "theme": "light",
+  "theme": "dark",
   "kanaCustom": {
     "hiragana": [],
     "katakana": []
@@ -27,11 +27,22 @@
       "builtin": true
     }
   ],
-  "kanjiCustomChars": [],
+  "kanjiCustomChars": [
+    {
+      "kana": "半a",
+      "romaji": "han",
+      "meaning": "nửa",
+      "hanviet": "Bán",
+      "onyomi": "ハン",
+      "kunyomi": "なか",
+      "example": "半分 (はんぶん) - một nửa",
+      "group": "custom"
+    }
+  ],
   "kanjiCustomRadicals": [],
   "kanjiHidden": {
     "chars": [],
     "radicals": []
   },
-  "lastSync": "2026-07-19T13:17:15.898Z"
+  "lastSync": "2026-07-19T13:17:23.621Z"
 }
