@@ -5,7 +5,7 @@
 const APP_CONFIG = {
   app_name: "Nihongo Master",
   app_subtitle: "Học Tiếng Nhật Hiệu Quả",
-  app_version: "2.0.0",
+  app_version: "2.1.0-username-folders",
 
   // ===== GITHUB SYNC =====
   github: {

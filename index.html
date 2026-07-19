@@ -338,6 +338,7 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:inherit;}
       <div style="font-size:52px;margin-bottom:8px;">🌸</div>
       <div style="font-size:22px;font-weight:700;color:var(--text);" id="authAppName">Nihongo Master</div>
       <div style="font-size:12px;color:var(--text3);margin-top:4px;">Học Tiếng Nhật Hiệu Quả</div>
+      <div style="font-size:10px;color:var(--text3);margin-top:6px;opacity:0.7;" id="authVersion"></div>
     </div>
     <!-- Login form -->
     <div id="loginForm">
@@ -354,19 +355,25 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:inherit;}
       <div style="text-align:center;margin-top:16px;font-size:13px;color:var(--text3);">
         Chưa có tài khoản? <span style="color:var(--primary);cursor:pointer;font-weight:700;" onclick="showRegister()">Đăng ký ngay</span>
       </div>
+      <div style="text-align:center;margin-top:8px;font-size:12px;">
+        <span style="color:var(--primary);cursor:pointer;text-decoration:underline;" onclick="showForgot()">Quên mật khẩu?</span>
+      </div>
       <div style="text-align:center;margin-top:8px;">
         <span style="color:var(--text3);font-size:11px;cursor:pointer;text-decoration:underline;" onclick="skipAuth()">Dùng không cần đăng nhập →</span>
       </div>
     </div>
     <!-- Register form -->
     <div id="registerForm" style="display:none;">
+      <div style="background:var(--warning-bg,#fff8e1);border:1px solid var(--warning,#f5a623);border-radius:8px;padding:10px 12px;margin-bottom:16px;font-size:12px;line-height:1.5;color:var(--text2,#555);">
+        ⚠️ <b>Lưu ý:</b> Đây là web tự làm "chạy bằng cơm", <b>không có bảo mật chuyên nghiệp</b> (mật khẩu có thể bị lộ). Vui lòng đặt <b>username và mật khẩu KHÁC HOÀN TOÀN</b> với mật khẩu ngân hàng, email hay các tài khoản quan trọng khác của bạn!
+      </div>
       <div class="form-group">
         <label class="form-label">Tên hiển thị *</label>
         <input type="text" class="form-input" id="regDisplayName" placeholder="VD: Nguyễn Văn A" style="font-size:15px;">
       </div>
       <div class="form-group">
         <label class="form-label">Tên đăng nhập *</label>
-        <input type="text" class="form-input" id="regUsername" placeholder="VD: nguyenvana (không dấu, không khoảng trắng)" style="font-size:14px;">
+        <input type="text" class="form-input" id="regUsername" placeholder="VD: nguyenvana (chỉ chữ thường, số, _ , -)" style="font-size:14px;">
       </div>
       <div class="form-group">
         <label class="form-label">Mật khẩu * (tối thiểu 4 ký tự)</label>
@@ -382,6 +389,33 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:inherit;}
         Đã có tài khoản? <span style="color:var(--primary);cursor:pointer;font-weight:700;" onclick="showLogin()">Đăng nhập</span>
       </div>
     </div>
+    <!-- Forgot password form -->
+    <div id="forgotForm" style="display:none;">
+      <div style="background:var(--warning-bg,#fff8e1);border:1px solid var(--warning,#f5a623);border-radius:8px;padding:10px 12px;margin-bottom:16px;font-size:12px;line-height:1.5;color:var(--text2,#555);">
+        🔑 Nhập <b>username</b> cần đặt lại mật khẩu và <b>mật khẩu admin</b> (do chủ web cung cấp) để đặt mật khẩu mới.
+      </div>
+      <div class="form-group">
+        <label class="form-label">Tên đăng nhập cần reset *</label>
+        <input type="text" class="form-input" id="forgotUsername" placeholder="Username của bạn" style="font-size:15px;">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Mật khẩu admin *</label>
+        <input type="password" class="form-input" id="forgotAdminPw" placeholder="Hỏi chủ web nếu chưa có" style="font-size:15px;">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Mật khẩu mới * (tối thiểu 4 ký tự)</label>
+        <input type="password" class="form-input" id="forgotNewPw" placeholder="••••••••" style="font-size:15px;">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Xác nhận mật khẩu mới *</label>
+        <input type="password" class="form-input" id="forgotNewPw2" placeholder="Nhập lại mật khẩu mới" style="font-size:15px;" onkeydown="if(event.key==='Enter')doForgotReset()">
+      </div>
+      <div id="forgotError" style="color:var(--danger);font-size:12px;min-height:18px;margin-bottom:8px;text-align:center;"></div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center;padding:12px;font-size:15px;" onclick="doForgotReset()">🔄 Đặt lại mật khẩu</button>
+      <div style="text-align:center;margin-top:16px;font-size:13px;color:var(--text3);">
+        <span style="color:var(--primary);cursor:pointer;font-weight:700;" onclick="showLogin()">← Quay lại đăng nhập</span>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -393,7 +427,7 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:inherit;}
 <nav class="sidebar" id="sidebar">
   <div class="sidebar-logo">
     <div class="logo-icon">🌸</div>
-    <div><div class="logo-text">Nihongo Master</div><div class="logo-sub">Học Tiếng Nhật · v0718-1702</div></div>
+    <div><div class="logo-text">Nihongo Master</div><div class="logo-sub">Học Tiếng Nhật · <span id="sidebarVersion">v0718-1702</span></div></div>
   </div>
   <div class="sidebar-nav">
     <div class="nav-section">Tổng quan</div>
@@ -1185,7 +1219,7 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:inherit;}
 <div class="modal-overlay" id="settingsModal">
   <div class="modal">
     <button class="modal-close" onclick="closeModal('settingsModal')">✕</button>
-    <div class="modal-title">⚙️ Cài đặt <span style="font-size:11px;color:var(--text3);font-weight:400;">v0718-1738</span></div>
+    <div class="modal-title">⚙️ Cài đặt <span style="font-size:11px;color:var(--text3);font-weight:400;" id="settingsVersion">v0718-1738</span></div>
     <div id="userInfoSettings" style="display:none;background:var(--primary-l);border:1px solid var(--primary);border-radius:var(--r);padding:12px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;"><div><div style="font-size:13px;font-weight:700;" id="settingsUserName"></div><div style="font-size:11px;color:var(--text3);" id="settingsUserId"></div></div><button class="btn btn-danger btn-sm" onclick="doLogout()">🚪 Đăng xuất</button></div>
     <div style="display:flex;flex-direction:column;gap:12px;">
       <div class="card" style="padding:14px;border-color:var(--primary);">
@@ -3205,6 +3239,16 @@ function initAuth(){
   // Apply app name from config
   const appNameEl=document.getElementById('authAppName');
   if(appNameEl&&typeof APP_CONFIG!=='undefined') appNameEl.textContent=APP_CONFIG.app_name||'Nihongo Master';
+
+  // Hiển thị version hiện tại ở màn hình đăng nhập, sidebar, settings - để dễ kiểm tra đang chạy bản nào
+  const verStr='v'+((typeof APP_CONFIG!=='undefined'&&APP_CONFIG.app_version)?APP_CONFIG.app_version:'?');
+  const verEl=document.getElementById('authVersion');
+  if(verEl) verEl.textContent=verStr;
+  const sidebarVerEl=document.getElementById('sidebarVersion');
+  if(sidebarVerEl) sidebarVerEl.textContent=verStr;
+  const settingsVerEl=document.getElementById('settingsVersion');
+  if(settingsVerEl) settingsVerEl.textContent=verStr;
+  document.title='🌸 Nihongo Master '+verStr;
   
   const authEnabled=(AUTH_CFG&&AUTH_CFG.enabled)||(typeof APP_CONFIG!=='undefined'&&APP_CONFIG.auth&&APP_CONFIG.auth.enabled);
   
@@ -3250,14 +3294,23 @@ function showAuthOverlay(){
 function showLogin(){
   document.getElementById('loginForm').style.display='block';
   document.getElementById('registerForm').style.display='none';
+  const ff=document.getElementById('forgotForm');if(ff)ff.style.display='none';
   document.getElementById('loginError').textContent='';
   setTimeout(()=>{const el=document.getElementById('loginUsername');if(el)el.focus();},100);
 }
 function showRegister(){
   document.getElementById('loginForm').style.display='none';
   document.getElementById('registerForm').style.display='block';
+  const ff=document.getElementById('forgotForm');if(ff)ff.style.display='none';
   document.getElementById('regError').textContent='';
   setTimeout(()=>{const el=document.getElementById('regDisplayName');if(el)el.focus();},100);
+}
+function showForgot(){
+  document.getElementById('loginForm').style.display='none';
+  document.getElementById('registerForm').style.display='none';
+  const ff=document.getElementById('forgotForm');if(ff)ff.style.display='block';
+  const fe=document.getElementById('forgotError');if(fe)fe.textContent='';
+  setTimeout(()=>{const el=document.getElementById('forgotUsername');if(el)el.focus();},100);
 }
 function skipAuth(){
   document.getElementById('authOverlay').style.display='none';
@@ -3297,6 +3350,8 @@ async function doRegister(){
   // Validate
   if(!displayName){errEl.textContent='Vui lòng nhập tên hiển thị!';return;}
   if(!username||username.length<2){errEl.textContent='Tên đăng nhập tối thiểu 2 ký tự!';return;}
+  if(!/^[a-z0-9_-]+$/.test(username)){errEl.textContent='Tên đăng nhập chỉ được chứa chữ thường, số, _ và -!';return;}
+  if(username.length>24){errEl.textContent='Tên đăng nhập tối đa 24 ký tự!';return;}
   if(pw.length<4){errEl.textContent='Mật khẩu tối thiểu 4 ký tự!';return;}
   if(pw!==pw2){errEl.textContent='Mật khẩu không khớp!';return;}
 
@@ -3307,18 +3362,19 @@ async function doRegister(){
   const users=await loadUsersList();
   if(users.find(u=>u.username===username)){
     errEl.style.color='var(--danger)';
-    errEl.textContent='❌ Tên đăng nhập đã tồn tại!';
+    errEl.textContent='❌ Tên đăng nhập đã tồn tại, vui lòng chọn tên khác!';
     return;
   }
 
-  // Generate new ID
+  // Generate new ID (chỉ để định danh nội bộ, KHÔNG dùng làm tên folder nữa)
   const maxId=users.reduce((m,u)=>Math.max(m,parseInt(u.id)||0),0);
   const newId=String(maxId+1).padStart(3,'0');
+  const passwordHash=simpleHash(pw);
   const newUser={
     id:newId,
     username,
     displayName,
-    passwordHash:simpleHash(pw),
+    passwordHash,
     createdAt:new Date().toISOString()
   };
   users.push(newUser);
@@ -3327,26 +3383,27 @@ async function doRegister(){
   errEl.textContent='⏳ [1/3] Lưu danh sách tài khoản...';
   await saveUsersList(users);
 
-  // Step 2: Create user data files on GitHub
+  // Step 2: Create user data files on GitHub - folder theo USERNAME
   if(GH&&GH.enabled&&GH.token){
     errEl.textContent='⏳ [2/3] Tạo dữ liệu trên GitHub...';
     const defaultData=getDefaultUserData();
-    const profile={id:newId,displayName,username,createdAt:new Date().toISOString()};
+    // Lưu cả passwordHash vào profile.json (app nội bộ, không yêu cầu bảo mật cao)
+    const profile={id:newId,displayName,username,passwordHash,createdAt:new Date().toISOString()};
     const status={kanaStatus:{},starred:{},score:0,theme:'light'};
     const vocab={vocabData:defaultData.vocabData,vocabLessons:defaultData.vocabLessons};
     const grammar={grammarData:defaultData.grammarData,grammarLessons:defaultData.grammarLessons};
     const sentences={sentData:defaultData.sentData,sentTopics:defaultData.sentTopics||{}};
 
     // Sequential to avoid race condition
-    await ghWriteFile(getUserDataPath(newId,'profile.json'),  profile,   'Create user '+newId);
+    await ghWriteFile(getUserDataPath(username,'profile.json'),  profile,   'Create user '+username);
     await new Promise(r=>setTimeout(r,300));
-    await ghWriteFile(getUserDataPath(newId,'status.json'),   status,    'Init status');
+    await ghWriteFile(getUserDataPath(username,'status.json'),   status,    'Init status');
     await new Promise(r=>setTimeout(r,300));
-    await ghWriteFile(getUserDataPath(newId,'vocab.json'),    vocab,     'Init vocab');
+    await ghWriteFile(getUserDataPath(username,'vocab.json'),    vocab,     'Init vocab');
     await new Promise(r=>setTimeout(r,300));
-    await ghWriteFile(getUserDataPath(newId,'grammar.json'),  grammar,   'Init grammar');
+    await ghWriteFile(getUserDataPath(username,'grammar.json'),  grammar,   'Init grammar');
     await new Promise(r=>setTimeout(r,300));
-    await ghWriteFile(getUserDataPath(newId,'sentences.json'),sentences, 'Init sentences');
+    await ghWriteFile(getUserDataPath(username,'sentences.json'),sentences, 'Init sentences');
   }
 
   // Step 3: Login immediately
@@ -3383,6 +3440,59 @@ function doLogout(){
   showToast('👋 Đã đăng xuất!','info');
   // Show auth overlay
   showAuthOverlay();
+}
+
+async function doForgotReset(){
+  const username=(document.getElementById('forgotUsername').value||'').trim().toLowerCase();
+  const adminPw=document.getElementById('forgotAdminPw').value;
+  const newPw=document.getElementById('forgotNewPw').value;
+  const newPw2=document.getElementById('forgotNewPw2').value;
+  const errEl=document.getElementById('forgotError');
+
+  if(!username){errEl.textContent='Vui lòng nhập tên đăng nhập!';return;}
+  if(!adminPw){errEl.textContent='Vui lòng nhập mật khẩu admin!';return;}
+  if(newPw.length<4){errEl.textContent='Mật khẩu mới tối thiểu 4 ký tự!';return;}
+  if(newPw!==newPw2){errEl.textContent='Mật khẩu mới không khớp!';return;}
+
+  const adminPassword=(AUTH_CFG&&AUTH_CFG.admin_password)||(typeof APP_CONFIG!=='undefined'&&APP_CONFIG.auth&&APP_CONFIG.auth.admin_password);
+  if(!adminPassword||adminPw!==adminPassword){
+    errEl.textContent='❌ Mật khẩu admin không đúng!';
+    return;
+  }
+
+  errEl.style.color='var(--info)';
+  errEl.textContent='⏳ Đang kiểm tra tài khoản...';
+
+  const users=await loadUsersList();
+  const idx=users.findIndex(u=>u.username===username);
+  if(idx===-1){
+    errEl.style.color='var(--danger)';
+    errEl.textContent='❌ Không tìm thấy tài khoản này!';
+    return;
+  }
+
+  const newHash=simpleHash(newPw);
+  users[idx].passwordHash=newHash;
+
+  errEl.textContent='⏳ Đang lưu mật khẩu mới...';
+  await saveUsersList(users);
+
+  // Cập nhật passwordHash trong profile.json (folder theo username) nếu có GitHub
+  if(GH&&GH.enabled&&GH.token){
+    const profileData=await ghReadFile(getUserDataPath(username,'profile.json'));
+    if(profileData){
+      profileData.passwordHash=newHash;
+      await ghWriteFile(getUserDataPath(username,'profile.json'),profileData,'Reset password for '+username);
+    }
+  }
+
+  errEl.style.color='var(--success,#2e7d32)';
+  errEl.textContent='✅ Đặt lại mật khẩu thành công! Đang chuyển đến đăng nhập...';
+  document.getElementById('forgotUsername').value='';
+  document.getElementById('forgotAdminPw').value='';
+  document.getElementById('forgotNewPw').value='';
+  document.getElementById('forgotNewPw2').value='';
+  setTimeout(()=>{showLogin();showToast('🔑 Mật khẩu đã được đặt lại, hãy đăng nhập lại!','success');},1200);
 }
 
 function updateUserUI(){
@@ -3449,15 +3559,11 @@ async function loadUserData(user){
     // No auth - use localStorage (already loaded in S)
     return;
   }
-  // Try GitHub first
+  // Try GitHub first (đọc theo folder users/{username}/)
   if(GH.enabled&&GH.token){
     showToast('⏳ Đang tải dữ liệu...','info');
-    const data=await ghReadFile('users/'+user.id+'.json');
-    if(data){
-      applyUserData(data);
-      showToast('☁️ Đã đồng bộ từ GitHub!','success');
-      return;
-    }
+    const loaded=await loadFromGitHub();
+    if(loaded) return;
   }
   // Fallback: load từ localStorage với user prefix
   const prefix='nihongo_user_'+user.id+'_';
@@ -3509,16 +3615,16 @@ function applyUserData(data){
 }
 
 // ============================================================
-// GITHUB USER DATA - lưu theo folder users/{id}/
+// GITHUB USER DATA - lưu theo folder users/{username}/
 // ============================================================
-function getUserDataPath(userId, file){
-  return 'users/'+userId+'/'+file;
+function getUserDataPath(usernameKey, file){
+  return 'users/'+usernameKey+'/'+file;
 }
 
 async function syncToGitHub(){
   if(!GH||!GH.enabled||!GH.token){showToast('⚠️ Chưa cấu hình GitHub trong config.js','error');return;}
   showToast('⏳ Đang sync lên GitHub...','info');
-  const userId = currentUser?currentUser.id:'guest';
+  const userId = currentUser?currentUser.username:'guest';
   
   try{
     // Save status (tiến độ học)
@@ -3546,9 +3652,10 @@ async function syncToGitHub(){
     };
     // Save profile
     const profile = {
-      id: userId,
+      id: currentUser?currentUser.id:'guest',
       displayName: currentUser?currentUser.displayName:'Guest',
       username: currentUser?currentUser.username:'guest',
+      passwordHash: currentUser?currentUser.passwordHash:undefined,
       lastSync: new Date().toISOString(),
     };
 
@@ -3585,7 +3692,7 @@ async function syncToGitHub(){
 
 async function loadFromGitHub(){
   if(!GH||!GH.enabled||!GH.token) return false;
-  const userId = currentUser?currentUser.id:'guest';
+  const userId = currentUser?currentUser.username:'guest';
   showToast('⏳ Đang tải từ GitHub...','info');
   try{
     // Load files sequentially
