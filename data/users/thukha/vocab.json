@@ -4747,24 +4747,6 @@
       }
     ],
     "N1_lesson_1": [],
-    "N5_lesson_14": [
-      {
-        "id": 1,
-        "word": "あいさつ",
-        "type": "名詞",
-        "meaning": "lời chào hỏi",
-        "reading": "あいさつ",
-        "kanji": "挨拶"
-      },
-      {
-        "id": 2,
-        "word": "こんにちは",
-        "type": "表現",
-        "meaning": "Xin chào",
-        "reading": "こんにちは",
-        "kanji": ""
-      }
-    ],
     "N4_lesson_2": [
       {
         "id": 1,
@@ -4842,11 +4824,6 @@
       {
         "id": 13,
         "title": "Bài 13",
-        "note": ""
-      },
-      {
-        "id": 14,
-        "title": "Bài 1 - Chào hỏi",
         "note": ""
       }
     ],
