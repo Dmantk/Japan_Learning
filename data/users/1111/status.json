@@ -2,7 +2,7 @@
   "kanaStatus": {},
   "starred": {},
   "score": 0,
-  "theme": "light",
+  "theme": "dark",
   "kanaCustom": {
     "hiragana": [],
     "katakana": []
@@ -44,5 +44,5 @@
     "chars": [],
     "radicals": []
   },
-  "lastSync": "2026-07-19T12:52:23.312Z"
+  "lastSync": "2026-07-19T12:52:32.220Z"
 }
