@@ -1528,16 +1528,6 @@
   ],
   "kanjiCustomChars": [
     {
-      "kana": "一",
-      "romaji": "ichi/hito",
-      "meaning": "một",
-      "hanviet": "Nhất",
-      "onyomi": "イチ、イツ",
-      "kunyomi": "ひと",
-      "example": "一つ (ひとつ) - một cái",
-      "group": "custom"
-    },
-    {
       "kana": "二",
       "romaji": "ni/futa",
       "meaning": "hai",
@@ -3019,5 +3009,5 @@
     }
   ],
   "kanjiCustomRadicals": [],
-  "lastSync": "2026-07-19T10:22:53.061Z"
+  "lastSync": "2026-07-19T10:26:29.927Z"
 }
