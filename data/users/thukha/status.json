@@ -25,28 +25,9 @@
       "title": "🔑 Bộ thủ",
       "note": "83 bộ thủ cơ bản",
       "builtin": true
-    },
-    {
-      "id": "grp_1784453912405",
-      "title": "📚 moisw",
-      "note": "",
-      "icon": "📚",
-      "items": [
-        {
-          "kana": "ggu",
-          "romaji": "hfd",
-          "meaning": "gf",
-          "hanviet": "",
-          "onyomi": "",
-          "kunyomi": "",
-          "example": "",
-          "group": "custom"
-        }
-      ],
-      "builtin": false
     }
   ],
   "kanjiCustomChars": [],
   "kanjiCustomRadicals": [],
-  "lastSync": "2026-07-19T09:38:56.967Z"
+  "lastSync": "2026-07-19T09:39:29.524Z"
 }
