@@ -25,9 +25,1508 @@
       "title": "🔑 Bộ thủ",
       "note": "83 bộ thủ cơ bản",
       "builtin": true
+    },
+    {
+      "id": "grp_1784456559546",
+      "title": "📚 Chữ Kanji",
+      "note": "100 chữ Kanji cơ bản",
+      "icon": "📚",
+      "items": [],
+      "builtin": false
     }
   ],
-  "kanjiCustomChars": [],
+  "kanjiCustomChars": [
+    {
+      "kana": "一",
+      "romaji": "ichi/hito",
+      "meaning": "một",
+      "hanviet": "Nhất",
+      "onyomi": "イチ、イツ",
+      "kunyomi": "ひと",
+      "example": "一つ (ひとつ) - một cái",
+      "group": "custom"
+    },
+    {
+      "kana": "二",
+      "romaji": "ni/futa",
+      "meaning": "hai",
+      "hanviet": "Nhị",
+      "onyomi": "ニ",
+      "kunyomi": "ふた",
+      "example": "二つ (ふたつ) - hai cái",
+      "group": "custom"
+    },
+    {
+      "kana": "三",
+      "romaji": "san/mi",
+      "meaning": "ba",
+      "hanviet": "Tam",
+      "onyomi": "サン",
+      "kunyomi": "み",
+      "example": "三つ (みっつ) - ba cái",
+      "group": "custom"
+    },
+    {
+      "kana": "四",
+      "romaji": "shi/yo",
+      "meaning": "bốn",
+      "hanviet": "Tứ",
+      "onyomi": "シ",
+      "kunyomi": "よ、よん",
+      "example": "四月 (しがつ) - tháng Tư",
+      "group": "custom"
+    },
+    {
+      "kana": "五",
+      "romaji": "go/itsu",
+      "meaning": "năm",
+      "hanviet": "Ngũ",
+      "onyomi": "ゴ",
+      "kunyomi": "いつ",
+      "example": "五月 (ごがつ) - tháng Năm",
+      "group": "custom"
+    },
+    {
+      "kana": "六",
+      "romaji": "roku/mu",
+      "meaning": "sáu",
+      "hanviet": "Lục",
+      "onyomi": "ロク",
+      "kunyomi": "む",
+      "example": "六月 (ろくがつ) - tháng Sáu",
+      "group": "custom"
+    },
+    {
+      "kana": "七",
+      "romaji": "shichi/nana",
+      "meaning": "bảy",
+      "hanviet": "Thất",
+      "onyomi": "シチ",
+      "kunyomi": "なな",
+      "example": "七月 (しちがつ) - tháng Bảy",
+      "group": "custom"
+    },
+    {
+      "kana": "八",
+      "romaji": "hachi/ya",
+      "meaning": "tám",
+      "hanviet": "Bát",
+      "onyomi": "ハチ",
+      "kunyomi": "や",
+      "example": "八月 (はちがつ) - tháng Tám",
+      "group": "custom"
+    },
+    {
+      "kana": "九",
+      "romaji": "ku/kyuu",
+      "meaning": "chín",
+      "hanviet": "Cửu",
+      "onyomi": "ク、キュウ",
+      "kunyomi": "ここの",
+      "example": "九月 (くがつ) - tháng Chín",
+      "group": "custom"
+    },
+    {
+      "kana": "十",
+      "romaji": "juu/too",
+      "meaning": "mười",
+      "hanviet": "Thập",
+      "onyomi": "ジュウ",
+      "kunyomi": "とお",
+      "example": "十月 (じゅうがつ) - tháng Mười",
+      "group": "custom"
+    },
+    {
+      "kana": "百",
+      "romaji": "hyaku",
+      "meaning": "trăm",
+      "hanviet": "Bách",
+      "onyomi": "ヒャク",
+      "kunyomi": "",
+      "example": "百円 (ひゃくえん) - 100 yên",
+      "group": "custom"
+    },
+    {
+      "kana": "千",
+      "romaji": "sen",
+      "meaning": "nghìn",
+      "hanviet": "Thiên",
+      "onyomi": "セン",
+      "kunyomi": "ち",
+      "example": "千円 (せんえん) - 1000 yên",
+      "group": "custom"
+    },
+    {
+      "kana": "万",
+      "romaji": "man",
+      "meaning": "vạn",
+      "hanviet": "Vạn",
+      "onyomi": "マン、バン",
+      "kunyomi": "",
+      "example": "一万円 (いちまんえん) - 10,000 yên",
+      "group": "custom"
+    },
+    {
+      "kana": "日",
+      "romaji": "nichi/hi",
+      "meaning": "ngày/mặt trời",
+      "hanviet": "Nhật",
+      "onyomi": "ニチ、ジツ",
+      "kunyomi": "ひ、か",
+      "example": "日本 (にほん) - Nhật Bản",
+      "group": "custom"
+    },
+    {
+      "kana": "月",
+      "romaji": "getsu/tsuki",
+      "meaning": "tháng/mặt trăng",
+      "hanviet": "Nguyệt",
+      "onyomi": "ゲツ、ガツ",
+      "kunyomi": "つき",
+      "example": "月曜日 (げつようび) - Thứ Hai",
+      "group": "custom"
+    },
+    {
+      "kana": "火",
+      "romaji": "ka/hi",
+      "meaning": "lửa",
+      "hanviet": "Hỏa",
+      "onyomi": "カ",
+      "kunyomi": "ひ",
+      "example": "火曜日 (かようび) - Thứ Ba",
+      "group": "custom"
+    },
+    {
+      "kana": "水",
+      "romaji": "sui/mizu",
+      "meaning": "nước",
+      "hanviet": "Thủy",
+      "onyomi": "スイ",
+      "kunyomi": "みず",
+      "example": "水曜日 (すいようび) - Thứ Tư",
+      "group": "custom"
+    },
+    {
+      "kana": "木",
+      "romaji": "moku/ki",
+      "meaning": "cây gỗ",
+      "hanviet": "Mộc",
+      "onyomi": "モク、ボク",
+      "kunyomi": "き",
+      "example": "木曜日 (もくようび) - Thứ Năm",
+      "group": "custom"
+    },
+    {
+      "kana": "金",
+      "romaji": "kin/kane",
+      "meaning": "vàng/tiền",
+      "hanviet": "Kim",
+      "onyomi": "キン、コン",
+      "kunyomi": "かね",
+      "example": "金曜日 (きんようび) - Thứ Sáu",
+      "group": "custom"
+    },
+    {
+      "kana": "土",
+      "romaji": "do/tsuchi",
+      "meaning": "đất",
+      "hanviet": "Thổ",
+      "onyomi": "ド、ト",
+      "kunyomi": "つち",
+      "example": "土曜日 (どようび) - Thứ Bảy",
+      "group": "custom"
+    },
+    {
+      "kana": "山",
+      "romaji": "san/yama",
+      "meaning": "núi",
+      "hanviet": "Sơn",
+      "onyomi": "サン",
+      "kunyomi": "やま",
+      "example": "富士山 (ふじさん) - Núi Phú Sĩ",
+      "group": "custom"
+    },
+    {
+      "kana": "川",
+      "romaji": "sen/kawa",
+      "meaning": "sông",
+      "hanviet": "Xuyên",
+      "onyomi": "セン",
+      "kunyomi": "かわ",
+      "example": "川 (かわ) - con sông",
+      "group": "custom"
+    },
+    {
+      "kana": "田",
+      "romaji": "den/ta",
+      "meaning": "ruộng lúa",
+      "hanviet": "Điền",
+      "onyomi": "デン",
+      "kunyomi": "た",
+      "example": "田中 (たなか) - họ Tanaka",
+      "group": "custom"
+    },
+    {
+      "kana": "空",
+      "romaji": "kuu/sora",
+      "meaning": "bầu trời/rỗng",
+      "hanviet": "Không",
+      "onyomi": "クウ",
+      "kunyomi": "そら、から",
+      "example": "空 (そら) - bầu trời",
+      "group": "custom"
+    },
+    {
+      "kana": "海",
+      "romaji": "kai/umi",
+      "meaning": "biển",
+      "hanviet": "Hải",
+      "onyomi": "カイ",
+      "kunyomi": "うみ",
+      "example": "海 (うみ) - biển",
+      "group": "custom"
+    },
+    {
+      "kana": "花",
+      "romaji": "ka/hana",
+      "meaning": "hoa",
+      "hanviet": "Hoa",
+      "onyomi": "カ",
+      "kunyomi": "はな",
+      "example": "花 (はな) - hoa",
+      "group": "custom"
+    },
+    {
+      "kana": "草",
+      "romaji": "sou/kusa",
+      "meaning": "cỏ",
+      "hanviet": "Thảo",
+      "onyomi": "ソウ",
+      "kunyomi": "くさ",
+      "example": "草 (くさ) - cỏ",
+      "group": "custom"
+    },
+    {
+      "kana": "雨",
+      "romaji": "u/ame",
+      "meaning": "mưa",
+      "hanviet": "Vũ",
+      "onyomi": "ウ",
+      "kunyomi": "あめ",
+      "example": "雨 (あめ) - mưa",
+      "group": "custom"
+    },
+    {
+      "kana": "雪",
+      "romaji": "setsu/yuki",
+      "meaning": "tuyết",
+      "hanviet": "Tuyết",
+      "onyomi": "セツ",
+      "kunyomi": "ゆき",
+      "example": "雪 (ゆき) - tuyết",
+      "group": "custom"
+    },
+    {
+      "kana": "風",
+      "romaji": "fuu/kaze",
+      "meaning": "gió",
+      "hanviet": "Phong",
+      "onyomi": "フウ、フ",
+      "kunyomi": "かぜ",
+      "example": "風 (かぜ) - gió",
+      "group": "custom"
+    },
+    {
+      "kana": "人",
+      "romaji": "jin/hito",
+      "meaning": "người",
+      "hanviet": "Nhân",
+      "onyomi": "ジン、ニン",
+      "kunyomi": "ひと",
+      "example": "日本人 (にほんじん) - người Nhật",
+      "group": "custom"
+    },
+    {
+      "kana": "父",
+      "romaji": "fu/chichi",
+      "meaning": "cha",
+      "hanviet": "Phụ",
+      "onyomi": "フ",
+      "kunyomi": "ちち",
+      "example": "お父さん (おとうさん) - bố",
+      "group": "custom"
+    },
+    {
+      "kana": "母",
+      "romaji": "bo/haha",
+      "meaning": "mẹ",
+      "hanviet": "Mẫu",
+      "onyomi": "ボ",
+      "kunyomi": "はは",
+      "example": "お母さん (おかあさん) - mẹ",
+      "group": "custom"
+    },
+    {
+      "kana": "子",
+      "romaji": "shi/ko",
+      "meaning": "con/trẻ em",
+      "hanviet": "Tử",
+      "onyomi": "シ、ス",
+      "kunyomi": "こ",
+      "example": "子供 (こども) - trẻ em",
+      "group": "custom"
+    },
+    {
+      "kana": "女",
+      "romaji": "jo/onna",
+      "meaning": "phụ nữ",
+      "hanviet": "Nữ",
+      "onyomi": "ジョ、ニョ",
+      "kunyomi": "おんな",
+      "example": "女の子 (おんなのこ) - bé gái",
+      "group": "custom"
+    },
+    {
+      "kana": "男",
+      "romaji": "dan/otoko",
+      "meaning": "đàn ông",
+      "hanviet": "Nam",
+      "onyomi": "ダン、ナン",
+      "kunyomi": "おとこ",
+      "example": "男の子 (おとこのこ) - bé trai",
+      "group": "custom"
+    },
+    {
+      "kana": "友",
+      "romaji": "yuu/tomo",
+      "meaning": "bạn bè",
+      "hanviet": "Hữu",
+      "onyomi": "ユウ",
+      "kunyomi": "とも",
+      "example": "友達 (ともだち) - bạn bè",
+      "group": "custom"
+    },
+    {
+      "kana": "先",
+      "romaji": "sen/saki",
+      "meaning": "trước/thầy",
+      "hanviet": "Tiên",
+      "onyomi": "セン",
+      "kunyomi": "さき",
+      "example": "先生 (せんせい) - giáo viên",
+      "group": "custom"
+    },
+    {
+      "kana": "生",
+      "romaji": "sei/nama",
+      "meaning": "sinh/sống",
+      "hanviet": "Sinh",
+      "onyomi": "セイ、ショウ",
+      "kunyomi": "なま、い",
+      "example": "学生 (がくせい) - học sinh",
+      "group": "custom"
+    },
+    {
+      "kana": "口",
+      "romaji": "kou/kuchi",
+      "meaning": "miệng/cửa",
+      "hanviet": "Khẩu",
+      "onyomi": "コウ、ク",
+      "kunyomi": "くち",
+      "example": "入口 (いりぐち) - lối vào",
+      "group": "custom"
+    },
+    {
+      "kana": "目",
+      "romaji": "moku/me",
+      "meaning": "mắt",
+      "hanviet": "Mục",
+      "onyomi": "モク、ボク",
+      "kunyomi": "め",
+      "example": "目 (め) - mắt",
+      "group": "custom"
+    },
+    {
+      "kana": "耳",
+      "romaji": "ji/mimi",
+      "meaning": "tai",
+      "hanviet": "Nhĩ",
+      "onyomi": "ジ",
+      "kunyomi": "みみ",
+      "example": "耳 (みみ) - tai",
+      "group": "custom"
+    },
+    {
+      "kana": "手",
+      "romaji": "shu/te",
+      "meaning": "tay",
+      "hanviet": "Thủ",
+      "onyomi": "シュ",
+      "kunyomi": "て",
+      "example": "手紙 (てがみ) - thư",
+      "group": "custom"
+    },
+    {
+      "kana": "足",
+      "romaji": "soku/ashi",
+      "meaning": "chân",
+      "hanviet": "Túc",
+      "onyomi": "ソク",
+      "kunyomi": "あし",
+      "example": "足 (あし) - chân",
+      "group": "custom"
+    },
+    {
+      "kana": "心",
+      "romaji": "shin/kokoro",
+      "meaning": "tim/tâm",
+      "hanviet": "Tâm",
+      "onyomi": "シン",
+      "kunyomi": "こころ",
+      "example": "心 (こころ) - trái tim",
+      "group": "custom"
+    },
+    {
+      "kana": "頭",
+      "romaji": "tou/atama",
+      "meaning": "đầu",
+      "hanviet": "Đầu",
+      "onyomi": "トウ、ズ",
+      "kunyomi": "あたま",
+      "example": "頭 (あたま) - cái đầu",
+      "group": "custom"
+    },
+    {
+      "kana": "大",
+      "romaji": "dai/oo",
+      "meaning": "lớn",
+      "hanviet": "Đại",
+      "onyomi": "ダイ、タイ",
+      "kunyomi": "おお",
+      "example": "大学 (だいがく) - đại học",
+      "group": "custom"
+    },
+    {
+      "kana": "小",
+      "romaji": "shou/ko",
+      "meaning": "nhỏ",
+      "hanviet": "Tiểu",
+      "onyomi": "ショウ",
+      "kunyomi": "こ、ちい",
+      "example": "小学校 (しょうがっこう) - tiểu học",
+      "group": "custom"
+    },
+    {
+      "kana": "中",
+      "romaji": "chuu/naka",
+      "meaning": "giữa/trong",
+      "hanviet": "Trung",
+      "onyomi": "チュウ",
+      "kunyomi": "なか",
+      "example": "中国 (ちゅうごく) - Trung Quốc",
+      "group": "custom"
+    },
+    {
+      "kana": "上",
+      "romaji": "jou/ue",
+      "meaning": "trên",
+      "hanviet": "Thượng",
+      "onyomi": "ジョウ",
+      "kunyomi": "うえ",
+      "example": "上手 (じょうず) - giỏi",
+      "group": "custom"
+    },
+    {
+      "kana": "下",
+      "romaji": "ka/shita",
+      "meaning": "dưới",
+      "hanviet": "Hạ",
+      "onyomi": "カ、ゲ",
+      "kunyomi": "した",
+      "example": "地下 (ちか) - dưới đất",
+      "group": "custom"
+    },
+    {
+      "kana": "左",
+      "romaji": "sa/hidari",
+      "meaning": "trái",
+      "hanviet": "Tả",
+      "onyomi": "サ",
+      "kunyomi": "ひだり",
+      "example": "左 (ひだり) - bên trái",
+      "group": "custom"
+    },
+    {
+      "kana": "右",
+      "romaji": "u/migi",
+      "meaning": "phải",
+      "hanviet": "Hữu",
+      "onyomi": "ウ、ユウ",
+      "kunyomi": "みぎ",
+      "example": "右 (みぎ) - bên phải",
+      "group": "custom"
+    },
+    {
+      "kana": "東",
+      "romaji": "tou/higashi",
+      "meaning": "đông",
+      "hanviet": "Đông",
+      "onyomi": "トウ",
+      "kunyomi": "ひがし",
+      "example": "東京 (とうきょう) - Tokyo",
+      "group": "custom"
+    },
+    {
+      "kana": "西",
+      "romaji": "sei/nishi",
+      "meaning": "tây",
+      "hanviet": "Tây",
+      "onyomi": "セイ、サイ",
+      "kunyomi": "にし",
+      "example": "西 (にし) - phía tây",
+      "group": "custom"
+    },
+    {
+      "kana": "南",
+      "romaji": "nan/minami",
+      "meaning": "nam",
+      "hanviet": "Nam",
+      "onyomi": "ナン、ナ",
+      "kunyomi": "みなみ",
+      "example": "南 (みなみ) - phía nam",
+      "group": "custom"
+    },
+    {
+      "kana": "北",
+      "romaji": "hoku/kita",
+      "meaning": "bắc",
+      "hanviet": "Bắc",
+      "onyomi": "ホク",
+      "kunyomi": "きた",
+      "example": "北 (きた) - phía bắc",
+      "group": "custom"
+    },
+    {
+      "kana": "年",
+      "romaji": "nen/toshi",
+      "meaning": "năm",
+      "hanviet": "Niên",
+      "onyomi": "ネン",
+      "kunyomi": "とし",
+      "example": "今年 (ことし) - năm nay",
+      "group": "custom"
+    },
+    {
+      "kana": "時",
+      "romaji": "ji/toki",
+      "meaning": "giờ/thời gian",
+      "hanviet": "Thời",
+      "onyomi": "ジ",
+      "kunyomi": "とき",
+      "example": "何時 (なんじ) - mấy giờ",
+      "group": "custom"
+    },
+    {
+      "kana": "分",
+      "romaji": "fun/bun",
+      "meaning": "phút/phần",
+      "hanviet": "Phân",
+      "onyomi": "フン、ブン",
+      "kunyomi": "わ",
+      "example": "五分 (ごふん) - 5 phút",
+      "group": "custom"
+    },
+    {
+      "kana": "今",
+      "romaji": "kon/ima",
+      "meaning": "bây giờ",
+      "hanviet": "Kim",
+      "onyomi": "コン、キン",
+      "kunyomi": "いま",
+      "example": "今日 (きょう) - hôm nay",
+      "group": "custom"
+    },
+    {
+      "kana": "前",
+      "romaji": "zen/mae",
+      "meaning": "trước",
+      "hanviet": "Tiền",
+      "onyomi": "ゼン",
+      "kunyomi": "まえ",
+      "example": "前 (まえ) - phía trước",
+      "group": "custom"
+    },
+    {
+      "kana": "後",
+      "romaji": "go/ato",
+      "meaning": "sau",
+      "hanviet": "Hậu",
+      "onyomi": "ゴ、コウ",
+      "kunyomi": "あと、うし",
+      "example": "後で (あとで) - sau này",
+      "group": "custom"
+    },
+    {
+      "kana": "毎",
+      "romaji": "mai",
+      "meaning": "mỗi",
+      "hanviet": "Mỗi",
+      "onyomi": "マイ",
+      "kunyomi": "",
+      "example": "毎日 (まいにち) - mỗi ngày",
+      "group": "custom"
+    },
+    {
+      "kana": "週",
+      "romaji": "shuu",
+      "meaning": "tuần",
+      "hanviet": "Tuần",
+      "onyomi": "シュウ",
+      "kunyomi": "",
+      "example": "今週 (こんしゅう) - tuần này",
+      "group": "custom"
+    },
+    {
+      "kana": "国",
+      "romaji": "koku/kuni",
+      "meaning": "quốc gia",
+      "hanviet": "Quốc",
+      "onyomi": "コク",
+      "kunyomi": "くに",
+      "example": "外国 (がいこく) - nước ngoài",
+      "group": "custom"
+    },
+    {
+      "kana": "外",
+      "romaji": "gai/soto",
+      "meaning": "ngoài",
+      "hanviet": "Ngoại",
+      "onyomi": "ガイ、ゲ",
+      "kunyomi": "そと",
+      "example": "外国語 (がいこくご) - ngoại ngữ",
+      "group": "custom"
+    },
+    {
+      "kana": "家",
+      "romaji": "ka/ie",
+      "meaning": "nhà",
+      "hanviet": "Gia",
+      "onyomi": "カ、ケ",
+      "kunyomi": "いえ、うち",
+      "example": "家 (いえ) - ngôi nhà",
+      "group": "custom"
+    },
+    {
+      "kana": "学",
+      "romaji": "gaku/mana",
+      "meaning": "học",
+      "hanviet": "Học",
+      "onyomi": "ガク",
+      "kunyomi": "まな",
+      "example": "学校 (がっこう) - trường học",
+      "group": "custom"
+    },
+    {
+      "kana": "校",
+      "romaji": "kou",
+      "meaning": "trường",
+      "hanviet": "Hiệu",
+      "onyomi": "コウ",
+      "kunyomi": "",
+      "example": "学校 (がっこう) - trường học",
+      "group": "custom"
+    },
+    {
+      "kana": "駅",
+      "romaji": "eki",
+      "meaning": "ga tàu",
+      "hanviet": "Dịch",
+      "onyomi": "エキ",
+      "kunyomi": "",
+      "example": "駅 (えき) - ga tàu",
+      "group": "custom"
+    },
+    {
+      "kana": "店",
+      "romaji": "ten/mise",
+      "meaning": "cửa hàng",
+      "hanviet": "Điếm",
+      "onyomi": "テン",
+      "kunyomi": "みせ",
+      "example": "お店 (おみせ) - cửa hàng",
+      "group": "custom"
+    },
+    {
+      "kana": "道",
+      "romaji": "dou/michi",
+      "meaning": "đường",
+      "hanviet": "Đạo",
+      "onyomi": "ドウ、トウ",
+      "kunyomi": "みち",
+      "example": "道 (みち) - con đường",
+      "group": "custom"
+    },
+    {
+      "kana": "車",
+      "romaji": "sha/kuruma",
+      "meaning": "xe",
+      "hanviet": "Xa",
+      "onyomi": "シャ",
+      "kunyomi": "くるま",
+      "example": "電車 (でんしゃ) - tàu điện",
+      "group": "custom"
+    },
+    {
+      "kana": "電",
+      "romaji": "den",
+      "meaning": "điện",
+      "hanviet": "Điện",
+      "onyomi": "デン",
+      "kunyomi": "",
+      "example": "電話 (でんわ) - điện thoại",
+      "group": "custom"
+    },
+    {
+      "kana": "本",
+      "romaji": "hon/moto",
+      "meaning": "sách/gốc",
+      "hanviet": "Bổn",
+      "onyomi": "ホン",
+      "kunyomi": "もと",
+      "example": "日本 (にほん) - Nhật Bản",
+      "group": "custom"
+    },
+    {
+      "kana": "語",
+      "romaji": "go/kata",
+      "meaning": "ngôn ngữ",
+      "hanviet": "Ngữ",
+      "onyomi": "ゴ",
+      "kunyomi": "かた",
+      "example": "日本語 (にほんご) - tiếng Nhật",
+      "group": "custom"
+    },
+    {
+      "kana": "食",
+      "romaji": "shoku/ta",
+      "meaning": "ăn/thức ăn",
+      "hanviet": "Thực",
+      "onyomi": "ショク",
+      "kunyomi": "た、く",
+      "example": "食べる (たべる) - ăn",
+      "group": "custom"
+    },
+    {
+      "kana": "飲",
+      "romaji": "in/no",
+      "meaning": "uống",
+      "hanviet": "Ẩm",
+      "onyomi": "イン",
+      "kunyomi": "の",
+      "example": "飲む (のむ) - uống",
+      "group": "custom"
+    },
+    {
+      "kana": "見",
+      "romaji": "ken/mi",
+      "meaning": "nhìn/thấy",
+      "hanviet": "Kiến",
+      "onyomi": "ケン",
+      "kunyomi": "み",
+      "example": "見る (みる) - nhìn",
+      "group": "custom"
+    },
+    {
+      "kana": "聞",
+      "romaji": "bun/ki",
+      "meaning": "nghe/hỏi",
+      "hanviet": "Văn",
+      "onyomi": "ブン、モン",
+      "kunyomi": "き",
+      "example": "聞く (きく) - nghe",
+      "group": "custom"
+    },
+    {
+      "kana": "書",
+      "romaji": "sho/ka",
+      "meaning": "viết",
+      "hanviet": "Thư",
+      "onyomi": "ショ",
+      "kunyomi": "か",
+      "example": "書く (かく) - viết",
+      "group": "custom"
+    },
+    {
+      "kana": "読",
+      "romaji": "doku/yo",
+      "meaning": "đọc",
+      "hanviet": "Độc",
+      "onyomi": "ドク",
+      "kunyomi": "よ",
+      "example": "読む (よむ) - đọc",
+      "group": "custom"
+    },
+    {
+      "kana": "話",
+      "romaji": "wa/hana",
+      "meaning": "nói/câu chuyện",
+      "hanviet": "Thoại",
+      "onyomi": "ワ",
+      "kunyomi": "はな",
+      "example": "話す (はなす) - nói",
+      "group": "custom"
+    },
+    {
+      "kana": "来",
+      "romaji": "rai/ku",
+      "meaning": "đến",
+      "hanviet": "Lai",
+      "onyomi": "ライ",
+      "kunyomi": "く、き",
+      "example": "来る (くる) - đến",
+      "group": "custom"
+    },
+    {
+      "kana": "行",
+      "romaji": "kou/i",
+      "meaning": "đi",
+      "hanviet": "Hành",
+      "onyomi": "コウ、ギョウ",
+      "kunyomi": "い、ゆ",
+      "example": "行く (いく) - đi",
+      "group": "custom"
+    },
+    {
+      "kana": "帰",
+      "romaji": "ki/kae",
+      "meaning": "về",
+      "hanviet": "Quy",
+      "onyomi": "キ",
+      "kunyomi": "かえ",
+      "example": "帰る (かえる) - về nhà",
+      "group": "custom"
+    },
+    {
+      "kana": "入",
+      "romaji": "nyuu/i",
+      "meaning": "vào",
+      "hanviet": "Nhập",
+      "onyomi": "ニュウ",
+      "kunyomi": "い、はい",
+      "example": "入る (はいる) - vào",
+      "group": "custom"
+    },
+    {
+      "kana": "出",
+      "romaji": "shutsu/de",
+      "meaning": "ra",
+      "hanviet": "Xuất",
+      "onyomi": "シュツ",
+      "kunyomi": "で、だ",
+      "example": "出る (でる) - ra",
+      "group": "custom"
+    },
+    {
+      "kana": "買",
+      "romaji": "bai/ka",
+      "meaning": "mua",
+      "hanviet": "Mãi",
+      "onyomi": "バイ",
+      "kunyomi": "か",
+      "example": "買う (かう) - mua",
+      "group": "custom"
+    },
+    {
+      "kana": "高",
+      "romaji": "kou/taka",
+      "meaning": "cao/đắt",
+      "hanviet": "Cao",
+      "onyomi": "コウ",
+      "kunyomi": "たか",
+      "example": "高い (たかい) - đắt/cao",
+      "group": "custom"
+    },
+    {
+      "kana": "安",
+      "romaji": "an/yasu",
+      "meaning": "rẻ/an toàn",
+      "hanviet": "An",
+      "onyomi": "アン",
+      "kunyomi": "やす",
+      "example": "安い (やすい) - rẻ",
+      "group": "custom"
+    },
+    {
+      "kana": "新",
+      "romaji": "shin/atara",
+      "meaning": "mới",
+      "hanviet": "Tân",
+      "onyomi": "シン",
+      "kunyomi": "あたら",
+      "example": "新しい (あたらしい) - mới",
+      "group": "custom"
+    },
+    {
+      "kana": "古",
+      "romaji": "ko/furu",
+      "meaning": "cũ",
+      "hanviet": "Cổ",
+      "onyomi": "コ",
+      "kunyomi": "ふる",
+      "example": "古い (ふるい) - cũ",
+      "group": "custom"
+    },
+    {
+      "kana": "白",
+      "romaji": "haku/shiro",
+      "meaning": "trắng",
+      "hanviet": "Bạch",
+      "onyomi": "ハク、ビャク",
+      "kunyomi": "しろ",
+      "example": "白い (しろい) - trắng",
+      "group": "custom"
+    },
+    {
+      "kana": "黒",
+      "romaji": "koku/kuro",
+      "meaning": "đen",
+      "hanviet": "Hắc",
+      "onyomi": "コク",
+      "kunyomi": "くろ",
+      "example": "黒い (くろい) - đen",
+      "group": "custom"
+    },
+    {
+      "kana": "赤",
+      "romaji": "seki/aka",
+      "meaning": "đỏ",
+      "hanviet": "Xích",
+      "onyomi": "セキ、シャク",
+      "kunyomi": "あか",
+      "example": "赤い (あかい) - đỏ",
+      "group": "custom"
+    },
+    {
+      "kana": "青",
+      "romaji": "sei/ao",
+      "meaning": "xanh",
+      "hanviet": "Thanh",
+      "onyomi": "セイ、ショウ",
+      "kunyomi": "あお",
+      "example": "青い (あおい) - xanh",
+      "group": "custom"
+    },
+    {
+      "kana": "長",
+      "romaji": "chou/naga",
+      "meaning": "dài/trưởng",
+      "hanviet": "Trường",
+      "onyomi": "チョウ",
+      "kunyomi": "なが",
+      "example": "長い (ながい) - dài",
+      "group": "custom"
+    },
+    {
+      "kana": "半",
+      "romaji": "han",
+      "meaning": "nửa",
+      "hanviet": "Bán",
+      "onyomi": "ハン",
+      "kunyomi": "なか",
+      "example": "半分 (はんぶん) - một nửa",
+      "group": "custom"
+    },
+    {
+      "kana": "干",
+      "romaji": "kan / ho su",
+      "meaning": "Can dự, mộc qua",
+      "hanviet": "CAN",
+      "onyomi": "カン",
+      "kunyomi": "ほ(す)",
+      "example": "干す",
+      "group": "custom"
+    },
+    {
+      "kana": "平",
+      "romaji": "hei biyou / tai ra",
+      "meaning": "Bằng phẳng, hòa bình",
+      "hanviet": "BÌNH",
+      "onyomi": "ヘイ・ビョウ",
+      "kunyomi": "たい(ら)",
+      "example": "平日",
+      "group": "custom"
+    },
+    {
+      "kana": "午",
+      "romaji": "go",
+      "meaning": "Buổi trưa, chi Ngọ",
+      "hanviet": "NGỌ",
+      "onyomi": "ゴ",
+      "kunyomi": "",
+      "example": "午前",
+      "group": "custom"
+    },
+    {
+      "kana": "牛",
+      "romaji": "giyuu / ushi",
+      "meaning": "Con bò, con trâu",
+      "hanviet": "NGƯU",
+      "onyomi": "ギュウ",
+      "kunyomi": "うし",
+      "example": "牛肉",
+      "group": "custom"
+    },
+    {
+      "kana": "工",
+      "romaji": "kou",
+      "meaning": "Công việc, thợ",
+      "hanviet": "CÔNG",
+      "onyomi": "コウ",
+      "kunyomi": "",
+      "example": "工場",
+      "group": "custom"
+    },
+    {
+      "kana": "士",
+      "romaji": "shi",
+      "meaning": "Kẻ sĩ, học trò",
+      "hanviet": "SĨ",
+      "onyomi": "シ",
+      "kunyomi": "",
+      "example": "博士",
+      "group": "custom"
+    },
+    {
+      "kana": "林",
+      "romaji": "rin / hayashi",
+      "meaning": "Rừng",
+      "hanviet": "LÂM",
+      "onyomi": "リン",
+      "kunyomi": "はやし",
+      "example": "森林",
+      "group": "custom"
+    },
+    {
+      "kana": "森",
+      "romaji": "shin / mori",
+      "meaning": "Rừng rậm",
+      "hanviet": "SÂM",
+      "onyomi": "シン",
+      "kunyomi": "もり",
+      "example": "森林",
+      "group": "custom"
+    },
+    {
+      "kana": "米",
+      "romaji": "bei mai / kome",
+      "meaning": "Gạo",
+      "hanviet": "MỄ",
+      "onyomi": "ベイ・マイ",
+      "kunyomi": "こめ",
+      "example": "米国",
+      "group": "custom"
+    },
+    {
+      "kana": "未",
+      "romaji": "mi / ima da",
+      "meaning": "Chưa, chi Mùi",
+      "hanviet": "VỊ",
+      "onyomi": "ミ",
+      "kunyomi": "いま(だ)",
+      "example": "未来",
+      "group": "custom"
+    },
+    {
+      "kana": "味",
+      "romaji": "mi / aji",
+      "meaning": "Mùi vị",
+      "hanviet": "VỊ",
+      "onyomi": "ミ",
+      "kunyomi": "あじ",
+      "example": "意味",
+      "group": "custom"
+    },
+    {
+      "kana": "末",
+      "romaji": "matsu batsu / sue",
+      "meaning": "Ngọn, cuối cùng",
+      "hanviet": "MẠT",
+      "onyomi": "マツ・バツ",
+      "kunyomi": "すえ",
+      "example": "週末",
+      "group": "custom"
+    },
+    {
+      "kana": "夫",
+      "romaji": "fu fuu / oっto",
+      "meaning": "Chồng, đàn ông",
+      "hanviet": "PHU",
+      "onyomi": "フ・フウ",
+      "kunyomi": "おっと",
+      "example": "夫婦",
+      "group": "custom"
+    },
+    {
+      "kana": "失",
+      "romaji": "shitsu / ushina u",
+      "meaning": "Mất, thất lạc",
+      "hanviet": "THẤT",
+      "onyomi": "シツ",
+      "kunyomi": "うしな(う)",
+      "example": "失敗",
+      "group": "custom"
+    },
+    {
+      "kana": "太",
+      "romaji": "tai / futo i",
+      "meaning": "Rất, quá, lớn",
+      "hanviet": "THÁI",
+      "onyomi": "タイ",
+      "kunyomi": "ふと(い)",
+      "example": "太陽",
+      "group": "custom"
+    },
+    {
+      "kana": "犬",
+      "romaji": "ken / inu",
+      "meaning": "Con chó",
+      "hanviet": "KHUYỂN",
+      "onyomi": "ケン",
+      "kunyomi": "いぬ",
+      "example": "子犬",
+      "group": "custom"
+    },
+    {
+      "kana": "丈",
+      "romaji": "jiyou / take",
+      "meaning": "Trượng phu, đơn vị đo",
+      "hanviet": "TRƯỢNG",
+      "onyomi": "ジョウ",
+      "kunyomi": "たけ",
+      "example": "丈夫",
+      "group": "custom"
+    },
+    {
+      "kana": "天",
+      "romaji": "ten / ama",
+      "meaning": "Trời",
+      "hanviet": "THIÊN",
+      "onyomi": "テン",
+      "kunyomi": "あま",
+      "example": "天気",
+      "group": "custom"
+    },
+    {
+      "kana": "王",
+      "romaji": "ou",
+      "meaning": "Vua",
+      "hanviet": "VƯƠNG",
+      "onyomi": "オウ",
+      "kunyomi": "",
+      "example": "王様",
+      "group": "custom"
+    },
+    {
+      "kana": "主",
+      "romaji": "shiyu / nushi",
+      "meaning": "Chủ nhân",
+      "hanviet": "CHỦ",
+      "onyomi": "シュ",
+      "kunyomi": "ぬし",
+      "example": "主人",
+      "group": "custom"
+    },
+    {
+      "kana": "住",
+      "romaji": "jiyuu / su mu",
+      "meaning": "Ở, cư trú",
+      "hanviet": "TRÚ",
+      "onyomi": "ジュウ",
+      "kunyomi": "す(む)",
+      "example": "住所",
+      "group": "custom"
+    },
+    {
+      "kana": "用",
+      "romaji": "you / mochi iru",
+      "meaning": "Dùng, sử dụng",
+      "hanviet": "DỤNG",
+      "onyomi": "ヨウ",
+      "kunyomi": "もち(いる)",
+      "example": "使用",
+      "group": "custom"
+    },
+    {
+      "kana": "内",
+      "romaji": "nai / uchi",
+      "meaning": "Bên trong",
+      "hanviet": "NỘI",
+      "onyomi": "ナイ",
+      "kunyomi": "うち",
+      "example": "国内",
+      "group": "custom"
+    },
+    {
+      "kana": "肉",
+      "romaji": "niku",
+      "meaning": "Thịt",
+      "hanviet": "NHỤC",
+      "onyomi": "ニク",
+      "kunyomi": "",
+      "example": "牛肉",
+      "group": "custom"
+    },
+    {
+      "kana": "不",
+      "romaji": "fu bu",
+      "meaning": "Không",
+      "hanviet": "BẤT",
+      "onyomi": "フ・ブ",
+      "kunyomi": "",
+      "example": "不便",
+      "group": "custom"
+    },
+    {
+      "kana": "止",
+      "romaji": "shi / to maru",
+      "meaning": "Dừng lại",
+      "hanviet": "CHỈ",
+      "onyomi": "シ",
+      "kunyomi": "と(まる)",
+      "example": "中止",
+      "group": "custom"
+    },
+    {
+      "kana": "正",
+      "romaji": "sei shiyou / tada shii",
+      "meaning": "Đúng, ngay thẳng",
+      "hanviet": "CHÍNH",
+      "onyomi": "セイ・ショウ",
+      "kunyomi": "ただ(しい)",
+      "example": "正月",
+      "group": "custom"
+    },
+    {
+      "kana": "刀",
+      "romaji": "tou / katana",
+      "meaning": "Con dao",
+      "hanviet": "ĐAO",
+      "onyomi": "トウ",
+      "kunyomi": "かたな",
+      "example": "日本刀",
+      "group": "custom"
+    },
+    {
+      "kana": "力",
+      "romaji": "riyoku riki / chikara",
+      "meaning": "Sức mạnh",
+      "hanviet": "LỰC",
+      "onyomi": "リョク・リキ",
+      "kunyomi": "ちから",
+      "example": "力",
+      "group": "custom"
+    },
+    {
+      "kana": "方",
+      "romaji": "hou / kata",
+      "meaning": "Phương hướng",
+      "hanviet": "PHƯƠNG",
+      "onyomi": "ホウ",
+      "kunyomi": "かた",
+      "example": "方向",
+      "group": "custom"
+    },
+    {
+      "kana": "品",
+      "romaji": "hin / shina",
+      "meaning": "Sản phẩm, phẩm chất",
+      "hanviet": "PHẨM",
+      "onyomi": "ヒン",
+      "kunyomi": "しな",
+      "example": "商品",
+      "group": "custom"
+    },
+    {
+      "kana": "石",
+      "romaji": "seki shiyaku / ishi",
+      "meaning": "Hòn đá",
+      "hanviet": "THẠCH",
+      "onyomi": "セキ・シャク",
+      "kunyomi": "いし",
+      "example": "宝石",
+      "group": "custom"
+    },
+    {
+      "kana": "合",
+      "romaji": "gou gaッ / a u",
+      "meaning": "Hợp lại, vừa vặn",
+      "hanviet": "HỢP",
+      "onyomi": "ゴウ・ガッ",
+      "kunyomi": "あ(う)",
+      "example": "合格",
+      "group": "custom"
+    },
+    {
+      "kana": "名",
+      "romaji": "mei miyou / na",
+      "meaning": "Tên",
+      "hanviet": "DANH",
+      "onyomi": "メイ・ミョウ",
+      "kunyomi": "な",
+      "example": "名前",
+      "group": "custom"
+    },
+    {
+      "kana": "回",
+      "romaji": "kai / mawa ru",
+      "meaning": "Quay lại, vòng",
+      "hanviet": "HỒI",
+      "onyomi": "カイ",
+      "kunyomi": "まわ(る)",
+      "example": "今回",
+      "group": "custom"
+    },
+    {
+      "kana": "因",
+      "romaji": "in / yo ru",
+      "meaning": "Nguyên nhân",
+      "hanviet": "NHÂN",
+      "onyomi": "イン",
+      "kunyomi": "よ(る)",
+      "example": "原因",
+      "group": "custom"
+    },
+    {
+      "kana": "困",
+      "romaji": "kon / koma ru",
+      "meaning": "Khó khăn, khốn cùng",
+      "hanviet": "KHỐN",
+      "onyomi": "コン",
+      "kunyomi": "こま(る)",
+      "example": "困難",
+      "group": "custom"
+    },
+    {
+      "kana": "固",
+      "romaji": "ko / kata i",
+      "meaning": "Cứng, vững chắc",
+      "hanviet": "CỐ",
+      "onyomi": "コ",
+      "kunyomi": "かた(い)",
+      "example": "固定",
+      "group": "custom"
+    },
+    {
+      "kana": "自",
+      "romaji": "ji shi / mizuka ra",
+      "meaning": "Tự mình",
+      "hanviet": "TỰ",
+      "onyomi": "ジ・シ",
+      "kunyomi": "みずか(ら)",
+      "example": "自分",
+      "group": "custom"
+    },
+    {
+      "kana": "貝",
+      "romaji": "bai / kai",
+      "meaning": "Vỏ sò",
+      "hanviet": "BỐI",
+      "onyomi": "バイ",
+      "kunyomi": "かい",
+      "example": "買い物",
+      "group": "custom"
+    },
+    {
+      "kana": "具",
+      "romaji": "gu / sona eru",
+      "meaning": "Dụng cụ",
+      "hanviet": "CỤ",
+      "onyomi": "グ",
+      "kunyomi": "そな(える)",
+      "example": "具体的",
+      "group": "custom"
+    },
+    {
+      "kana": "少",
+      "romaji": "shiyou / suku nai",
+      "meaning": "Ít, một chút",
+      "hanviet": "THIỂU",
+      "onyomi": "ショウ",
+      "kunyomi": "すく(ない)",
+      "example": "少年",
+      "group": "custom"
+    },
+    {
+      "kana": "多",
+      "romaji": "ta / oo i",
+      "meaning": "Nhiều",
+      "hanviet": "ĐA",
+      "onyomi": "タ",
+      "kunyomi": "おお(い)",
+      "example": "多い",
+      "group": "custom"
+    },
+    {
+      "kana": "寺",
+      "romaji": "ji / tera",
+      "meaning": "Ngôi chùa",
+      "hanviet": "TỰ",
+      "onyomi": "ジ",
+      "kunyomi": "てら",
+      "example": "お寺",
+      "group": "custom"
+    },
+    {
+      "kana": "亡",
+      "romaji": "bou mou / horo biru",
+      "meaning": "Chết, mất",
+      "hanviet": "VONG",
+      "onyomi": "ボウ・モウ",
+      "kunyomi": "ほろ(びる)",
+      "example": "死亡",
+      "group": "custom"
+    },
+    {
+      "kana": "門",
+      "romaji": "mon / kado",
+      "meaning": "Cái cổng",
+      "hanviet": "MÔN",
+      "onyomi": "モン",
+      "kunyomi": "かど",
+      "example": "専門",
+      "group": "custom"
+    },
+    {
+      "kana": "丸",
+      "romaji": "gan / maru",
+      "meaning": "Viên tròn",
+      "hanviet": "HOÀN",
+      "onyomi": "ガン",
+      "kunyomi": "まる",
+      "example": "丸い",
+      "group": "custom"
+    },
+    {
+      "kana": "己",
+      "romaji": "ko ki / onore",
+      "meaning": "Bản thân mình",
+      "hanviet": "KỶ",
+      "onyomi": "コ・キ",
+      "kunyomi": "おのれ",
+      "example": "自己",
+      "group": "custom"
+    },
+    {
+      "kana": "才",
+      "romaji": "sai",
+      "meaning": "Tài năng, tuổi",
+      "hanviet": "TÀI",
+      "onyomi": "サイ",
+      "kunyomi": "",
+      "example": "天才",
+      "group": "custom"
+    }
+  ],
   "kanjiCustomRadicals": [],
-  "lastSync": "2026-07-19T10:14:46.658Z"
+  "lastSync": "2026-07-19T10:22:41.053Z"
 }
