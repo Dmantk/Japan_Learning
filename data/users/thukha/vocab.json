@@ -1,6 +1,7 @@
 {
   "vocabData": {
-    "N5_lesson_1": []
+    "N5_lesson_1": [],
+    "N5_lesson_2": []
   },
   "vocabLessons": {
     "N5": [
@@ -12,8 +13,8 @@
       },
       {
         "id": 2,
-        "title": "Bài 2 - Gia đình",
-        "note": "家族の言葉",
+        "title": "Bài 2",
+        "note": "",
         "vocabIds": []
       },
       {
