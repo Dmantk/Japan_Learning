@@ -1528,46 +1528,6 @@
   ],
   "kanjiCustomChars": [
     {
-      "kana": "田",
-      "romaji": "den/ta",
-      "meaning": "ruộng lúa",
-      "hanviet": "Điền",
-      "onyomi": "デン",
-      "kunyomi": "た",
-      "example": "田中 (たなか) - họ Tanaka",
-      "group": "custom"
-    },
-    {
-      "kana": "空",
-      "romaji": "kuu/sora",
-      "meaning": "bầu trời/rỗng",
-      "hanviet": "Không",
-      "onyomi": "クウ",
-      "kunyomi": "そら、から",
-      "example": "空 (そら) - bầu trời",
-      "group": "custom"
-    },
-    {
-      "kana": "海",
-      "romaji": "kai/umi",
-      "meaning": "biển",
-      "hanviet": "Hải",
-      "onyomi": "カイ",
-      "kunyomi": "うみ",
-      "example": "海 (うみ) - biển",
-      "group": "custom"
-    },
-    {
-      "kana": "花",
-      "romaji": "ka/hana",
-      "meaning": "hoa",
-      "hanviet": "Hoa",
-      "onyomi": "カ",
-      "kunyomi": "はな",
-      "example": "花 (はな) - hoa",
-      "group": "custom"
-    },
-    {
       "kana": "草",
       "romaji": "sou/kusa",
       "meaning": "cỏ",
@@ -2799,5 +2759,5 @@
     }
   ],
   "kanjiCustomRadicals": [],
-  "lastSync": "2026-07-19T10:28:31.349Z"
+  "lastSync": "2026-07-19T10:28:44.519Z"
 }
