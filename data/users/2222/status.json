@@ -1,6 +1,54 @@
 {
   "kanaStatus": {},
   "starred": {},
-  "score": 0,
-  "theme": "light"
+  "score": 50,
+  "theme": "light",
+  "kanaCustom": {
+    "hiragana": [
+      {
+        "kana": "1111",
+        "romaji": "1111",
+        "meaning": "1111",
+        "group": "custom"
+      }
+    ],
+    "katakana": []
+  },
+  "kanaHidden": {
+    "hiragana": [],
+    "katakana": []
+  },
+  "kanjiGroups": [
+    {
+      "id": "chars",
+      "title": "📝 Chữ Kanji",
+      "note": "100 chữ Kanji cơ bản",
+      "builtin": true
+    },
+    {
+      "id": "radicals",
+      "title": "🔑 Bộ thủ",
+      "note": "83 bộ thủ cơ bản",
+      "builtin": true
+    },
+    {
+      "id": "grp_1784450174864",
+      "title": "📚 Aaaaaa",
+      "note": "",
+      "icon": "📚",
+      "items": [],
+      "builtin": false
+    },
+    {
+      "id": "grp_1784450228301",
+      "title": "📚 Fjjffhf",
+      "note": "",
+      "icon": "📚",
+      "items": [],
+      "builtin": false
+    }
+  ],
+  "kanjiCustomChars": [],
+  "kanjiCustomRadicals": [],
+  "lastSync": "2026-07-19T08:39:48.545Z"
 }
