@@ -4123,8 +4123,8 @@ function kanaFlipCard(el){
   } else {
     front.style.display='none';back.style.display='block';
     el.style.background='var(--primary-l)';el.style.borderColor='var(--primary)';
-    speak(el.dataset.kana);
   }
+  speak(el.dataset.kana);
 }
 
 function kanaFlipAll(type,open){
@@ -4307,7 +4307,11 @@ function kanjiRenderChars(){
         +'<div style="font-size:11px;color:var(--text3);">'+(k.strokes||'')+(k.strokes?' nét':'')+'</div>'
       :'<div style="font-size:15px;font-weight:800;color:var(--accent);">'+(k.hanviet||'')+'</div>'
         +'<div style="font-size:12px;color:var(--text2);">'+k.meaning+'</div>'
-        +'<div style="font-size:10px;color:var(--text3);">'+k.romaji+'</div>';
+        +'<div style="font-size:10px;color:var(--text3);margin-bottom:4px;">'+k.romaji+'</div>'
+        +'<div style="display:flex;flex-direction:column;gap:3px;align-items:center;">'
+          +(k.onyomi?'<div style="background:var(--info-l);color:var(--info);font-size:10px;font-weight:700;padding:2px 7px;border-radius:6px;">音 On (Katakana): '+k.onyomi+'</div>':'')
+          +(k.kunyomi?'<div style="background:var(--success-l);color:var(--success);font-size:10px;font-weight:700;padding:2px 7px;border-radius:6px;">訓 Kun (Hiragana): '+k.kunyomi+'</div>':'')
+        +'</div>';
     var editHtml=editMode
       ?'<div style="display:flex;gap:2px;justify-content:center;margin-top:5px;" onclick="event.stopPropagation()">'
         +'<button style="background:var(--info);color:#fff;border:none;border-radius:4px;padding:2px 7px;font-size:11px;cursor:pointer;" data-kana="'+kEsc+'" onclick="kanjiEditChar(this.dataset.kana)">✏️</button>'
@@ -4329,7 +4333,8 @@ function kanjiFlipCard(el){
   if(!front||!back)return;
   var isFlipped=front.style.display==='none';
   if(isFlipped){front.style.display='';back.style.display='none';el.style.background='';el.style.borderColor='';}
-  else{front.style.display='none';back.style.display='block';el.style.background='var(--primary-l)';el.style.borderColor='var(--primary)';speak(el.dataset.kana);}
+  else{front.style.display='none';back.style.display='block';el.style.background='var(--primary-l)';el.style.borderColor='var(--primary)';}
+  speak(el.dataset.kana);
 }
 function kanjiFlipAll(open){
   document.querySelectorAll('#kanji-grid .kana-fc').forEach(function(el){
