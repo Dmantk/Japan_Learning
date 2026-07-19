@@ -1,6 +1,367 @@
 {
   "vocabData": {
-    "N5_lesson_1": []
+    "N5_lesson_1": [
+      {
+        "id": 1,
+        "word": "わたし",
+        "type": "名詞",
+        "meaning": "Tôi",
+        "reading": "わたし",
+        "kanji": "私"
+      },
+      {
+        "id": 2,
+        "word": "わたしたち",
+        "type": "名詞",
+        "meaning": "Chúng tôi",
+        "reading": "わたしたち",
+        "kanji": "私たち"
+      },
+      {
+        "id": 3,
+        "word": "あなた",
+        "type": "名詞",
+        "meaning": "Anh/chị, ông/bà, bạn (ngôi thứ 2 số ít)",
+        "reading": "あなた",
+        "kanji": ""
+      },
+      {
+        "id": 4,
+        "word": "あのひと",
+        "type": "名詞",
+        "meaning": "Người kia",
+        "reading": "あのひと",
+        "kanji": "あの人"
+      },
+      {
+        "id": 5,
+        "word": "あのかた",
+        "type": "名詞",
+        "meaning": "Vị này Lịch sự tương đương với あのひと",
+        "reading": "あのかた",
+        "kanji": "あの方"
+      },
+      {
+        "id": 6,
+        "word": "みなさん",
+        "type": "名詞",
+        "meaning": "Các bạn, các anh, các chị, mọi người",
+        "reading": "みなさん",
+        "kanji": ""
+      },
+      {
+        "id": 7,
+        "word": "～さん",
+        "type": "名詞",
+        "meaning": "Anh ～, Chị ～, Ông ～, Bà ～ (cách gọi người khác 1 cách lịch sự)",
+        "reading": "～さん",
+        "kanji": ""
+      },
+      {
+        "id": 8,
+        "word": "～ちゃん",
+        "type": "名詞",
+        "meaning": "Bé ( dùng cho nữ) hoặc gọi thân mật cho trẻ con ( cả nam lẫn nữ)",
+        "reading": "～ちゃん",
+        "kanji": ""
+      },
+      {
+        "id": 9,
+        "word": "～くん",
+        "type": "名詞",
+        "meaning": "Bé (dùng cho nam) hoặc gọi thân mật",
+        "reading": "～くん",
+        "kanji": ""
+      },
+      {
+        "id": 10,
+        "word": "～じん",
+        "type": "名詞",
+        "meaning": "Người nước ～",
+        "reading": "～じん",
+        "kanji": "～人"
+      },
+      {
+        "id": 11,
+        "word": "せんせい",
+        "type": "名詞",
+        "meaning": "Giáo viên",
+        "reading": "せんせい",
+        "kanji": "先生"
+      },
+      {
+        "id": 12,
+        "word": "きょうし",
+        "type": "名詞",
+        "meaning": "Giáo viên ( dùng để nói đến nghề nghiệp)",
+        "reading": "きょうし",
+        "kanji": "教師"
+      },
+      {
+        "id": 13,
+        "word": "がくせい",
+        "type": "名詞",
+        "meaning": "học sinh, sinh viên",
+        "reading": "がくせい",
+        "kanji": "学生"
+      },
+      {
+        "id": 14,
+        "word": "かいしゃいん",
+        "type": "名詞",
+        "meaning": "nhân viên công ty",
+        "reading": "かいしゃいん",
+        "kanji": "会社員"
+      },
+      {
+        "id": 15,
+        "word": "～しゃいん",
+        "type": "名詞",
+        "meaning": "nhân viên công ty ～",
+        "reading": "～しゃいん",
+        "kanji": "社員"
+      },
+      {
+        "id": 16,
+        "word": "ぎんこういん",
+        "type": "名詞",
+        "meaning": "nhân viên ngân hàng",
+        "reading": "ぎんこういん",
+        "kanji": "銀行員"
+      },
+      {
+        "id": 17,
+        "word": "いしゃ",
+        "type": "名詞",
+        "meaning": "bác sĩ",
+        "reading": "いしゃ",
+        "kanji": "医者"
+      },
+      {
+        "id": 18,
+        "word": "けんきゅうしゃ",
+        "type": "名詞",
+        "meaning": "nhà nghiên cứu",
+        "reading": "けんきゅうしゃ",
+        "kanji": "研究者"
+      },
+      {
+        "id": 19,
+        "word": "エンジニア",
+        "type": "名詞",
+        "meaning": "kỹ sư",
+        "reading": "エンジニア",
+        "kanji": ""
+      },
+      {
+        "id": 20,
+        "word": "だいがく",
+        "type": "名詞",
+        "meaning": "trường đại học",
+        "reading": "だいがく",
+        "kanji": "大学"
+      },
+      {
+        "id": 21,
+        "word": "びょういん",
+        "type": "名詞",
+        "meaning": "bệnh viện",
+        "reading": "びょういん",
+        "kanji": "病院"
+      },
+      {
+        "id": 22,
+        "word": "でんき",
+        "type": "名詞",
+        "meaning": "Điện, đèn điện",
+        "reading": "でんき",
+        "kanji": "電気"
+      },
+      {
+        "id": 23,
+        "word": "だれ（どなた）",
+        "type": "名詞",
+        "meaning": "ai (ngài nào, vị nào)",
+        "reading": "だれ（どなた）",
+        "kanji": "誰"
+      },
+      {
+        "id": 24,
+        "word": "―さい",
+        "type": "名詞",
+        "meaning": "tuổi",
+        "reading": "―さい",
+        "kanji": "～歳"
+      },
+      {
+        "id": 25,
+        "word": "なんさい",
+        "type": "名詞",
+        "meaning": "mấy tuổi",
+        "reading": "なんさい",
+        "kanji": "何歳"
+      },
+      {
+        "id": 26,
+        "word": "はい",
+        "type": "名詞",
+        "meaning": "vâng",
+        "reading": "はい",
+        "kanji": ""
+      },
+      {
+        "id": 27,
+        "word": "いいえ",
+        "type": "名詞",
+        "meaning": "không",
+        "reading": "いいえ",
+        "kanji": ""
+      },
+      {
+        "id": 28,
+        "word": "しつれいですが",
+        "type": "名詞",
+        "meaning": "Xin lỗi ( khi muốn nhờ ai việc gì đó)",
+        "reading": "しつれいですが",
+        "kanji": "失礼ですが"
+      },
+      {
+        "id": 29,
+        "word": "おなまえは？",
+        "type": "名詞",
+        "meaning": "Bạn tên gì?",
+        "reading": "おなまえは？",
+        "kanji": "お名前は"
+      },
+      {
+        "id": 30,
+        "word": "はじめまして。",
+        "type": "名詞",
+        "meaning": "chào lần đầu gặp nhau",
+        "reading": "はじめまして。",
+        "kanji": "初めて"
+      },
+      {
+        "id": 31,
+        "word": "どうぞよろしく[おねがいします]。",
+        "type": "名詞",
+        "meaning": "rất hân hạnh được làm quen",
+        "reading": "どうぞよろしく[おねがいします]。",
+        "kanji": "どうぞよろしく「お願いします」。"
+      },
+      {
+        "id": 32,
+        "word": "こちらは～さんです。",
+        "type": "名詞",
+        "meaning": "đây là ngài",
+        "reading": "こちらは～さんです。",
+        "kanji": ""
+      },
+      {
+        "id": 33,
+        "word": "～からきました。",
+        "type": "名詞",
+        "meaning": "đến từ ～",
+        "reading": "～からきました。",
+        "kanji": "～から来ました"
+      },
+      {
+        "id": 34,
+        "word": "アメリカ",
+        "type": "名詞",
+        "meaning": "Mỹ",
+        "reading": "アメリカ",
+        "kanji": ""
+      },
+      {
+        "id": 35,
+        "word": "イギリス",
+        "type": "名詞",
+        "meaning": "Anh",
+        "reading": "イギリス",
+        "kanji": ""
+      },
+      {
+        "id": 36,
+        "word": "インド",
+        "type": "名詞",
+        "meaning": "Ấn Độ",
+        "reading": "インド",
+        "kanji": ""
+      },
+      {
+        "id": 37,
+        "word": "インドネシア",
+        "type": "名詞",
+        "meaning": "Indonesia",
+        "reading": "インドネシア",
+        "kanji": ""
+      },
+      {
+        "id": 38,
+        "word": "かんこく",
+        "type": "名詞",
+        "meaning": "Hàn quốc",
+        "reading": "かんこく",
+        "kanji": "韓国"
+      },
+      {
+        "id": 39,
+        "word": "タイ",
+        "type": "名詞",
+        "meaning": "Thái Lan",
+        "reading": "タイ",
+        "kanji": ""
+      },
+      {
+        "id": 40,
+        "word": "ちゅうごく",
+        "type": "名詞",
+        "meaning": "Trung Quốc",
+        "reading": "ちゅうごく",
+        "kanji": "中国"
+      },
+      {
+        "id": 41,
+        "word": "ドイツ",
+        "type": "名詞",
+        "meaning": "Đức",
+        "reading": "ドイツ",
+        "kanji": ""
+      },
+      {
+        "id": 42,
+        "word": "にほん",
+        "type": "名詞",
+        "meaning": "Nhật",
+        "reading": "にほん",
+        "kanji": "日本"
+      },
+      {
+        "id": 43,
+        "word": "フランス",
+        "type": "名詞",
+        "meaning": "Pháp",
+        "reading": "フランス",
+        "kanji": ""
+      },
+      {
+        "id": 44,
+        "word": "ブラジル",
+        "type": "名詞",
+        "meaning": "Brazil",
+        "reading": "ブラジル",
+        "kanji": ""
+      },
+      {
+        "id": 45,
+        "word": "さくらだいがく",
+        "type": "名詞",
+        "meaning": "Trường ĐH Sakura (Hoa Anh Đào)",
+        "reading": "さくらだいがく",
+        "kanji": "さ‌く‌ら‌大‌学"
+      }
+    ]
   },
   "vocabLessons": {
     "N5": [
