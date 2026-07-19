@@ -1,7 +1,7 @@
 {
   "kanaStatus": {},
   "starred": {},
-  "score": 0,
+  "score": 50,
   "theme": "light",
   "kanaCustom": {
     "hiragana": [
@@ -38,9 +38,17 @@
       "icon": "📚",
       "items": [],
       "builtin": false
+    },
+    {
+      "id": "grp_1784450228301",
+      "title": "📚 Fjjffhf",
+      "note": "",
+      "icon": "📚",
+      "items": [],
+      "builtin": false
     }
   ],
   "kanjiCustomChars": [],
   "kanjiCustomRadicals": [],
-  "lastSync": "2026-07-19T08:38:15.240Z"
+  "lastSync": "2026-07-19T08:38:22.430Z"
 }
