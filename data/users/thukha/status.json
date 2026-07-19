@@ -1528,56 +1528,6 @@
   ],
   "kanjiCustomChars": [
     {
-      "kana": "東",
-      "romaji": "tou/higashi",
-      "meaning": "đông",
-      "hanviet": "Đông",
-      "onyomi": "トウ",
-      "kunyomi": "ひがし",
-      "example": "東京 (とうきょう) - Tokyo",
-      "group": "custom"
-    },
-    {
-      "kana": "西",
-      "romaji": "sei/nishi",
-      "meaning": "tây",
-      "hanviet": "Tây",
-      "onyomi": "セイ、サイ",
-      "kunyomi": "にし",
-      "example": "西 (にし) - phía tây",
-      "group": "custom"
-    },
-    {
-      "kana": "南",
-      "romaji": "nan/minami",
-      "meaning": "nam",
-      "hanviet": "Nam",
-      "onyomi": "ナン、ナ",
-      "kunyomi": "みなみ",
-      "example": "南 (みなみ) - phía nam",
-      "group": "custom"
-    },
-    {
-      "kana": "北",
-      "romaji": "hoku/kita",
-      "meaning": "bắc",
-      "hanviet": "Bắc",
-      "onyomi": "ホク",
-      "kunyomi": "きた",
-      "example": "北 (きた) - phía bắc",
-      "group": "custom"
-    },
-    {
-      "kana": "年",
-      "romaji": "nen/toshi",
-      "meaning": "năm",
-      "hanviet": "Niên",
-      "onyomi": "ネン",
-      "kunyomi": "とし",
-      "example": "今年 (ことし) - năm nay",
-      "group": "custom"
-    },
-    {
       "kana": "時",
       "romaji": "ji/toki",
       "meaning": "giờ/thời gian",
@@ -2489,5 +2439,5 @@
     }
   ],
   "kanjiCustomRadicals": [],
-  "lastSync": "2026-07-19T10:29:55.313Z"
+  "lastSync": "2026-07-19T10:30:06.516Z"
 }
