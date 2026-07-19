@@ -2,5 +2,32 @@
   "kanaStatus": {},
   "starred": {},
   "score": 0,
-  "theme": "light"
+  "theme": "light",
+  "kanaCustom": {
+    "hiragana": [],
+    "katakana": []
+  },
+  "customHiragana": [],
+  "customKatakana": [],
+  "kanaHidden": {
+    "hiragana": [],
+    "katakana": []
+  },
+  "kanjiGroups": [
+    {
+      "id": "chars",
+      "title": "📝 Chữ Kanji",
+      "note": "100 chữ Kanji cơ bản",
+      "builtin": true
+    },
+    {
+      "id": "radicals",
+      "title": "🔑 Bộ thủ",
+      "note": "83 bộ thủ cơ bản",
+      "builtin": true
+    }
+  ],
+  "kanjiCustomChars": [],
+  "kanjiCustomRadicals": [],
+  "lastSync": "2026-07-19T09:30:27.138Z"
 }
