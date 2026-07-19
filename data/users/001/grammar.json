@@ -297,7 +297,15 @@
         "id": 1,
         "title": "Grammar 1 - Câu cơ bản",
         "note": "〜は〜です、〜が〜",
-        "sections": []
+        "sections": [
+          {
+            "type": "combined",
+            "image": "",
+            "structure": "123",
+            "explain": "",
+            "example": ""
+          }
+        ]
       },
       {
         "id": 2,
@@ -310,6 +318,20 @@
         "title": "Grammar 3 - Động từ",
         "note": "〜ます、〜ません",
         "sections": []
+      },
+      {
+        "id": 4,
+        "title": "123",
+        "note": "",
+        "sections": [
+          {
+            "type": "combined",
+            "image": "",
+            "structure": "123",
+            "explain": "",
+            "example": ""
+          }
+        ]
       }
     ],
     "N4": [
