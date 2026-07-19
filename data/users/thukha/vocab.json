@@ -4871,24 +4871,12 @@
     ],
     "N3": [
       {
-        "id": 1,
-        "title": "Bài 1 - Cảm xúc & Tính cách",
-        "note": "感情・性格",
-        "vocabIds": []
-      },
-      {
         "id": 2,
         "title": "Bài 2 - Gia đình",
         "note": ""
       }
     ],
     "N2": [
-      {
-        "id": 1,
-        "title": "Bài 1 - Kinh tế & Xã hội",
-        "note": "経済・社会",
-        "vocabIds": []
-      },
       {
         "id": 2,
         "title": "Bài 1 - Chào hỏi",
