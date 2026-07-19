@@ -628,11 +628,13 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:inherit;}
           <button class="tab-btn active" onclick="setFCSource('hiragana',this)">Hiragana</button>
           <button class="tab-btn" onclick="setFCSource('katakana',this)">Katakana</button>
           <button class="tab-btn" onclick="setFCSource('kanji',this)">Kanji</button>
+          <button class="tab-btn" id="fcTabVocab" onclick="setFCSource('vocab',this)">📖 Từ vựng</button>
           <button class="tab-btn" onclick="setFCSource('mix',this)">🔀 Trộn</button>
           <button class="tab-btn" onclick="setFCSource('learning',this)">📌 Đang học</button>
         </div>
         <button class="btn btn-secondary btn-sm" onclick="shuffleFC()">🔀 Xáo trộn</button>
       </div>
+      <div id="fc-scope-label" style="display:none;font-size:12px;color:var(--text3);margin:-12px 0 14px;"></div>
       <div class="fc-wrap">
         <div class="fc-container" onclick="flipCard()">
           <div class="fc-inner" id="flashcard">
@@ -687,6 +689,7 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:inherit;}
           <div class="lesson-back-btn" onclick="backToLessons('vocab')">← Quay lại danh sách bài</div>
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
             <div style="font-size:16px;font-weight:700;" id="vocab-current-lesson-title"></div>
+            <button class="btn btn-primary btn-sm" onclick="startVocabLessonFlashcard()">🃏 Flashcard bài này</button>
             <div id="vocab-table-edit-btns" style="display:none;gap:6px;flex-wrap:wrap;">
               <button class="btn btn-primary btn-sm" onclick="openAddVocabModal()">➕ Thêm từ</button>
             </div>
@@ -1283,7 +1286,7 @@ const S={
   grammarData:JSON.parse(localStorage.getItem('grammarData')||'null')||JSON.parse(JSON.stringify(GRAMMAR)),
   score:parseInt(localStorage.getItem('score')||'0'),
   theme:localStorage.getItem('theme')||'light',
-  fcSource:'hiragana',fcIndex:0,fcDeck:[],fcFlipped:false,
+  fcSource:'hiragana',fcIndex:0,fcDeck:[],fcFlipped:false,fcVocabKey:null,
   quizType:'hiragana',quizData:[],quizIndex:0,quizScore:0,quizTimer:null,quizTimeLeft:30,quizCorrect:0,quizTotal:0,
   writingSource:'hiragana',writingIndex:0,writingDeck:[],
   listeningSource:'hiragana',listeningIndex:0,listeningDeck:[],listenCorrect:0,listenWrong:0,
@@ -1742,12 +1745,48 @@ function buildFCDeck(src){
   if(src==='hiragana')return HIRAGANA.map(k=>({char:k.kana,answer:k.romaji,sub:'Hiragana'}));
   if(src==='katakana')return KATAKANA.map(k=>({char:k.kana,answer:k.romaji,sub:'Katakana'}));
   if(src==='kanji')return KANJI.map(k=>({char:k.kana,answer:(k.hanviet?k.hanviet+' — ':'')+k.meaning,sub:'On: '+k.onyomi+' | Kun: '+k.kunyomi}));
+  if(src==='vocab'){
+    const typeLabel=t=>(typeof TYPE_VN!=='undefined'&&TYPE_VN[t])?TYPE_VN[t]:(t||'');
+    let items=[];
+    if(S.fcVocabKey){
+      items=(S.vocabData[S.fcVocabKey]||[]).map(v=>({char:v.word,answer:v.meaning,sub:(v.kanji?v.kanji+' · ':'')+typeLabel(v.type)}));
+    } else {
+      Object.keys(S.vocabData||{}).forEach(k=>{
+        (S.vocabData[k]||[]).forEach(v=>{
+          items.push({char:v.word,answer:v.meaning,sub:(v.kanji?v.kanji+' · ':'')+typeLabel(v.type)});
+        });
+      });
+    }
+    return items.length?items:[{char:'—',answer:'Chưa có từ vựng nào. Hãy thêm từ trong mục "Học theo cấp độ" trước!',sub:''}];
+  }
   if(src==='mix')return[...HIRAGANA.map(k=>({char:k.kana,answer:k.romaji,sub:'Hiragana'})),...KATAKANA.map(k=>({char:k.kana,answer:k.romaji,sub:'Katakana'})),...KANJI.map(k=>({char:k.kana,answer:k.meaning,sub:'Kanji'}))];
   if(src==='learning'){const d=[...HIRAGANA.filter(k=>S.kanaStatus['h_'+k.kana]==='learning').map(k=>({char:k.kana,answer:k.romaji,sub:'Hiragana'})),...KATAKANA.filter(k=>S.kanaStatus['k_'+k.kana]==='learning').map(k=>({char:k.kana,answer:k.romaji,sub:'Katakana'}))];return d.length?d:HIRAGANA.map(k=>({char:k.kana,answer:k.romaji,sub:'Hiragana'}));}
   return HIRAGANA.map(k=>({char:k.kana,answer:k.romaji,sub:'Hiragana'}));
 }
 function initFlashcard(){S.fcDeck=buildFCDeck(S.fcSource);S.fcIndex=0;S.fcFlipped=false;renderFC();}
-function renderFC(){const c=S.fcDeck[S.fcIndex];if(!c)return;document.getElementById('fc-front-char').textContent=c.char;document.getElementById('fc-back-answer').textContent=c.answer;document.getElementById('fc-back-sub').textContent=c.sub;document.getElementById('fc-progress').textContent=`${S.fcIndex+1} / ${S.fcDeck.length}`;document.getElementById('flashcard').classList.remove('flipped');S.fcFlipped=false;}
+function renderFC(){
+  const c=S.fcDeck[S.fcIndex];if(!c)return;
+  document.getElementById('fc-front-char').textContent=c.char;
+  document.getElementById('fc-back-answer').textContent=c.answer;
+  document.getElementById('fc-back-sub').textContent=c.sub;
+  document.getElementById('fc-progress').textContent=`${S.fcIndex+1} / ${S.fcDeck.length}`;
+  document.getElementById('flashcard').classList.remove('flipped');
+  S.fcFlipped=false;
+  const scopeEl=document.getElementById('fc-scope-label');
+  if(scopeEl){
+    if(S.fcSource==='vocab'&&S.fcVocabKey){
+      const m=/^([^_]+)_lesson_(\d+)$/.exec(S.fcVocabKey);
+      const lesson=m?(S.vocabLessons[m[1]]||[]).find(l=>l.id===+m[2]):null;
+      scopeEl.textContent=lesson?('📖 Chỉ từ bài: '+lesson.title):'';
+      scopeEl.style.display=lesson?'block':'none';
+    } else if(S.fcSource==='vocab'){
+      scopeEl.textContent='📚 Toàn bộ từ vựng (tất cả các bài)';
+      scopeEl.style.display='block';
+    } else {
+      scopeEl.style.display='none';
+    }
+  }
+}
 function flipCard(){S.fcFlipped=!S.fcFlipped;document.getElementById('flashcard').classList.toggle('flipped',S.fcFlipped);if(S.fcFlipped){const c=S.fcDeck[S.fcIndex];if(c)speak(c.char);}}
 function nextFC(){S.fcIndex=(S.fcIndex+1)%S.fcDeck.length;renderFC();}
 function prevFC(){S.fcIndex=(S.fcIndex-1+S.fcDeck.length)%S.fcDeck.length;renderFC();}
@@ -1755,8 +1794,21 @@ function shuffleFC(){S.fcDeck=S.fcDeck.sort(()=>Math.random()-.5);S.fcIndex=0;re
 function speakCurrent(){const c=S.fcDeck[S.fcIndex];if(c)speak(c.char);}
 function rateFC(r){if(r==='easy'){S.score+=5;save();showToast('+5 điểm! 😊','success');}else if(r==='hard'){showToast('Hãy ôn lại nhé 😓','info');}nextFC();}
 function markCurrentFC(){const c=S.fcDeck[S.fcIndex];if(!c)return;const prefix=c.sub==='Hiragana'?'h_':c.sub==='Katakana'?'k_':'kj_';const key=prefix+c.char;S.kanaStatus[key]=S.kanaStatus[key]==='learning'?undefined:'learning';if(!S.kanaStatus[key])delete S.kanaStatus[key];save();showToast(S.kanaStatus[key]==='learning'?'📌 Đánh dấu!':'🗑 Bỏ đánh dấu','info');}
-function setFCSource(src,el){S.fcSource=src;document.querySelectorAll('#page-flashcard .tab-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');initFlashcard();}
-function startFlashcardFor(src){S.fcSource=src;navigate('flashcard');}
+function setFCSource(src,el){S.fcSource=src;S.fcVocabKey=null;document.querySelectorAll('#page-flashcard .tab-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');initFlashcard();}
+function startFlashcardFor(src){S.fcSource=src;S.fcVocabKey=null;navigate('flashcard');}
+// Flashcard riêng cho 1 bài từ vựng cụ thể - chỉ lấy từ của bài đó (không trộn với các bài khác)
+function startVocabLessonFlashcard(lessonId){
+  const lv=S.level;
+  const id=lessonId!==undefined&&lessonId!==null?lessonId:currentVocabLesson;
+  if(id===null||id===undefined){showToast('Vui lòng chọn 1 bài trước!','error');return;}
+  const key=lv+'_lesson_'+id;
+  if(!(S.vocabData[key]||[]).length){showToast('Bài này chưa có từ vựng nào!','info');return;}
+  S.fcSource='vocab';
+  S.fcVocabKey=key;
+  navigate('flashcard');
+  const tabBtn=document.getElementById('fcTabVocab');
+  if(tabBtn){document.querySelectorAll('#page-flashcard .tab-btn').forEach(b=>b.classList.remove('active'));tabBtn.classList.add('active');}
+}
 
 // ============================================================
 // VOCABULARY
@@ -2307,6 +2359,7 @@ function renderVocabLessons(){
       +'<div class="lesson-card-count">'+vocabArr.length+' từ</div>'
       +'<div class="lesson-card-title">'+lesson.title+'</div>'
       +'<div class="lesson-card-note">'+( lesson.note||'')+'</div>'
+      +(vocabArr.length?'<button class="btn btn-secondary btn-xs" style="margin-top:8px;" onclick="event.stopPropagation();startVocabLessonFlashcard('+lesson.id+')">🃏 Flashcard</button>':'')
       +editBtns
       +'</div>';
   }).join('');
