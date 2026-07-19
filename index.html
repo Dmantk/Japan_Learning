@@ -3605,6 +3605,8 @@ function resetStateToDefault(){
   if(typeof kanjiCustomRadicals!=='undefined') kanjiCustomRadicals=[];
   localStorage.removeItem('kanaHidden_hiragana');
   localStorage.removeItem('kanaHidden_katakana');
+  localStorage.removeItem('kanjiHidden_chars');
+  localStorage.removeItem('kanjiHidden_radicals');
 }
 
 async function loadUserData(user){
@@ -3646,7 +3648,7 @@ async function loadUserData(user){
   if(kcVal){
     try{ kanaCustom=JSON.parse(kcVal); loaded++; }catch(e){console.warn('Failed to load kanaCustom',e);}
   }
-  ['kanaHidden_hiragana','kanaHidden_katakana'].forEach(k=>{
+  ['kanaHidden_hiragana','kanaHidden_katakana','kanjiHidden_chars','kanjiHidden_radicals'].forEach(k=>{
     const val=localStorage.getItem(prefix+k);
     if(val){ localStorage.setItem(k,val); loaded++; }
   });
@@ -3724,6 +3726,10 @@ async function syncToGitHub(silent){
       kanjiGroups: (typeof kanjiGroups!=='undefined')?kanjiGroups:undefined,
       kanjiCustomChars: (typeof kanjiCustomChars!=='undefined')?kanjiCustomChars:undefined,
       kanjiCustomRadicals: (typeof kanjiCustomRadicals!=='undefined')?kanjiCustomRadicals:undefined,
+      kanjiHidden: {                   // chữ Kanji/bộ thủ mặc định bị user ẩn/xoá/sửa
+        chars: JSON.parse(localStorage.getItem('kanjiHidden_chars')||'[]'),
+        radicals: JSON.parse(localStorage.getItem('kanjiHidden_radicals')||'[]'),
+      },
       lastSync: new Date().toISOString(),
     };
     // Save vocab (từ vựng + tất cả thẻ bài user đã tạo)
@@ -3829,6 +3835,10 @@ async function loadFromGitHub(){
       if(status.kanjiCustomRadicals && typeof kanjiCustomRadicals!=='undefined'){
         kanjiCustomRadicals=status.kanjiCustomRadicals;
         localStorage.setItem('kanjiCustomRadicals',JSON.stringify(kanjiCustomRadicals));
+      }
+      if(status.kanjiHidden){
+        localStorage.setItem('kanjiHidden_chars',JSON.stringify(status.kanjiHidden.chars||[]));
+        localStorage.setItem('kanjiHidden_radicals',JSON.stringify(status.kanjiHidden.radicals||[]));
       }
       loaded++;
     }
@@ -3939,6 +3949,8 @@ function saveUserData(){
     if(typeof kanjiGroups!=='undefined') localStorage.setItem(prefix+'kanjiGroups', JSON.stringify(kanjiGroups));
     if(typeof kanjiCustomChars!=='undefined') localStorage.setItem(prefix+'kanjiCustomChars', JSON.stringify(kanjiCustomChars));
     if(typeof kanjiCustomRadicals!=='undefined') localStorage.setItem(prefix+'kanjiCustomRadicals', JSON.stringify(kanjiCustomRadicals));
+    localStorage.setItem(prefix+'kanjiHidden_chars', localStorage.getItem('kanjiHidden_chars')||'[]');
+    localStorage.setItem(prefix+'kanjiHidden_radicals', localStorage.getItem('kanjiHidden_radicals')||'[]');
   }catch(e){console.warn('saveUserData error:',e);}
   if(typeof scheduleAutoSync==='function')scheduleAutoSync();
 }
@@ -4476,8 +4488,17 @@ function kanaSaveChar(){
   if(!arr){arr=[];kanaCustom[_kanaEditType]=arr;}
   if(_kanaEditMode){
     var idx=arr.findIndex(function(k){return k.kana===_kanaEditChar;});
-    if(idx>=0)arr[idx]={kana:kana,romaji:romaji,meaning:romaji,group:group};
-    else arr.push({kana:kana,romaji:romaji,meaning:romaji,group:'custom'});
+    if(idx>=0){
+      arr[idx]={kana:kana,romaji:romaji,meaning:romaji,group:group};
+    } else {
+      // Editing a built-in default char (not a custom entry): hide the original
+      // default so it doesn't keep showing alongside the edited version, then
+      // save the edited version as a custom override.
+      var hiddenKey='kanaHidden_'+_kanaEditType;
+      var hidden=JSON.parse(localStorage.getItem(hiddenKey)||'[]');
+      if(hidden.indexOf(_kanaEditChar)===-1){hidden.push(_kanaEditChar);localStorage.setItem(hiddenKey,JSON.stringify(hidden));}
+      arr.push({kana:kana,romaji:romaji,meaning:romaji,group:'custom'});
+    }
     showToast('✅ Đã cập nhật!','success');
   } else {
     arr.push({kana:kana,romaji:romaji,meaning:romaji,group:'custom'});
@@ -4521,8 +4542,16 @@ var _kanjiCharEditKana = null;
 function kanjiSaveGroups(){localStorage.setItem('kanjiGroups',JSON.stringify(kanjiGroups));if(typeof scheduleAutoSync==='function')scheduleAutoSync();}
 
 function kanjiGetChars(groupId){
-  if(groupId==='chars') return KANJI_CHARS.concat(kanjiCustomChars);
-  if(groupId==='radicals') return KANJI_RADICALS.concat(kanjiCustomRadicals);
+  if(groupId==='chars'){
+    var hidden=JSON.parse(localStorage.getItem('kanjiHidden_chars')||'[]');
+    var filtered=hidden.length>0?KANJI_CHARS.filter(function(k){return hidden.indexOf(k.kana)===-1;}):KANJI_CHARS;
+    return filtered.concat(kanjiCustomChars);
+  }
+  if(groupId==='radicals'){
+    var hidden=JSON.parse(localStorage.getItem('kanjiHidden_radicals')||'[]');
+    var filtered=hidden.length>0?KANJI_RADICALS.filter(function(k){return hidden.indexOf(k.kana)===-1;}):KANJI_RADICALS;
+    return filtered.concat(kanjiCustomRadicals);
+  }
   var g=kanjiGroups.find(function(x){return x.id===groupId;});
   return g&&g.items ? g.items : [];
 }
@@ -4723,10 +4752,21 @@ function kanjiSaveChar(){
   var updated={kana:kana,romaji:document.getElementById('kanji-romaji-input').value.trim(),meaning:meaning,hanviet:document.getElementById('kanji-hanviet-input').value.trim(),onyomi:document.getElementById('kanji-onyomi-input').value.trim(),kunyomi:document.getElementById('kanji-kunyomi-input').value.trim(),example:document.getElementById('kanji-example-input').value.trim(),group:'custom'};
   if(kanjiCurrentGroup==='chars'||kanjiCurrentGroup==='radicals'){
     var isRad=kanjiCurrentGroup==='radicals';
+    var type=isRad?'radicals':'chars';
     var arr=isRad?kanjiCustomRadicals:kanjiCustomChars;
     if(_kanjiCharEditKana){
       var idx=arr.findIndex(function(k){return k.kana===_kanjiCharEditKana;});
-      if(idx>=0)arr[idx]=updated;else arr.push(updated);
+      if(idx>=0){
+        arr[idx]=updated;
+      } else {
+        // Editing a built-in default char (not a custom entry): hide the original
+        // default so it doesn't keep showing alongside the edited version, then
+        // save the edited version as a custom override.
+        var hiddenKey='kanjiHidden_'+type;
+        var hidden=JSON.parse(localStorage.getItem(hiddenKey)||'[]');
+        if(hidden.indexOf(_kanjiCharEditKana)===-1){hidden.push(_kanjiCharEditKana);localStorage.setItem(hiddenKey,JSON.stringify(hidden));}
+        arr.push(updated);
+      }
       showToast('✅ Đã cập nhật!','success');
     } else {
       arr.push(updated);showToast('✅ Đã thêm Kanji!','success');speak(kana);
@@ -4752,11 +4792,18 @@ function kanjiSaveChar(){
   if(typeof scheduleAutoSync==='function')scheduleAutoSync();
 }
 function kanjiDeleteChar(kana){
-  if(!confirm('Xóa Kanji "'+kana+'"?'))return;
+  if(!confirm('Xóa/ẩn Kanji "'+kana+'"?'))return;
   if(kanjiCurrentGroup==='chars'||kanjiCurrentGroup==='radicals'){
     var isRad=kanjiCurrentGroup==='radicals';
+    var type=isRad?'radicals':'chars';
+    // Remove it if it's a custom-added entry
     if(isRad){kanjiCustomRadicals=kanjiCustomRadicals.filter(function(k){return k.kana!==kana;});localStorage.setItem('kanjiCustomRadicals',JSON.stringify(kanjiCustomRadicals));}
     else{kanjiCustomChars=kanjiCustomChars.filter(function(k){return k.kana!==kana;});localStorage.setItem('kanjiCustomChars',JSON.stringify(kanjiCustomChars));}
+    // Also hide it if it's a built-in default entry (custom-only removal above has no
+    // effect on defaults, so without this the "delete" button did nothing for them).
+    var hiddenKey='kanjiHidden_'+type;
+    var hidden=JSON.parse(localStorage.getItem(hiddenKey)||'[]');
+    if(hidden.indexOf(kana)===-1){hidden.push(kana);localStorage.setItem(hiddenKey,JSON.stringify(hidden));}
   } else {
     var g=kanjiGroups.find(function(x){return x.id===kanjiCurrentGroup;});
     if(g&&g.items)g.items=g.items.filter(function(k){return k.kana!==kana;});
@@ -4786,8 +4833,11 @@ function importKanjiExcel(event){
     var isRad=kanjiCurrentGroup==='radicals';
     var g=isBuiltin?null:kanjiGroups.find(function(x){return x.id===kanjiCurrentGroup;});
     if(!isBuiltin&&g&&!g.items)g.items=[];
-    var targetList=isBuiltin?(isRad?kanjiCustomRadicals:kanjiCustomChars):(g?g.items:[]);
-    var existingKana=new Set(targetList.map(function(x){return String(x.kana||'').trim();}));
+    // Dedup against the FULL list the user sees (built-in defaults + custom additions),
+    // not just the custom-added list, otherwise re-importing a char that's already
+    // in the built-in default set slips through as a "new" duplicate.
+    var fullList=kanjiGetChars(kanjiCurrentGroup);
+    var existingKana=new Set(fullList.map(function(x){return String(x.kana||'').trim();}));
     rows.slice(1).forEach(function(row){
       if(!row[1])return;
       var kana=String(row[1]||'').trim();
