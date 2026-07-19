@@ -3952,7 +3952,9 @@ function saveUserData(){
     localStorage.setItem(prefix+'kanjiHidden_chars', localStorage.getItem('kanjiHidden_chars')||'[]');
     localStorage.setItem(prefix+'kanjiHidden_radicals', localStorage.getItem('kanjiHidden_radicals')||'[]');
   }catch(e){console.warn('saveUserData error:',e);}
-  if(typeof scheduleAutoSync==='function')scheduleAutoSync();
+  // KHÔNG gọi scheduleAutoSync() ở đây: scheduleAutoSync() đã tự gọi saveUserData()
+  // ngay bước đầu tiên của nó rồi. Gọi ngược lại ở đây tạo vòng lặp gọi lẫn nhau vô hạn
+  // (saveUserData -> scheduleAutoSync -> saveUserData -> ...) => Maximum call stack size exceeded.
 }
 
 // Add sync button to settings
