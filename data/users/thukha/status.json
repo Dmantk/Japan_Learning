@@ -1528,56 +1528,6 @@
   ],
   "kanjiCustomChars": [
     {
-      "kana": "高",
-      "romaji": "kou/taka",
-      "meaning": "cao/đắt",
-      "hanviet": "Cao",
-      "onyomi": "コウ",
-      "kunyomi": "たか",
-      "example": "高い (たかい) - đắt/cao",
-      "group": "custom"
-    },
-    {
-      "kana": "安",
-      "romaji": "an/yasu",
-      "meaning": "rẻ/an toàn",
-      "hanviet": "An",
-      "onyomi": "アン",
-      "kunyomi": "やす",
-      "example": "安い (やすい) - rẻ",
-      "group": "custom"
-    },
-    {
-      "kana": "新",
-      "romaji": "shin/atara",
-      "meaning": "mới",
-      "hanviet": "Tân",
-      "onyomi": "シン",
-      "kunyomi": "あたら",
-      "example": "新しい (あたらしい) - mới",
-      "group": "custom"
-    },
-    {
-      "kana": "古",
-      "romaji": "ko/furu",
-      "meaning": "cũ",
-      "hanviet": "Cổ",
-      "onyomi": "コ",
-      "kunyomi": "ふる",
-      "example": "古い (ふるい) - cũ",
-      "group": "custom"
-    },
-    {
-      "kana": "白",
-      "romaji": "haku/shiro",
-      "meaning": "trắng",
-      "hanviet": "Bạch",
-      "onyomi": "ハク、ビャク",
-      "kunyomi": "しろ",
-      "example": "白い (しろい) - trắng",
-      "group": "custom"
-    },
-    {
       "kana": "黒",
       "romaji": "koku/kuro",
       "meaning": "đen",
@@ -2119,5 +2069,5 @@
     }
   ],
   "kanjiCustomRadicals": [],
-  "lastSync": "2026-07-19T10:31:17.766Z"
+  "lastSync": "2026-07-19T10:31:30.037Z"
 }
