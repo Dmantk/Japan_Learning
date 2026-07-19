@@ -1528,46 +1528,6 @@
   ],
   "kanjiCustomChars": [
     {
-      "kana": "金",
-      "romaji": "kin/kane",
-      "meaning": "vàng/tiền",
-      "hanviet": "Kim",
-      "onyomi": "キン、コン",
-      "kunyomi": "かね",
-      "example": "金曜日 (きんようび) - Thứ Sáu",
-      "group": "custom"
-    },
-    {
-      "kana": "土",
-      "romaji": "do/tsuchi",
-      "meaning": "đất",
-      "hanviet": "Thổ",
-      "onyomi": "ド、ト",
-      "kunyomi": "つち",
-      "example": "土曜日 (どようび) - Thứ Bảy",
-      "group": "custom"
-    },
-    {
-      "kana": "山",
-      "romaji": "san/yama",
-      "meaning": "núi",
-      "hanviet": "Sơn",
-      "onyomi": "サン",
-      "kunyomi": "やま",
-      "example": "富士山 (ふじさん) - Núi Phú Sĩ",
-      "group": "custom"
-    },
-    {
-      "kana": "川",
-      "romaji": "sen/kawa",
-      "meaning": "sông",
-      "hanviet": "Xuyên",
-      "onyomi": "セン",
-      "kunyomi": "かわ",
-      "example": "川 (かわ) - con sông",
-      "group": "custom"
-    },
-    {
       "kana": "田",
       "romaji": "den/ta",
       "meaning": "ruộng lúa",
@@ -2839,5 +2799,5 @@
     }
   ],
   "kanjiCustomRadicals": [],
-  "lastSync": "2026-07-19T10:28:19.758Z"
+  "lastSync": "2026-07-19T10:28:31.349Z"
 }
