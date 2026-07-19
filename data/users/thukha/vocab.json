@@ -4746,7 +4746,6 @@
         "kanji": "別々に"
       }
     ],
-    "N1_lesson_1": [],
     "N4_lesson_2": [
       {
         "id": 1,
@@ -4897,12 +4896,6 @@
       }
     ],
     "N1": [
-      {
-        "id": 1,
-        "title": "Bài 1 - Văn học & Triết học",
-        "note": "文学・哲学",
-        "vocabIds": []
-      },
       {
         "id": 2,
         "title": "Bài 1 - Chào hỏi",
