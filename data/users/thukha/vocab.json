@@ -4745,6 +4745,46 @@
         "reading": "べつべつに",
         "kanji": "別々に"
       }
+    ],
+    "N4_lesson_2": [
+      {
+        "id": 1,
+        "word": "かぞく",
+        "type": "名詞",
+        "meaning": "gia đình",
+        "reading": "かぞく",
+        "kanji": "家族"
+      }
+    ],
+    "N1_lesson_2": [
+      {
+        "id": 1,
+        "word": "あいさつ",
+        "type": "名詞",
+        "meaning": "lời chào hỏi",
+        "reading": "あいさつ",
+        "kanji": "挨拶"
+      }
+    ],
+    "N2_lesson_2": [
+      {
+        "id": 1,
+        "word": "こんにちは",
+        "type": "表現",
+        "meaning": "Xin chào",
+        "reading": "こんにちは",
+        "kanji": ""
+      }
+    ],
+    "N3_lesson_2": [
+      {
+        "id": 1,
+        "word": "かぞく",
+        "type": "名詞",
+        "meaning": "gia đình",
+        "reading": "かぞく",
+        "kanji": "家族"
+      }
     ]
   },
   "vocabLessons": {
@@ -4818,34 +4858,30 @@
     ],
     "N4": [
       {
-        "id": 1,
-        "title": "Bài 1 - Hành động hàng ngày",
-        "note": "日常動作",
-        "vocabIds": []
+        "id": 2,
+        "title": "Bài 2 - Gia đình",
+        "note": ""
       }
     ],
     "N3": [
       {
-        "id": 1,
-        "title": "Bài 1 - Cảm xúc & Tính cách",
-        "note": "感情・性格",
-        "vocabIds": []
+        "id": 2,
+        "title": "Bài 2 - Gia đình",
+        "note": ""
       }
     ],
     "N2": [
       {
-        "id": 1,
-        "title": "Bài 1 - Kinh tế & Xã hội",
-        "note": "経済・社会",
-        "vocabIds": []
+        "id": 2,
+        "title": "Bài 1 - Chào hỏi",
+        "note": ""
       }
     ],
     "N1": [
       {
-        "id": 1,
-        "title": "Bài 1 - Văn học & Triết học",
-        "note": "文学・哲学",
-        "vocabIds": []
+        "id": 2,
+        "title": "Bài 1 - Chào hỏi",
+        "note": ""
       }
     ]
   }
