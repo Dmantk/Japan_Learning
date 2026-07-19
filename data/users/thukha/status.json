@@ -1528,56 +1528,6 @@
   ],
   "kanjiCustomChars": [
     {
-      "kana": "日",
-      "romaji": "nichi/hi",
-      "meaning": "ngày/mặt trời",
-      "hanviet": "Nhật",
-      "onyomi": "ニチ、ジツ",
-      "kunyomi": "ひ、か",
-      "example": "日本 (にほん) - Nhật Bản",
-      "group": "custom"
-    },
-    {
-      "kana": "月",
-      "romaji": "getsu/tsuki",
-      "meaning": "tháng/mặt trăng",
-      "hanviet": "Nguyệt",
-      "onyomi": "ゲツ、ガツ",
-      "kunyomi": "つき",
-      "example": "月曜日 (げつようび) - Thứ Hai",
-      "group": "custom"
-    },
-    {
-      "kana": "火",
-      "romaji": "ka/hi",
-      "meaning": "lửa",
-      "hanviet": "Hỏa",
-      "onyomi": "カ",
-      "kunyomi": "ひ",
-      "example": "火曜日 (かようび) - Thứ Ba",
-      "group": "custom"
-    },
-    {
-      "kana": "水",
-      "romaji": "sui/mizu",
-      "meaning": "nước",
-      "hanviet": "Thủy",
-      "onyomi": "スイ",
-      "kunyomi": "みず",
-      "example": "水曜日 (すいようび) - Thứ Tư",
-      "group": "custom"
-    },
-    {
-      "kana": "木",
-      "romaji": "moku/ki",
-      "meaning": "cây gỗ",
-      "hanviet": "Mộc",
-      "onyomi": "モク、ボク",
-      "kunyomi": "き",
-      "example": "木曜日 (もくようび) - Thứ Năm",
-      "group": "custom"
-    },
-    {
       "kana": "金",
       "romaji": "kin/kane",
       "meaning": "vàng/tiền",
@@ -2889,5 +2839,5 @@
     }
   ],
   "kanjiCustomRadicals": [],
-  "lastSync": "2026-07-19T10:28:06.766Z"
+  "lastSync": "2026-07-19T10:28:19.758Z"
 }
