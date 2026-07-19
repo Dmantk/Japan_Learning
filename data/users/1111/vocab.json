@@ -1,6 +1,15 @@
 {
   "vocabData": {
-    "N5_lesson_1": []
+    "N5_lesson_1": [
+      {
+        "id": 1,
+        "word": "Ffc",
+        "type": "名詞",
+        "meaning": "Fff",
+        "reading": "Ffc",
+        "kanji": ""
+      }
+    ]
   },
   "vocabLessons": {
     "N5": [
