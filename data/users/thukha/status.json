@@ -519,6 +519,17 @@
       "group": "custom"
     }
   ],
-  "kanjiCustomRadicals": [],
-  "lastSync": "2026-07-19T10:50:47.108Z"
+  "kanjiCustomRadicals": [
+    {
+      "kana": "儿",
+      "romaji": "ninnyou",
+      "meaning": "chân người",
+      "hanviet": "Nhân đi",
+      "onyomi": "",
+      "kunyomi": "",
+      "example": "元、兄",
+      "group": "custom"
+    }
+  ],
+  "lastSync": "2026-07-19T10:51:12.966Z"
 }
