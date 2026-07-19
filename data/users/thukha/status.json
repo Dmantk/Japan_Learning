@@ -531,5 +531,9 @@
       "group": "custom"
     }
   ],
-  "lastSync": "2026-07-19T11:01:03.871Z"
+  "kanjiHidden": {
+    "chars": [],
+    "radicals": []
+  },
+  "lastSync": "2026-07-19T15:41:13.203Z"
 }
