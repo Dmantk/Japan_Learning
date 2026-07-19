@@ -1528,46 +1528,6 @@
   ],
   "kanjiCustomChars": [
     {
-      "kana": "三",
-      "romaji": "san/mi",
-      "meaning": "ba",
-      "hanviet": "Tam",
-      "onyomi": "サン",
-      "kunyomi": "み",
-      "example": "三つ (みっつ) - ba cái",
-      "group": "custom"
-    },
-    {
-      "kana": "四",
-      "romaji": "shi/yo",
-      "meaning": "bốn",
-      "hanviet": "Tứ",
-      "onyomi": "シ",
-      "kunyomi": "よ、よん",
-      "example": "四月 (しがつ) - tháng Tư",
-      "group": "custom"
-    },
-    {
-      "kana": "五",
-      "romaji": "go/itsu",
-      "meaning": "năm",
-      "hanviet": "Ngũ",
-      "onyomi": "ゴ",
-      "kunyomi": "いつ",
-      "example": "五月 (ごがつ) - tháng Năm",
-      "group": "custom"
-    },
-    {
-      "kana": "六",
-      "romaji": "roku/mu",
-      "meaning": "sáu",
-      "hanviet": "Lục",
-      "onyomi": "ロク",
-      "kunyomi": "む",
-      "example": "六月 (ろくがつ) - tháng Sáu",
-      "group": "custom"
-    },
-    {
       "kana": "七",
       "romaji": "shichi/nana",
       "meaning": "bảy",
@@ -2999,5 +2959,5 @@
     }
   ],
   "kanjiCustomRadicals": [],
-  "lastSync": "2026-07-19T10:27:31.470Z"
+  "lastSync": "2026-07-19T10:27:43.661Z"
 }
