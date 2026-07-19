@@ -1528,46 +1528,6 @@
   ],
   "kanjiCustomChars": [
     {
-      "kana": "父",
-      "romaji": "fu/chichi",
-      "meaning": "cha",
-      "hanviet": "Phụ",
-      "onyomi": "フ",
-      "kunyomi": "ちち",
-      "example": "お父さん (おとうさん) - bố",
-      "group": "custom"
-    },
-    {
-      "kana": "母",
-      "romaji": "bo/haha",
-      "meaning": "mẹ",
-      "hanviet": "Mẫu",
-      "onyomi": "ボ",
-      "kunyomi": "はは",
-      "example": "お母さん (おかあさん) - mẹ",
-      "group": "custom"
-    },
-    {
-      "kana": "子",
-      "romaji": "shi/ko",
-      "meaning": "con/trẻ em",
-      "hanviet": "Tử",
-      "onyomi": "シ、ス",
-      "kunyomi": "こ",
-      "example": "子供 (こども) - trẻ em",
-      "group": "custom"
-    },
-    {
-      "kana": "女",
-      "romaji": "jo/onna",
-      "meaning": "phụ nữ",
-      "hanviet": "Nữ",
-      "onyomi": "ジョ、ニョ",
-      "kunyomi": "おんな",
-      "example": "女の子 (おんなのこ) - bé gái",
-      "group": "custom"
-    },
-    {
       "kana": "男",
       "romaji": "dan/otoko",
       "meaning": "đàn ông",
@@ -2709,5 +2669,5 @@
     }
   ],
   "kanjiCustomRadicals": [],
-  "lastSync": "2026-07-19T10:28:56.531Z"
+  "lastSync": "2026-07-19T10:29:08.936Z"
 }
