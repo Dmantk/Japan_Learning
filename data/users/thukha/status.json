@@ -1528,56 +1528,6 @@
   ],
   "kanjiCustomChars": [
     {
-      "kana": "草",
-      "romaji": "sou/kusa",
-      "meaning": "cỏ",
-      "hanviet": "Thảo",
-      "onyomi": "ソウ",
-      "kunyomi": "くさ",
-      "example": "草 (くさ) - cỏ",
-      "group": "custom"
-    },
-    {
-      "kana": "雨",
-      "romaji": "u/ame",
-      "meaning": "mưa",
-      "hanviet": "Vũ",
-      "onyomi": "ウ",
-      "kunyomi": "あめ",
-      "example": "雨 (あめ) - mưa",
-      "group": "custom"
-    },
-    {
-      "kana": "雪",
-      "romaji": "setsu/yuki",
-      "meaning": "tuyết",
-      "hanviet": "Tuyết",
-      "onyomi": "セツ",
-      "kunyomi": "ゆき",
-      "example": "雪 (ゆき) - tuyết",
-      "group": "custom"
-    },
-    {
-      "kana": "風",
-      "romaji": "fuu/kaze",
-      "meaning": "gió",
-      "hanviet": "Phong",
-      "onyomi": "フウ、フ",
-      "kunyomi": "かぜ",
-      "example": "風 (かぜ) - gió",
-      "group": "custom"
-    },
-    {
-      "kana": "人",
-      "romaji": "jin/hito",
-      "meaning": "người",
-      "hanviet": "Nhân",
-      "onyomi": "ジン、ニン",
-      "kunyomi": "ひと",
-      "example": "日本人 (にほんじん) - người Nhật",
-      "group": "custom"
-    },
-    {
       "kana": "父",
       "romaji": "fu/chichi",
       "meaning": "cha",
@@ -2759,5 +2709,5 @@
     }
   ],
   "kanjiCustomRadicals": [],
-  "lastSync": "2026-07-19T10:28:44.519Z"
+  "lastSync": "2026-07-19T10:28:56.531Z"
 }
