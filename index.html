@@ -550,10 +550,14 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:inherit;}
         <div class="section-title">漢 Kanji</div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
           <div id="kanji-edit-btns" style="display:none;gap:6px;flex-wrap:wrap;">
-            <button class="btn btn-secondary btn-sm" onclick="kanjiOpenAddGroupModal()">📁 Thêm nhóm</button>
-            <label class="btn btn-secondary btn-sm" style="cursor:pointer;">📥 Import<input type="file" accept=".xlsx,.xls" style="display:none" onchange="importKanjiExcel(event)"></label>
-            <button class="btn btn-secondary btn-sm" onclick="exportKanjiTemplate()">📤 Template</button>
-            <button class="btn btn-primary btn-sm" onclick="kanjiOpenAddCharModal()">➕ Thêm chữ</button>
+            <div id="kanji-group-edit-btns" style="display:flex;gap:6px;flex-wrap:wrap;">
+              <button class="btn btn-secondary btn-sm" onclick="kanjiOpenAddGroupModal()">📁 Thêm nhóm</button>
+            </div>
+            <div id="kanji-char-edit-btns" style="display:none;gap:6px;flex-wrap:wrap;">
+              <label class="btn btn-secondary btn-sm" style="cursor:pointer;">📥 Import<input type="file" accept=".xlsx,.xls" style="display:none" onchange="importKanjiExcel(event)"></label>
+              <button class="btn btn-secondary btn-sm" onclick="exportKanjiTemplate()">📤 Template</button>
+              <button class="btn btn-primary btn-sm" onclick="kanjiOpenAddCharModal()">➕ Thêm chữ</button>
+            </div>
           </div>
         </div>
       </div>
@@ -1110,7 +1114,7 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:inherit;}
     <div class="form-group"><label class="form-label">Âm On (音読み)</label><input type="text" class="form-input" id="kanji-onyomi-input" placeholder="VD: アイ"></div>
     <div class="form-group"><label class="form-label">Âm Kun (訓読み)</label><input type="text" class="form-input" id="kanji-kunyomi-input" placeholder="VD: いと"></div>
     <div class="form-group"><label class="form-label">Ví dụ</label><input type="text" class="form-input" id="kanji-example-input" placeholder="VD: 愛 (あい) - tình yêu"></div>
-    <div class="form-actions"><button class="btn btn-secondary" onclick="closeModal('addKanjiModal')">Hủy</button><button class="btn btn-primary" onclick="saveNewKanji()">💾 Lưu</button></div>
+    <div class="form-actions"><button class="btn btn-secondary" onclick="closeModal('addKanjiModal')">Hủy</button><button class="btn btn-primary" onclick="kanjiSaveChar()">💾 Lưu</button></div>
   </div>
 </div>
 <!-- Add Lesson Modal -->
@@ -1297,6 +1301,8 @@ function navigate(page,param){
     var gv=document.getElementById('kanji-group-view');
     var cv=document.getElementById('kanji-char-view');
     if(gv)gv.style.display='block';if(cv)cv.style.display='none';
+    var geb=document.getElementById('kanji-group-edit-btns'),ceb=document.getElementById('kanji-char-edit-btns');
+    if(geb)geb.style.display='flex';if(ceb)ceb.style.display='none';
     kanjiCurrentGroup=null;kanjiShuffleArr=null;
     kanjiRenderGroups();
   }
@@ -1455,30 +1461,6 @@ function flipAllMatrix(type,open){
   if(open) showToast('👁 Đã lật tất cả!','info');
   else showToast('🙈 Đã úp tất cả!','info');
 }
-function renderKanjiMatrix(){
-  const matrixGrid=document.getElementById('kanji-matrix-grid');if(!matrixGrid)return;
-  const cols=Math.min(KANJI.length,window.innerWidth<=480?4:window.innerWidth<=768?5:8);
-  matrixGrid.style.gridTemplateColumns='repeat('+cols+',1fr)';
-  matrixGrid.innerHTML=KANJI.map(k=>{
-    const st=S.kanaStatus['kj_'+k.kana]||'';
-    const dot=st==='learned'?'✅':st==='learning'?'📌':'';
-    const kanaEsc=k.kana.replace(/'/g,"\'");
-    return '<div class="kana-matrix-cell '+st+'" onclick="flipKanjiCell(this,&quot;'+kanaEsc+'&quot;)">'
-      +'<div class="km-status">'+dot+'</div>'
-      +'<div class="km-kana" style="font-size:26px;">'+k.kana+'</div>'
-      +'<div class="km-romaji-big" style="font-size:13px;line-height:1.5;">'
-        +'<span style="color:var(--accent);font-weight:800;font-size:15px;">'+( k.hanviet||'')+'</span><br>'
-        +'<span style="color:var(--text2);font-size:11px;">'+k.meaning+'</span>'
-      +'</div>'
-      +'</div>';
-  }).join('');
-}
-function flipKanjiCell(el,kana){
-  el.classList.toggle('flipped');
-  speak(kana);
-}
-function markAllLearnedKanji(){KANJI.forEach(k=>S.kanaStatus['kj_'+k.kana]='learned');save();renderKanjiGrid();showToast('✅ Đã tick tất cả Kanji!','success');}
-function unmarkAllLearnedKanji(){KANJI.forEach(k=>delete S.kanaStatus['kj_'+k.kana]);save();renderKanjiGrid();showToast('🗑 Đã bỏ tick tất cả Kanji!','info');}
 function filterKana(type,group,el){const grid=document.getElementById(type+'-grid');grid.dataset.filter=group;document.getElementById(type==='hiragana'?'hira-filter':'kata-filter').querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');renderKanaGrid(type);}
 function markAllLearned(type){const data=type==='hiragana'?HIRAGANA:KATAKANA,prefix=type==='hiragana'?'h_':'k_';data.forEach(k=>S.kanaStatus[prefix+k.kana]='learned');save();renderKanaGrid(type);showToast('✅ Đã đánh dấu tất cả!','success');}
 function unmarkAllLearned(type){const data=type==='hiragana'?HIRAGANA:KATAKANA,prefix=type==='hiragana'?'h_':'k_';data.forEach(k=>delete S.kanaStatus[prefix+k.kana]);save();renderKanaGrid(type);showToast('🗑 Đã bỏ tick tất cả!','info');}
@@ -1713,7 +1695,7 @@ function markKanaStatus(status){
   if(!S.modalKana)return;const key=S.modalKanaPrefix+S.modalKana.kana;
   if(status==='none')delete S.kanaStatus[key];else S.kanaStatus[key]=status;
   save();closeModal('kanaModal');
-  if(S.page==='hiragana')renderKanaGrid('hiragana');if(S.page==='katakana')renderKanaGrid('katakana');if(S.page==='kanji')renderKanjiGrid();
+  if(S.page==='hiragana')renderKanaGrid('hiragana');if(S.page==='katakana')renderKanaGrid('katakana');if(S.page==='kanji')kanjiRerenderCurrentView();
   showToast(status==='learned'?'✅ Đã thuộc!':status==='learning'?'📌 Đang học!':'🗑 Bỏ đánh dấu','success');
 }
 function speakModalChar(){if(S.modalKana)speak(S.modalKana.kana);}
@@ -2063,7 +2045,7 @@ function resetProgress(){
   closeModal('settingsModal');
   if(S.page==='hiragana')renderKanaGrid('hiragana');
   if(S.page==='katakana')renderKanaGrid('katakana');
-  if(S.page==='kanji')renderKanjiGrid();
+  if(S.page==='kanji')kanjiRerenderCurrentView();
   updateDashboard();
 }
 function resetStats(){
@@ -2212,7 +2194,7 @@ function toggleEditMode(){
   setTimeout(function(){
     if(S.page==='hiragana') renderKanaGrid('hiragana');
     else if(S.page==='katakana') renderKanaGrid('katakana');
-    else if(S.page==='kanji') renderKanjiGrid();
+    else if(S.page==='kanji') kanjiRerenderCurrentView();
     else if(S.page==='level'){renderVocabLessons();renderGrammarLessons();}
     else if(S.page==='sentences') renderSentTopics();
   }, 50);
@@ -2725,15 +2707,10 @@ function renderGrammarGrid(){
 // Custom kana added by user
 let customHiragana = JSON.parse(localStorage.getItem('customHiragana')||'[]');
 let customKatakana = JSON.parse(localStorage.getItem('customKatakana')||'[]');
-let customKanjiChars = JSON.parse(localStorage.getItem('customKanjiChars')||'[]');
-let customKanjiRadicals = JSON.parse(localStorage.getItem('customKanjiRadicals')||'[]');
 
 // Shuffled order state (reset on navigate away)
 let kanaShuffled = {hiragana:false, katakana:false};
 let kanaOrder = {hiragana:null, katakana:null}; // null = original order
-let kanjiShuffled = false;
-let kanjiOrder = null;
-let currentKanjiType = 'chars'; // 'chars' | 'radicals'
 
 function getKanaData(type){
   const base = type==='hiragana' ? [...HIRAGANA,...customHiragana] : [...KATAKANA,...customKatakana];
@@ -2848,106 +2825,8 @@ function saveNewKana(){
   closeModal('addKanaModal');renderKanaGrid(addingKanaType);showToast('✅ Đã thêm chữ mới!','success');
 }
 
+// KANJI GRID - see rewritten implementation further below (kanjiRenderGroups section)
 // ============================================================
-// KANJI GRID (flashcard style)
-// ============================================================
-
-
-
-function getKanjiData(){
-  return currentKanjiType==='chars'
-    ? [...KANJI_CHARS,...customKanjiChars]
-    : [...KANJI_RADICALS,...customKanjiRadicals];
-}
-
-
-
-function flipKanjiCardEl(el){
-  const front=el.querySelector('.kana-fc-front');
-  const back=el.querySelector('.kana-fc-back');
-  const isFlipped=front.style.display==='none';
-  if(isFlipped){
-    front.style.display='';back.style.display='none';
-    el.style.background='';el.style.borderColor='';
-  } else {
-    front.style.display='none';back.style.display='block';
-    el.style.background='var(--primary-l)';el.style.borderColor='var(--primary)';
-    speak(el.dataset.kana);
-  }
-}
-
-function filterKanjiGrid(filter,el){
-  const grid=document.getElementById('kanji-grid');if(!grid)return;
-  grid.dataset.filter=filter;
-  document.getElementById('kanji-filter').querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');
-  renderKanjiGrid();
-}
-
-function shuffleKanjiGrid(){
-  const data=getKanjiData();
-  kanjiOrder=[...data].sort(()=>Math.random()-.5).map(k=>k.kana);
-  kanjiShuffled=true;renderKanjiGrid();showToast('🔀 Đã xáo trộn!','info');
-}
-function resetKanjiOrder(){kanjiOrder=null;kanjiShuffled=false;renderKanjiGrid();showToast('↺ Đã reset!','info');}
-function markAllLearnedKanji(){getKanjiData().forEach(k=>S.kanaStatus['kj_'+k.kana]='learned');save();renderKanjiGrid();showToast('✅ Đã tick tất cả!','success');}
-function unmarkAllLearnedKanji(){getKanjiData().forEach(k=>delete S.kanaStatus['kj_'+k.kana]);save();renderKanjiGrid();showToast('🗑 Đã bỏ tick!','info');}
-
-// Add custom kanji
-let addingKanjiType='chars';
-function openAddKanjiModal(type){
-  addingKanjiType=type||currentKanjiType;
-  document.getElementById('addKanjiTitle').textContent='Thêm '+(addingKanjiType==='chars'?'Chữ Kanji':'Bộ thủ');
-  ['kanji-char-input','kanji-romaji-input','kanji-meaning-input','kanji-hanviet-input','kanji-onyomi-input','kanji-kunyomi-input','kanji-example-input'].forEach(id=>document.getElementById(id).value='');
-  openModal('addKanjiModal');
-}
-function saveNewKanji(){
-  const kana=document.getElementById('kanji-char-input').value.trim();
-  const romaji=document.getElementById('kanji-romaji-input').value.trim();
-  const meaning=document.getElementById('kanji-meaning-input').value.trim();
-  if(!kana||!meaning){showToast('Vui lòng điền ký tự và nghĩa!','error');return;}
-  const newItem={
-    kana,romaji,meaning,
-    hanviet:document.getElementById('kanji-hanviet-input').value.trim(),
-    onyomi:document.getElementById('kanji-onyomi-input').value.trim(),
-    kunyomi:document.getElementById('kanji-kunyomi-input').value.trim(),
-    example:document.getElementById('kanji-example-input').value.trim(),
-    group:addingKanjiType==='chars'?'custom':'radical'
-  };
-  if(addingKanjiType==='chars'){customKanjiChars.push(newItem);localStorage.setItem('customKanjiChars',JSON.stringify(customKanjiChars));}
-  else{customKanjiRadicals.push(newItem);localStorage.setItem('customKanjiRadicals',JSON.stringify(customKanjiRadicals));}
-  closeModal('addKanjiModal');renderKanjiGrid();showToast('✅ Đã thêm Kanji mới!','success');
-  speak(kana);
-}
-
-// Kanji Excel import/export
-function importKanjiExcel(event){
-  const file=event.target.files[0];if(!file)return;
-  const reader=new FileReader();
-  reader.onload=function(e){try{
-    const wb=XLSX.read(e.target.result,{type:'binary'}),ws=wb.Sheets[wb.SheetNames[0]],rows=XLSX.utils.sheet_to_json(ws,{header:1});
-    let added=0;
-    rows.slice(1).forEach(row=>{
-      if(!row[1])return;
-      const item={kana:String(row[1]||''),romaji:String(row[2]||''),meaning:String(row[3]||''),hanviet:String(row[4]||''),onyomi:String(row[5]||''),kunyomi:String(row[6]||''),example:String(row[7]||''),group:'custom'};
-      if(currentKanjiType==='chars'){customKanjiChars.push(item);localStorage.setItem('customKanjiChars',JSON.stringify(customKanjiChars));}
-      else{customKanjiRadicals.push(item);localStorage.setItem('customKanjiRadicals',JSON.stringify(customKanjiRadicals));}
-      added++;
-    });
-    renderKanjiGrid();showToast('✅ Import '+added+' Kanji!','success');
-  }catch(err){showToast('❌ Lỗi đọc file!','error');}};
-  reader.readAsBinaryString(file);event.target.value='';
-}
-function exportKanjiTemplate(){
-  const data=currentKanjiType==='chars'?[...KANJI_CHARS,...customKanjiChars]:[...KANJI_RADICALS,...customKanjiRadicals];
-  const ws_data=[['STT','Ký tự','Romaji','Nghĩa','Âm Hán Việt','Âm On','Âm Kun','Ví dụ'],...data.map((k,i)=>[i+1,k.kana,k.romaji,k.meaning,k.hanviet||'',k.onyomi||'',k.kunyomi||'',k.example||''])];
-  const wb=XLSX.utils.book_new(),ws=XLSX.utils.aoa_to_sheet(ws_data);
-  ws['!cols']=[{wch:5},{wch:8},{wch:15},{wch:20},{wch:12},{wch:15},{wch:15},{wch:35}];
-  XLSX.utils.book_append_sheet(wb,ws,'Kanji');
-  XLSX.writeFile(wb,'kanji_'+currentKanjiType+'.xlsx');
-  showToast('📤 Đã tải file Excel!','success');
-}
-
 // ============================================================
 // RESET STATE ON NAVIGATE (thoát ra reset trạng thái)
 // ============================================================
@@ -2955,12 +2834,7 @@ function resetPageState(page){
   // Reset kana flip state
   if(page!=='hiragana'){kanaOrder.hiragana=null;kanaShuffled.hiragana=false;}
   if(page!=='katakana'){kanaOrder.katakana=null;kanaShuffled.katakana=false;}
-  if(page!=='kanji'){kanjiOrder=null;kanjiShuffled=false;}
-  // Reset kanji type selector
-  if(page==='kanji'){
-    document.getElementById('kanji-type-selector').style.display='flex';
-    document.getElementById('kanji-grid-section').style.display='none';
-  }
+  if(page!=='kanji'){kanjiShuffleArr=null;}
   // Reset quiz
   if(page!=='quiz'){clearInterval(S.quizTimer);S.quizTimer=null;}
   // Reset sentence practice
@@ -4172,138 +4046,6 @@ function deleteCustomKana(type,kana){
   else{customKatakana=(customKatakana||[]).filter(function(k){return k.kana!==kana;});localStorage.setItem('customKatakana',JSON.stringify(customKatakana));}
   renderKanaGrid(type);showToast('🗑 Đã xóa!','info');
 }
-function openEditKanjiModal(kana){
-  _editKanjiChar=kana;
-  var all=currentKanjiType==='chars'?[...KANJI_CHARS,...(customKanjiChars||[])]:[ ...KANJI_RADICALS,...(customKanjiRadicals||[])];
-  var item=all.find(function(k){return k.kana===kana;});if(!item)return;
-  document.getElementById('addKanjiTitle').textContent='Chỉnh sửa Kanji';
-  document.getElementById('kanji-char-input').value=item.kana;
-  document.getElementById('kanji-romaji-input').value=item.romaji||'';
-  document.getElementById('kanji-meaning-input').value=item.meaning||'';
-  document.getElementById('kanji-hanviet-input').value=item.hanviet||'';
-  document.getElementById('kanji-onyomi-input').value=item.onyomi||'';
-  document.getElementById('kanji-kunyomi-input').value=item.kunyomi||'';
-  document.getElementById('kanji-example-input').value=item.example||'';
-  var btn=document.querySelector('#addKanjiModal .btn-primary');
-  if(btn){btn.textContent='💾 Cập nhật';btn.onclick=updateKanji;}
-  openModal('addKanjiModal');
-}
-function updateKanji(){
-  var kana=document.getElementById('kanji-char-input').value.trim();
-  var meaning=document.getElementById('kanji-meaning-input').value.trim();
-  if(!kana||!meaning){showToast('Vui lòng điền ký tự và nghĩa!','error');return;}
-  var updated={kana:kana,romaji:document.getElementById('kanji-romaji-input').value.trim(),meaning:meaning,hanviet:document.getElementById('kanji-hanviet-input').value.trim(),onyomi:document.getElementById('kanji-onyomi-input').value.trim(),kunyomi:document.getElementById('kanji-kunyomi-input').value.trim(),example:document.getElementById('kanji-example-input').value.trim(),group:currentKanjiType==='chars'?'custom':'radical'};
-  var arr=currentKanjiType==='chars'?customKanjiChars:customKanjiRadicals;
-  if(!arr){if(currentKanjiType==='chars'){customKanjiChars=[];arr=customKanjiChars;}else{customKanjiRadicals=[];arr=customKanjiRadicals;}}
-  var idx=arr.findIndex(function(k){return k.kana===_editKanjiChar;});
-  if(idx>=0)arr[idx]=updated;else arr.push(updated);
-  localStorage.setItem(currentKanjiType==='chars'?'customKanjiChars':'customKanjiRadicals',JSON.stringify(arr));
-  var btn=document.querySelector('#addKanjiModal .btn-primary');
-  if(btn){btn.textContent='💾 Lưu';btn.onclick=saveNewKanji;}
-  closeModal('addKanjiModal');renderKanjiGrid();showToast('✅ Đã cập nhật!','success');
-}
-function deleteCustomKanji(kana){
-  if(!confirm('Xóa Kanji "'+kana+'"?'))return;
-  if(currentKanjiType==='chars'){customKanjiChars=(customKanjiChars||[]).filter(function(k){return k.kana!==kana;});localStorage.setItem('customKanjiChars',JSON.stringify(customKanjiChars));}
-  else{customKanjiRadicals=(customKanjiRadicals||[]).filter(function(k){return k.kana!==kana;});localStorage.setItem('customKanjiRadicals',JSON.stringify(customKanjiRadicals));}
-  renderKanjiGrid();showToast('🗑 Đã xóa!','info');
-}
-
-// ============================================================
-// KANJI GROUP MANAGEMENT
-// ============================================================
-// Built-in groups (cannot delete)
-const KANJI_BUILTIN_GROUPS = [
-  {id:'chars', title:'📝 Chữ Kanji', note:'100 chữ Kanji cơ bản thường dùng', builtin:true},
-  {id:'radicals', title:'🔑 Bộ thủ', note:'83 bộ thủ cơ bản của Kanji', builtin:true},
-];
-
-// Custom groups stored in localStorage
-var customKanjiGroups = JSON.parse(localStorage.getItem('customKanjiGroups')||'[]');
-var editingKanjiGroupId = null;
-
-function getAllKanjiGroups(){
-  return [...KANJI_BUILTIN_GROUPS, ...customKanjiGroups];
-}
-
-
-
-function openAddKanjiGroupModal(){
-  editingKanjiGroupId = null;
-  document.getElementById('kanjiGroupModalTitle').textContent = 'Thêm nhóm Kanji';
-  document.getElementById('kanji-group-name-input').value = '';
-  document.getElementById('kanji-group-desc-input').value = '';
-  document.getElementById('kanji-group-icon-input').value = '📚';
-  openModal('kanjiGroupModal');
-}
-
-function openEditKanjiGroupModal(id){
-  editingKanjiGroupId = id;
-  var g = customKanjiGroups.find(function(x){return x.id===id;});
-  if(!g) return;
-  document.getElementById('kanjiGroupModalTitle').textContent = 'Chỉnh sửa nhóm';
-  document.getElementById('kanji-group-name-input').value = g.title.replace(/^.\s/,'');
-  document.getElementById('kanji-group-desc-input').value = g.note||'';
-  document.getElementById('kanji-group-icon-input').value = g.icon||'📚';
-  openModal('kanjiGroupModal');
-}
-
-function saveKanjiGroup(){
-  var name = document.getElementById('kanji-group-name-input').value.trim();
-  var desc = document.getElementById('kanji-group-desc-input').value.trim();
-  var icon = document.getElementById('kanji-group-icon-input').value.trim()||'📚';
-  if(!name){showToast('Vui lòng nhập tên nhóm!','error');return;}
-  
-  if(editingKanjiGroupId){
-    var idx = customKanjiGroups.findIndex(function(g){return g.id===editingKanjiGroupId;});
-    if(idx>=0){
-      customKanjiGroups[idx].title = icon+' '+name;
-      customKanjiGroups[idx].note = desc;
-      customKanjiGroups[idx].icon = icon;
-      showToast('✅ Đã cập nhật nhóm!','success');
-    }
-  } else {
-    var newId = 'custom_'+Date.now();
-    customKanjiGroups.push({id:newId, title:icon+' '+name, note:desc, icon:icon, items:[], builtin:false});
-    showToast('✅ Đã thêm nhóm mới!','success');
-  }
-  localStorage.setItem('customKanjiGroups', JSON.stringify(customKanjiGroups));
-  closeModal('kanjiGroupModal');
-  renderKanjiGroupGrid();
-}
-
-function deleteKanjiGroup(id){
-  if(!confirm('Xóa nhóm này? Các Kanji trong nhóm cũng bị xóa!')) return;
-  customKanjiGroups = customKanjiGroups.filter(function(g){return g.id!==id;});
-  localStorage.setItem('customKanjiGroups', JSON.stringify(customKanjiGroups));
-  renderKanjiGroupGrid();
-  showToast('🗑 Đã xóa nhóm!','info');
-}
-
-// Override showKanjiType to handle custom groups
-var _origShowKanjiType = showKanjiType;
-function showKanjiType(type){
-  currentKanjiType = type;
-  document.getElementById('kanji-type-selector').style.display='none';
-  document.getElementById('kanji-grid-section').style.display='block';
-  var groups = getAllKanjiGroups();
-  var g = groups.find(function(x){return x.id===type;});
-  var title = g ? g.title : type;
-  document.getElementById('kanji-section-title').textContent = title;
-  renderKanjiGrid();
-}
-
-// Override backToKanjiTypes to re-render group grid
-var _origBackToKanjiTypes = backToKanjiTypes;
-function backToKanjiTypes(){
-  document.getElementById('kanji-type-selector').style.display='block';
-  document.getElementById('kanji-grid-section').style.display='none';
-  kanjiOrder=null; kanjiShuffled=false;
-  renderKanjiGroupGrid();
-}
-
-// Override navigate for kanji page
-
 // ============================================================
 // BẢNG CHỮ CÁI - VIẾT LẠI HOÀN TOÀN
 // ============================================================
@@ -4529,6 +4271,8 @@ function kanjiOpenGroup(gid){
   kanjiShuffleArr=null;
   document.getElementById('kanji-group-view').style.display='none';
   document.getElementById('kanji-char-view').style.display='block';
+  var geb=document.getElementById('kanji-group-edit-btns'),ceb=document.getElementById('kanji-char-edit-btns');
+  if(geb)geb.style.display='none';if(ceb)ceb.style.display='flex';
   var g=kanjiGroups.find(function(x){return x.id===gid;});
   document.getElementById('kanji-group-title').textContent=g?g.title:gid;
   kanjiRenderChars();
@@ -4538,6 +4282,8 @@ function kanjiBackToGroups(){
   kanjiCurrentGroup=null;kanjiShuffleArr=null;
   document.getElementById('kanji-group-view').style.display='block';
   document.getElementById('kanji-char-view').style.display='none';
+  var geb=document.getElementById('kanji-group-edit-btns'),ceb=document.getElementById('kanji-char-edit-btns');
+  if(geb)geb.style.display='flex';if(ceb)ceb.style.display='none';
   kanjiRenderGroups();
 }
 
@@ -4657,8 +4403,7 @@ function kanjiOpenAddCharModal(){
 }
 function kanjiEditChar(kana){
   _kanjiCharEditKana=kana;
-  var isRad=kanjiCurrentGroup==='radicals';
-  var all=isRad?KANJI_RADICALS.concat(kanjiCustomRadicals):KANJI_CHARS.concat(kanjiCustomChars);
+  var all=kanjiGetChars(kanjiCurrentGroup);
   var item=all.find(function(k){return k.kana===kana;});if(!item)return;
   document.getElementById('addKanjiTitle').textContent='Chỉnh sửa Kanji';
   document.getElementById('kanji-char-input').value=item.kana;
@@ -4676,28 +4421,98 @@ function kanjiSaveChar(){
   var kana=document.getElementById('kanji-char-input').value.trim();
   var meaning=document.getElementById('kanji-meaning-input').value.trim();
   if(!kana||!meaning){showToast('Vui lòng điền ký tự và nghĩa!','error');return;}
-  var isRad=kanjiCurrentGroup==='radicals';
-  var arr=isRad?kanjiCustomRadicals:kanjiCustomChars;
   var updated={kana:kana,romaji:document.getElementById('kanji-romaji-input').value.trim(),meaning:meaning,hanviet:document.getElementById('kanji-hanviet-input').value.trim(),onyomi:document.getElementById('kanji-onyomi-input').value.trim(),kunyomi:document.getElementById('kanji-kunyomi-input').value.trim(),example:document.getElementById('kanji-example-input').value.trim(),group:'custom'};
-  if(_kanjiCharEditKana){
-    var idx=arr.findIndex(function(k){return k.kana===_kanjiCharEditKana;});
-    if(idx>=0)arr[idx]=updated;else arr.push(updated);
-    showToast('✅ Đã cập nhật!','success');
+  if(kanjiCurrentGroup==='chars'||kanjiCurrentGroup==='radicals'){
+    var isRad=kanjiCurrentGroup==='radicals';
+    var arr=isRad?kanjiCustomRadicals:kanjiCustomChars;
+    if(_kanjiCharEditKana){
+      var idx=arr.findIndex(function(k){return k.kana===_kanjiCharEditKana;});
+      if(idx>=0)arr[idx]=updated;else arr.push(updated);
+      showToast('✅ Đã cập nhật!','success');
+    } else {
+      arr.push(updated);showToast('✅ Đã thêm Kanji!','success');speak(kana);
+    }
+    localStorage.setItem(isRad?'kanjiCustomRadicals':'kanjiCustomChars',JSON.stringify(arr));
   } else {
-    arr.push(updated);showToast('✅ Đã thêm Kanji!','success');speak(kana);
+    // Custom user-created group: store directly on the group's own items[]
+    var g=kanjiGroups.find(function(x){return x.id===kanjiCurrentGroup;});
+    if(!g)return;
+    if(!g.items)g.items=[];
+    if(_kanjiCharEditKana){
+      var gidx=g.items.findIndex(function(k){return k.kana===_kanjiCharEditKana;});
+      if(gidx>=0)g.items[gidx]=updated;else g.items.push(updated);
+      showToast('✅ Đã cập nhật!','success');
+    } else {
+      g.items.push(updated);showToast('✅ Đã thêm Kanji!','success');speak(kana);
+    }
+    kanjiSaveGroups();
   }
-  localStorage.setItem(isRad?'kanjiCustomRadicals':'kanjiCustomChars',JSON.stringify(arr));
-  if(isRad)kanjiCustomRadicals=arr;else kanjiCustomChars=arr;
   var btn=document.querySelector('#addKanjiModal .btn-primary');
   if(btn){btn.textContent='💾 Lưu';btn.onclick=kanjiSaveChar;}
   closeModal('addKanjiModal');kanjiRenderChars();
 }
 function kanjiDeleteChar(kana){
   if(!confirm('Xóa Kanji "'+kana+'"?'))return;
-  var isRad=kanjiCurrentGroup==='radicals';
-  if(isRad){kanjiCustomRadicals=kanjiCustomRadicals.filter(function(k){return k.kana!==kana;});localStorage.setItem('kanjiCustomRadicals',JSON.stringify(kanjiCustomRadicals));}
-  else{kanjiCustomChars=kanjiCustomChars.filter(function(k){return k.kana!==kana;});localStorage.setItem('kanjiCustomChars',JSON.stringify(kanjiCustomChars));}
+  if(kanjiCurrentGroup==='chars'||kanjiCurrentGroup==='radicals'){
+    var isRad=kanjiCurrentGroup==='radicals';
+    if(isRad){kanjiCustomRadicals=kanjiCustomRadicals.filter(function(k){return k.kana!==kana;});localStorage.setItem('kanjiCustomRadicals',JSON.stringify(kanjiCustomRadicals));}
+    else{kanjiCustomChars=kanjiCustomChars.filter(function(k){return k.kana!==kana;});localStorage.setItem('kanjiCustomChars',JSON.stringify(kanjiCustomChars));}
+  } else {
+    var g=kanjiGroups.find(function(x){return x.id===kanjiCurrentGroup;});
+    if(g&&g.items)g.items=g.items.filter(function(k){return k.kana!==kana;});
+    kanjiSaveGroups();
+  }
   kanjiRenderChars();showToast('🗑 Đã xóa!','info');
+}
+
+// Re-render whichever kanji view (group list or chars-in-group) is currently visible.
+// Safe to call from any code path (settings reset, edit-mode toggle, etc.).
+function kanjiRerenderCurrentView(){
+  var gv=document.getElementById('kanji-group-view');
+  if(gv&&gv.style.display!=='none'){kanjiRenderGroups();}
+  else if(kanjiCurrentGroup){kanjiRenderChars();}
+}
+
+// Kanji Excel import/export - operates on whichever group is currently open
+function importKanjiExcel(event){
+  var file=event.target.files[0];if(!file)return;
+  if(!kanjiCurrentGroup){showToast('Vui lòng mở một nhóm trước khi import!','error');event.target.value='';return;}
+  var reader=new FileReader();
+  reader.onload=function(e){try{
+    var wb=XLSX.read(e.target.result,{type:'binary'}),ws=wb.Sheets[wb.SheetNames[0]],rows=XLSX.utils.sheet_to_json(ws,{header:1});
+    var added=0;
+    var isBuiltin=(kanjiCurrentGroup==='chars'||kanjiCurrentGroup==='radicals');
+    var isRad=kanjiCurrentGroup==='radicals';
+    var g=isBuiltin?null:kanjiGroups.find(function(x){return x.id===kanjiCurrentGroup;});
+    if(!isBuiltin&&g&&!g.items)g.items=[];
+    rows.slice(1).forEach(function(row){
+      if(!row[1])return;
+      var item={kana:String(row[1]||''),romaji:String(row[2]||''),meaning:String(row[3]||''),hanviet:String(row[4]||''),onyomi:String(row[5]||''),kunyomi:String(row[6]||''),example:String(row[7]||''),group:'custom'};
+      if(isBuiltin){
+        if(isRad){kanjiCustomRadicals.push(item);}else{kanjiCustomChars.push(item);}
+      } else if(g){
+        g.items.push(item);
+      }
+      added++;
+    });
+    if(isBuiltin){
+      localStorage.setItem(isRad?'kanjiCustomRadicals':'kanjiCustomChars',JSON.stringify(isRad?kanjiCustomRadicals:kanjiCustomChars));
+    } else {
+      kanjiSaveGroups();
+    }
+    kanjiRenderChars();showToast('✅ Import '+added+' Kanji!','success');
+  }catch(err){showToast('❌ Lỗi đọc file!','error');}};
+  reader.readAsBinaryString(file);event.target.value='';
+}
+function exportKanjiTemplate(){
+  if(!kanjiCurrentGroup){showToast('Vui lòng mở một nhóm trước!','error');return;}
+  var data=kanjiGetChars(kanjiCurrentGroup);
+  var ws_data=[['STT','Ký tự','Romaji','Nghĩa','Âm Hán Việt','Âm On','Âm Kun','Ví dụ'],...data.map(function(k,i){return [i+1,k.kana,k.romaji||'',k.meaning,k.hanviet||'',k.onyomi||'',k.kunyomi||'',k.example||''];})];
+  var wb=XLSX.utils.book_new(),ws=XLSX.utils.aoa_to_sheet(ws_data);
+  ws['!cols']=[{wch:5},{wch:8},{wch:15},{wch:20},{wch:12},{wch:15},{wch:15},{wch:35}];
+  XLSX.utils.book_append_sheet(wb,ws,'Kanji');
+  XLSX.writeFile(wb,'kanji_'+kanjiCurrentGroup+'.xlsx');
+  showToast('📤 Đã tải file Excel!','success');
 }
 
 function speak(text){if(!window.speechSynthesis)return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='ja-JP';u.rate=0.8;u.pitch=1;const voices=window.speechSynthesis.getVoices();const jp=voices.find(v=>v.lang.startsWith('ja'));if(jp)u.voice=jp;window.speechSynthesis.speak(u);}
