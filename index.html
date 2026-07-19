@@ -539,6 +539,7 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:inherit;}
       <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
         <button class="btn btn-secondary btn-sm" onclick="kanaFlipAll('hiragana',true)">👁 Lật tất cả</button>
         <button class="btn btn-secondary btn-sm" onclick="kanaFlipAll('hiragana',false)">🙈 Úp tất cả</button>
+        <button class="btn btn-secondary btn-sm" id="flipModeBtn-hiragana" onclick="flipMode('hiragana')">🔁 Flip: A→B</button>
       </div>
     </div>
 
@@ -575,6 +576,7 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:inherit;}
       <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
         <button class="btn btn-secondary btn-sm" onclick="kanaFlipAll('katakana',true)">👁 Lật tất cả</button>
         <button class="btn btn-secondary btn-sm" onclick="kanaFlipAll('katakana',false)">🙈 Úp tất cả</button>
+        <button class="btn btn-secondary btn-sm" id="flipModeBtn-katakana" onclick="flipMode('katakana')">🔁 Flip: A→B</button>
       </div>
     </div>
 
@@ -616,6 +618,7 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:inherit;}
         <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
           <button class="btn btn-secondary btn-sm" onclick="kanjiFlipAll(true)">👁 Lật tất cả</button>
           <button class="btn btn-secondary btn-sm" onclick="kanjiFlipAll(false)">🙈 Úp tất cả</button>
+          <button class="btn btn-secondary btn-sm" id="flipModeBtn-kanji" onclick="flipMode('kanji')">🔁 Flip: A→B</button>
         </div>
       </div>
     </div>
@@ -632,7 +635,7 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:inherit;}
           <button class="tab-btn" onclick="setFCSource('learning',this)">📌 Đang học</button>
         </div>
         <button class="btn btn-secondary btn-sm" onclick="shuffleFC()">🔀 Xáo trộn</button>
-        <button class="btn btn-secondary btn-sm" id="fcFlipModeBtn" onclick="toggleFCReverse()">🔁 Lật: A→B</button>
+        <button class="btn btn-secondary btn-sm" id="flipModeBtn-main" onclick="flipMode('main')">🔁 Flip: A→B</button>
       </div>
       <div class="fc-wrap">
         <div class="fc-container" onclick="flip('main')">
@@ -692,20 +695,52 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:inherit;}
               <button class="btn btn-primary btn-sm" onclick="openAddVocabModal()">➕ Thêm từ</button>
             </div>
           </div>
-          <div class="vocab-toolbar">
-            <div class="search-box"><span class="search-icon">🔍</span><input type="text" id="vocabSearch" placeholder="Tìm từ vựng..." oninput="filterVocab()"></div>
-            <div class="tab-group">
-              <button class="tab-btn active" onclick="filterVocabType('all',this)">Tất cả</button>
-              <button class="tab-btn" onclick="filterVocabType('名詞',this)">名詞</button>
-              <button class="tab-btn" onclick="filterVocabType('動詞',this)">動詞</button>
-              <button class="tab-btn" onclick="filterVocabType('形容詞',this)">形容詞</button>
-              <button class="tab-btn" onclick="filterVocabType('starred',this)">⭐</button>
+          <div class="tab-group" style="margin-bottom:14px;width:fit-content;">
+            <button class="tab-btn active" onclick="switchVocabViewTab('list',this)">📋 Danh sách</button>
+            <button class="tab-btn" onclick="switchVocabViewTab('flashcard',this)">🃏 Flashcard</button>
+          </div>
+          <div id="vocab-list-section">
+            <div class="vocab-toolbar">
+              <div class="search-box"><span class="search-icon">🔍</span><input type="text" id="vocabSearch" placeholder="Tìm từ vựng..." oninput="filterVocab()"></div>
+              <div class="tab-group">
+                <button class="tab-btn active" onclick="filterVocabType('all',this)">Tất cả</button>
+                <button class="tab-btn" onclick="filterVocabType('名詞',this)">名詞</button>
+                <button class="tab-btn" onclick="filterVocabType('動詞',this)">動詞</button>
+                <button class="tab-btn" onclick="filterVocabType('形容詞',this)">形容詞</button>
+                <button class="tab-btn" onclick="filterVocabType('starred',this)">⭐</button>
+              </div>
+            </div>
+            <div class="vocab-table-wrap">
+              <table><thead><tr><th>#</th><th>Từ vựng</th><th>Từ loại</th><th>Nghĩa</th><th>Kanji</th><th>⭐</th><th id="vocab-action-col">Thao tác</th></tr></thead><tbody id="vocabTableBody"></tbody></table>
+            </div>
+            <div style="margin-top:8px;font-size:11px;color:var(--text3)" id="vocabCount"></div>
+          </div>
+          <!-- Vocab FLASHCARD tab -->
+          <div id="vocab-flashcard-section" style="display:none;">
+            <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center;">
+              <button class="btn btn-secondary btn-sm" onclick="shuffleVocabFC()">🔀 Xáo trộn</button>
+              <button class="btn btn-secondary btn-sm" id="flipModeBtn-vocab" onclick="flipMode('vocab')">🔁 Flip: A→B</button>
+            </div>
+            <div class="fc-wrap">
+              <div style="width:100%;max-width:520px;cursor:pointer;margin:0 auto;" onclick="flip('vocab')">
+                <div id="vocab-flashcard">
+                  <div id="vocab-fc-front" style="background:var(--card);border:1.5px solid var(--border);border-radius:var(--r2);padding:24px;min-height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;"></div>
+                  <div id="vocab-fc-back" style="background:var(--primary-l);border:1.5px solid var(--primary);border-radius:var(--r2);padding:24px;min-height:130px;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;"></div>
+                </div>
+              </div>
+              <div class="fc-progress" id="vocab-fc-progress">1 / 1</div>
+              <div class="fc-controls">
+                <button class="btn btn-secondary" onclick="prevVocabFC()">← Trước</button>
+                <button class="btn btn-primary" onclick="speakVocabCurrent()">🔊 Nghe</button>
+                <button class="btn btn-secondary" onclick="nextVocabFC()">Tiếp →</button>
+              </div>
+              <div class="fc-rating">
+                <button class="btn btn-danger btn-sm" onclick="rateVocabFC('hard')">😓 Khó</button>
+                <button class="btn btn-secondary btn-sm" onclick="rateVocabFC('ok')">😐 Ổn</button>
+                <button class="btn btn-success btn-sm" onclick="rateVocabFC('easy')">😊 Dễ</button>
+              </div>
             </div>
           </div>
-          <div class="vocab-table-wrap">
-            <table><thead><tr><th>#</th><th>Từ vựng</th><th>Từ loại</th><th>Nghĩa</th><th>Kanji</th><th>⭐</th><th id="vocab-action-col">Thao tác</th></tr></thead><tbody id="vocabTableBody"></tbody></table>
-          </div>
-          <div style="margin-top:8px;font-size:11px;color:var(--text3)" id="vocabCount"></div>
         </div>
       </div>
       <!-- GRAMMAR -->
@@ -975,13 +1010,14 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:inherit;}
             <button class="tab-btn" onclick="setSentFCSource('topic',this)">Chủ đề hiện tại</button>
           </div>
           <button class="btn btn-secondary btn-sm" onclick="shuffleSentFC()">🔀 Xáo trộn</button>
+          <button class="btn btn-secondary btn-sm" id="flipModeBtn-sent" onclick="flipMode('sent')">🔁 Flip: A→B</button>
         </div>
         <div class="fc-wrap">
           <div style="width:100%;max-width:520px;cursor:pointer;margin:0 auto;" onclick="flip('sent')">
             <div id="sent-flashcard">
               <div id="sent-fc-front" style="background:var(--card);border:1.5px solid var(--border);border-radius:var(--r2);padding:24px;min-height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;">
                 <div id="sent-fc-jp" style="font-size:clamp(14px,3vw,22px);font-weight:700;color:var(--text);line-height:1.6;word-break:break-all;overflow-wrap:break-word;width:100%;"></div>
-                <div style="font-size:11px;color:var(--text3);margin-top:10px;">Nhấn để xem nghĩa</div>
+                <div id="sent-fc-hint" style="font-size:11px;color:var(--text3);margin-top:10px;">Nhấn để xem nghĩa</div>
               </div>
               <div id="sent-fc-back" style="background:var(--primary-l);border:1.5px solid var(--primary);border-radius:var(--r2);padding:24px;min-height:130px;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;">
                 <div id="sent-fc-vn" style="font-size:clamp(13px,2.5vw,18px);font-weight:600;color:var(--primary);line-height:1.6;word-break:break-word;width:100%;"></div>
@@ -1754,15 +1790,22 @@ function renderFC(){
   document.getElementById('fc-progress').textContent=`${S.fcIndex+1} / ${S.fcDeck.length}`;
   document.getElementById('flashcard').classList.remove('flipped');S.fcFlipped=false;
 }
-function toggleFCReverse(){
-  S.fcReversed=!S.fcReversed;
-  const btn=document.getElementById('fcFlipModeBtn');
-  if(btn)btn.textContent=S.fcReversed?'🔁 Lật: B→A':'🔁 Lật: A→B';
-  renderFC();
-  showToast(S.fcReversed?'🔁 Chế độ: xem đáp án trước':'🔁 Chế độ: xem câu hỏi trước','info');
+// Trạng thái "chế độ Flip" (đảo mặt trước/sau) cho từng khu vực flashcard
+let flipModeState={main:false,sent:false,hiragana:false,katakana:false,kanji:false,vocab:false};
+function flipMode(section){
+  flipModeState[section]=!flipModeState[section];
+  const rev=flipModeState[section];
+  const btn=document.getElementById('flipModeBtn-'+section);
+  if(btn)btn.textContent=rev?'🔁 Flip: B→A':'🔁 Flip: A→B';
+  if(section==='main'){S.fcReversed=rev;renderFC();}
+  else if(section==='sent'){renderSentFC();}
+  else if(section==='hiragana'||section==='katakana'){renderKanaGrid(section);kanaRenderGrid(section);}
+  else if(section==='kanji'){kanjiRenderChars();}
+  else if(section==='vocab'){renderVocabFC();}
+  showToast(rev?'🔁 Chế độ: xem đáp án/nghĩa trước':'🔁 Chế độ: xem câu hỏi trước','info');
 }
 // Unified flip handler for every flashcard in the app.
-// kind: 'main' (trang Flashcard), 'sent' (Flashcard câu), 'matrix' (bảng kana), 'card' (ô kana/kanji dạng lưới)
+// kind: 'main' (trang Flashcard), 'sent' (Flashcard câu), 'matrix' (bảng kana), 'card' (ô kana/kanji dạng lưới), 'vocab' (Flashcard từ vựng)
 function flip(kind,el,a,b){
   if(kind==='main'){
     S.fcFlipped=!S.fcFlipped;
@@ -1797,6 +1840,15 @@ function flip(kind,el,a,b){
       el.style.background='var(--primary-l)';el.style.borderColor='var(--primary)';
       speak(el.dataset.kana);
     }
+    return;
+  }
+  if(kind==='vocab'){
+    const front=document.getElementById('vocab-fc-front');
+    const back=document.getElementById('vocab-fc-back');
+    if(!front||!back)return;
+    const isFlipped=back.style.display!=='none';
+    if(isFlipped){front.style.display='flex';back.style.display='none';}
+    else{front.style.display='none';back.style.display='flex';const v=vocabFCDeck[vocabFCIdx];if(v)speak(v.word);}
     return;
   }
 }
@@ -2379,9 +2431,69 @@ function openVocabLesson(lessonId){
   // Init vocab data for this lesson if not exists
   const key = lv+'_lesson_'+lessonId;
   if(!S.vocabData[key]) S.vocabData[key] = [];
+  // Luôn quay về tab Danh sách khi mở bài mới
+  document.querySelectorAll('#vocab-table-view .tab-group .tab-btn').forEach((b,i)=>b.classList.toggle('active',i===0));
+  document.getElementById('vocab-list-section').style.display='block';
+  document.getElementById('vocab-flashcard-section').style.display='none';
   renderVocabTable();
   applyEditMode();
 }
+
+function switchVocabViewTab(tab,el){
+  document.querySelectorAll('#vocab-table-view .tab-group .tab-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('vocab-list-section').style.display=tab==='list'?'block':'none';
+  document.getElementById('vocab-flashcard-section').style.display=tab==='flashcard'?'block':'none';
+  if(tab==='flashcard'){
+    const lv=S.level;
+    const key=currentVocabLesson?lv+'_lesson_'+currentVocabLesson:lv;
+    vocabFCDeck=(S.vocabData[key]||[]).slice();
+    vocabFCIdx=0;
+    renderVocabFC();
+  }
+}
+
+let vocabFCDeck=[];
+let vocabFCIdx=0;
+function vocabJapanHTML(v){
+  return '<div style="font-size:clamp(18px,4vw,28px);font-weight:700;color:var(--text);">'+v.word+'</div>'
+    +(v.reading&&v.reading!==v.word?'<div style="font-size:13px;color:var(--text3);margin-top:6px;">'+v.reading+'</div>':'')
+    +(v.kanji?'<div style="font-size:13px;color:var(--warning);font-weight:700;margin-top:4px;">'+v.kanji+'</div>':'');
+}
+function vocabMeaningHTML(v){
+  return '<div style="font-size:clamp(15px,3vw,20px);font-weight:700;color:var(--primary);">'+v.meaning+'</div>'
+    +(v.type?'<div style="font-size:12px;color:var(--text2);margin-top:6px;font-style:italic;">Từ loại: '+v.type+'</div>':'');
+}
+function renderVocabFC(){
+  const lv=S.level;
+  const key=currentVocabLesson?lv+'_lesson_'+currentVocabLesson:lv;
+  const data=vocabFCDeck.length?vocabFCDeck:(S.vocabData[key]||[]);
+  vocabFCDeck=data;
+  const front=document.getElementById('vocab-fc-front');
+  const back=document.getElementById('vocab-fc-back');
+  const progress=document.getElementById('vocab-fc-progress');
+  if(!front||!back)return;
+  if(!data.length){
+    front.innerHTML='<div style="color:var(--text3);">Chưa có từ nào trong bài này</div>';
+    back.innerHTML='';
+    if(progress)progress.textContent='0 / 0';
+    return;
+  }
+  vocabFCIdx=Math.min(vocabFCIdx,data.length-1);
+  const v=data[vocabFCIdx];
+  const rev=flipModeState.vocab;
+  const hint='<div style="font-size:11px;color:var(--text3);margin-top:10px;">'+(rev?'Nhấn để xem từ':'Nhấn để xem nghĩa')+'</div>';
+  front.innerHTML=(rev?vocabMeaningHTML(v):vocabJapanHTML(v))+hint;
+  back.innerHTML=rev?vocabJapanHTML(v):vocabMeaningHTML(v);
+  if(progress)progress.textContent=(vocabFCIdx+1)+' / '+data.length;
+  front.style.display='flex';
+  back.style.display='none';
+}
+function shuffleVocabFC(){vocabFCDeck=vocabFCDeck.sort(()=>Math.random()-.5);vocabFCIdx=0;renderVocabFC();showToast('🔀 Đã xáo trộn!','info');}
+function nextVocabFC(){vocabFCIdx=(vocabFCIdx+1)%Math.max(1,vocabFCDeck.length);renderVocabFC();}
+function prevVocabFC(){vocabFCIdx=(vocabFCIdx-1+vocabFCDeck.length)%Math.max(1,vocabFCDeck.length);renderVocabFC();}
+function speakVocabCurrent(){const v=vocabFCDeck[vocabFCIdx];if(v)speak(v.word);}
+function rateVocabFC(r){if(r==='easy'){S.score+=5;save();showToast('+5 điểm!','success');}nextVocabFC();}
 
 function backToLessons(type){
   if(type==='vocab'){
@@ -2835,13 +2947,13 @@ function renderKanaGrid(type){
     const pair=type==='hiragana'?(HIRA_KATA[k.kana]||''):(KATA_HIRA[k.kana]||'');
     const pairLabel=type==='hiragana'?'Kata':'Hira';
     const kEsc=k.kana.replace(/"/g,'&quot;');
+    const kanaBlock='<div class="kana-char" style="font-size:56px;font-weight:700;line-height:1.1;">'+k.kana+'</div>';
+    const romajiBlock='<div style="font-size:18px;font-weight:700;color:var(--primary);">'+k.romaji+'</div>'+(pair?'<div style="font-size:12px;color:var(--text3);margin-top:3px;">'+pairLabel+': '+pair+'</div>':'');
+    const rev=flipModeState[type];
     return '<div class="kana-card '+st+' kana-fc" data-kana="'+kEsc+'" data-type="'+type+'" onclick="flip(\'card\',this)">'
       +'<div class="kana-status-dot">'+dot+'</div>'
-      +'<div class="kana-char kana-fc-front">'+k.kana+'</div>'
-      +'<div class="kana-fc-back" style="display:none;">'
-        +'<div style="font-size:16px;font-weight:700;color:var(--primary);">'+k.romaji+'</div>'
-        +(pair?'<div style="font-size:11px;color:var(--text3);margin-top:3px;">'+pairLabel+': '+pair+'</div>':'')
-      +'</div>'
+      +'<div class="kana-fc-front">'+(rev?romajiBlock:kanaBlock)+'</div>'
+      +'<div class="kana-fc-back" style="display:none;text-align:center;">'+(rev?kanaBlock:romajiBlock)+'</div>'
       +'</div>';
   }).join('');
 }
@@ -4243,9 +4355,11 @@ function renderSentFC(){
   }
   sentFCIdx=Math.min(sentFCIdx,data.length-1);
   const s=data[sentFCIdx];
-  document.getElementById('sent-fc-jp').textContent=s.jp;
-  document.getElementById('sent-fc-vn').textContent=s.vn;
+  const rev=flipModeState.sent;
+  document.getElementById('sent-fc-jp').textContent=rev?s.vn:s.jp;
+  document.getElementById('sent-fc-vn').textContent=rev?s.jp:s.vn;
   document.getElementById('sent-fc-note').textContent=s.note||'';
+  const hint=document.getElementById('sent-fc-hint');if(hint)hint.textContent=rev?'Nhấn để xem câu tiếng Nhật':'Nhấn để xem nghĩa';
   document.getElementById('sent-fc-progress').textContent=(sentFCIdx+1)+' / '+data.length;
   if(front)front.style.display='flex';
   if(back)back.style.display='none';
@@ -4420,13 +4534,13 @@ function kanaRenderGrid(type){
         + '<button style="background:var(--danger);color:#fff;border:none;border-radius:4px;padding:2px 7px;font-size:11px;cursor:pointer;" data-type="'+type+'" data-kana="'+kEsc+'" onclick="kanaDeleteChar(this.dataset.type,this.dataset.kana)">🗑</button>'
         + '</div>'
       : '';
+    var kanaBlock='<div class="kana-char" style="font-size:56px;font-weight:700;line-height:1.1;">'+k.kana+'</div>';
+    var romajiBlock='<div style="font-size:18px;font-weight:700;color:var(--primary);">'+k.romaji+'</div>'+(pair?'<div style="font-size:12px;color:var(--text3);margin-top:3px;">'+pairLabel+': '+pair+'</div>':'');
+    var rev=flipModeState[type];
     return '<div class="kana-card '+st+' kana-fc" data-kana="'+kEsc+'" data-type="'+type+'" onclick="flip(\'card\',this)">'
       + '<div class="kana-status-dot">'+dot+'</div>'
-      + '<div class="kana-char kana-fc-front" style="font-size:56px;font-weight:700;line-height:1.1;">'+k.kana+'</div>'
-      + '<div class="kana-fc-back" style="display:none;text-align:center;">'
-        + '<div style="font-size:18px;font-weight:700;color:var(--primary);">'+k.romaji+'</div>'
-        + (pair?'<div style="font-size:12px;color:var(--text3);margin-top:3px;">'+pairLabel+': '+pair+'</div>':'')
-      + '</div>'
+      + '<div class="kana-fc-front">'+(rev?romajiBlock:kanaBlock)+'</div>'
+      + '<div class="kana-fc-back" style="display:none;text-align:center;">'+(rev?kanaBlock:romajiBlock)+'</div>'
       + editHtml
       + '</div>';
   }).join('');
@@ -4643,10 +4757,12 @@ function kanjiRenderChars(){
         +'<button style="background:var(--danger);color:#fff;border:none;border-radius:4px;padding:2px 7px;font-size:11px;cursor:pointer;" data-kana="'+kEsc+'" onclick="kanjiDeleteChar(this.dataset.kana)">🗑</button>'
         +'</div>'
       :'';
+    var kanjiBlock='<div style="font-size:44px;font-weight:700;line-height:1.2;">'+k.kana+'</div>';
+    var rev=flipModeState.kanji;
     return '<div class="kana-card kanji kana-fc" data-kana="'+kEsc+'" onclick="flip(\'card\',this)">'
       +'<div class="kana-status-dot">'+dot+'</div>'
-      +'<div class="kana-fc-front" style="font-size:44px;font-weight:700;line-height:1.2;">'+k.kana+'</div>'
-      +'<div class="kana-fc-back" style="display:none;text-align:center;">'+backHtml+'</div>'
+      +'<div class="kana-fc-front" style="text-align:center;">'+(rev?backHtml:kanjiBlock)+'</div>'
+      +'<div class="kana-fc-back" style="display:none;text-align:center;">'+(rev?kanjiBlock:backHtml)+'</div>'
       +editHtml
       +'</div>';
   }).join('');
