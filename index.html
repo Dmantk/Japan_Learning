@@ -4244,7 +4244,7 @@ function kanjiRenderGroups(){
     var chars=kanjiGetChars(g.id);
     var countTxt=chars.length+(g.id==='radicals'?' bộ':' chữ');
     // Edit buttons only for non-builtin groups
-    var editHtml=editMode&&!g.builtin
+    var editHtml=editMode
       ?'<div style="display:flex;gap:5px;margin-top:10px;">'
         +'<button class="btn btn-secondary btn-xs" data-gid="'+g.id+'" onclick="event.stopPropagation();kanjiEditGroup(this.dataset.gid)">✏️ Sửa</button>'
         +'<button class="btn btn-danger btn-xs" data-gid="'+g.id+'" onclick="event.stopPropagation();kanjiDeleteGroup(this.dataset.gid)">🗑 Xóa</button>'
@@ -4387,8 +4387,12 @@ function kanjiSaveGroup(){
   kanjiSaveGroups();closeModal('kanjiGroupModal');kanjiRenderGroups();
 }
 function kanjiDeleteGroup(id){
-  if(!confirm('Xóa nhóm này?'))return;
-  kanjiGroups=kanjiGroups.filter(function(g){return g.id!==id;});
+  var g=kanjiGroups.find(function(x){return x.id===id;});
+  var msg=g&&g.builtin
+    ?'Đây là nhóm mặc định ('+g.title+'). Xóa sẽ ẩn nhóm này khỏi danh sách, bạn có chắc muốn xóa?'
+    :'Xóa nhóm này? Các Kanji trong nhóm cũng bị xóa!';
+  if(!confirm(msg))return;
+  kanjiGroups=kanjiGroups.filter(function(x){return x.id!==id;});
   kanjiSaveGroups();kanjiRenderGroups();showToast('🗑 Đã xóa nhóm!','info');
 }
 
@@ -4521,6 +4525,12 @@ function closeModal(id){document.getElementById(id).classList.remove('open');}
 document.querySelectorAll('.modal-overlay').forEach(m=>{m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');});});
 function showToast(msg,type='info'){const c=document.getElementById('toastContainer'),t=document.createElement('div');t.className=`toast ${type}`;const icons={success:'✅',error:'❌',info:'ℹ️'};t.innerHTML=`${icons[type]||'ℹ️'} ${msg}`;c.appendChild(t);setTimeout(()=>{t.style.opacity='0';t.style.transform='translateY(10px)';setTimeout(()=>t.remove(),280);},2400);}
 
+// Global safety net: if a button/action throws an unexpected JS error,
+// surface it as a toast instead of failing silently with no feedback.
+window.addEventListener('error', function(e){
+  try{ showToast('❌ Có lỗi xảy ra: '+(e.message||'không rõ nguyên nhân'), 'error'); }catch(_){}
+});
+
 // ============================================================
 // INIT
 // ============================================================
@@ -4562,7 +4572,7 @@ window.addEventListener('load',sendHeight);window.addEventListener('resize',send
     <div class="form-group"><label class="form-label">Icon (emoji)</label><input type="text" class="form-input" id="kanji-group-icon-input" placeholder="VD: 📚 🎯 ✨" maxlength="4" style="font-size:20px;text-align:center;"></div>
     <div class="form-actions">
       <button class="btn btn-secondary" onclick="closeModal('kanjiGroupModal')">Hủy</button>
-      <button class="btn btn-primary" onclick="saveKanjiGroup()">💾 Lưu</button>
+      <button class="btn btn-primary" onclick="kanjiSaveGroup()">💾 Lưu</button>
     </div>
   </div>
 </div>
