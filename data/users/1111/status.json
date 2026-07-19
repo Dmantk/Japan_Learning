@@ -30,9 +30,17 @@
       "title": "🔑 Bộ thủ",
       "note": "83 bộ thủ cơ bản",
       "builtin": true
+    },
+    {
+      "id": "grp_1784450174864",
+      "title": "📚 Aaaaaa",
+      "note": "",
+      "icon": "📚",
+      "items": [],
+      "builtin": false
     }
   ],
   "kanjiCustomChars": [],
   "kanjiCustomRadicals": [],
-  "lastSync": "2026-07-19T08:36:11.813Z"
+  "lastSync": "2026-07-19T08:36:21.678Z"
 }
