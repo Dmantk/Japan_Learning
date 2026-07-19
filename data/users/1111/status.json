@@ -1,7 +1,7 @@
 {
   "kanaStatus": {},
   "starred": {},
-  "score": 0,
+  "score": 50,
   "theme": "light",
   "kanaCustom": {
     "hiragana": [
@@ -32,8 +32,8 @@
       "builtin": true
     },
     {
-      "id": "grp_1784450174864",
-      "title": "📚 Aaaaaa",
+      "id": "grp_1784450086900",
+      "title": "📚 Thu",
       "note": "",
       "icon": "📚",
       "items": [],
@@ -41,6 +41,17 @@
     }
   ],
   "kanjiCustomChars": [],
-  "kanjiCustomRadicals": [],
-  "lastSync": "2026-07-19T08:36:21.678Z"
+  "kanjiCustomRadicals": [
+    {
+      "kana": "An",
+      "romaji": "",
+      "meaning": "An",
+      "hanviet": "",
+      "onyomi": "",
+      "kunyomi": "",
+      "example": "",
+      "group": "custom"
+    }
+  ],
+  "lastSync": "2026-07-19T08:36:38.886Z"
 }
