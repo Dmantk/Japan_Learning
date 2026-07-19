@@ -1528,46 +1528,6 @@
   ],
   "kanjiCustomChars": [
     {
-      "kana": "黒",
-      "romaji": "koku/kuro",
-      "meaning": "đen",
-      "hanviet": "Hắc",
-      "onyomi": "コク",
-      "kunyomi": "くろ",
-      "example": "黒い (くろい) - đen",
-      "group": "custom"
-    },
-    {
-      "kana": "赤",
-      "romaji": "seki/aka",
-      "meaning": "đỏ",
-      "hanviet": "Xích",
-      "onyomi": "セキ、シャク",
-      "kunyomi": "あか",
-      "example": "赤い (あかい) - đỏ",
-      "group": "custom"
-    },
-    {
-      "kana": "青",
-      "romaji": "sei/ao",
-      "meaning": "xanh",
-      "hanviet": "Thanh",
-      "onyomi": "セイ、ショウ",
-      "kunyomi": "あお",
-      "example": "青い (あおい) - xanh",
-      "group": "custom"
-    },
-    {
-      "kana": "長",
-      "romaji": "chou/naga",
-      "meaning": "dài/trưởng",
-      "hanviet": "Trường",
-      "onyomi": "チョウ",
-      "kunyomi": "なが",
-      "example": "長い (ながい) - dài",
-      "group": "custom"
-    },
-    {
       "kana": "半",
       "romaji": "han",
       "meaning": "nửa",
@@ -2069,5 +2029,5 @@
     }
   ],
   "kanjiCustomRadicals": [],
-  "lastSync": "2026-07-19T10:31:30.037Z"
+  "lastSync": "2026-07-19T10:31:41.613Z"
 }
