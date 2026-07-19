@@ -1528,46 +1528,6 @@
   ],
   "kanjiCustomChars": [
     {
-      "kana": "聞",
-      "romaji": "bun/ki",
-      "meaning": "nghe/hỏi",
-      "hanviet": "Văn",
-      "onyomi": "ブン、モン",
-      "kunyomi": "き",
-      "example": "聞く (きく) - nghe",
-      "group": "custom"
-    },
-    {
-      "kana": "書",
-      "romaji": "sho/ka",
-      "meaning": "viết",
-      "hanviet": "Thư",
-      "onyomi": "ショ",
-      "kunyomi": "か",
-      "example": "書く (かく) - viết",
-      "group": "custom"
-    },
-    {
-      "kana": "読",
-      "romaji": "doku/yo",
-      "meaning": "đọc",
-      "hanviet": "Độc",
-      "onyomi": "ドク",
-      "kunyomi": "よ",
-      "example": "読む (よむ) - đọc",
-      "group": "custom"
-    },
-    {
-      "kana": "話",
-      "romaji": "wa/hana",
-      "meaning": "nói/câu chuyện",
-      "hanviet": "Thoại",
-      "onyomi": "ワ",
-      "kunyomi": "はな",
-      "example": "話す (はなす) - nói",
-      "group": "custom"
-    },
-    {
       "kana": "来",
       "romaji": "rai/ku",
       "meaning": "đến",
@@ -2219,5 +2179,5 @@
     }
   ],
   "kanjiCustomRadicals": [],
-  "lastSync": "2026-07-19T10:30:55.014Z"
+  "lastSync": "2026-07-19T10:31:06.039Z"
 }
