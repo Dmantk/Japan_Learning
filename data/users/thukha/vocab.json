@@ -2860,6 +2860,14 @@
         "meaning": "Điện thoại di động",
         "reading": "ケータイ",
         "kanji": ""
+      },
+      {
+        "id": 47,
+        "word": "メール",
+        "type": "名詞",
+        "meaning": "Email",
+        "reading": "メール",
+        "kanji": ""
       }
     ],
     "N5_lesson_8": [
