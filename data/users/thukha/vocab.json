@@ -2657,7 +2657,7 @@
         "id": 21,
         "word": "かみ",
         "type": "名詞",
-        "meaning": "tóc",
+        "meaning": "Giấy",
         "reading": "かみ",
         "kanji": ""
       },
@@ -2867,6 +2867,14 @@
         "type": "名詞",
         "meaning": "Email",
         "reading": "メール",
+        "kanji": ""
+      },
+      {
+        "id": 48,
+        "word": "ねんがじょう",
+        "type": "名詞",
+        "meaning": "Thiệp mừng năm mới",
+        "reading": "ねんがじょう",
         "kanji": ""
       }
     ],
